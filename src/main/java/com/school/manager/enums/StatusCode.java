@@ -10,6 +10,7 @@ public enum StatusCode {
      */
     success(200, "成功"),
     error(-200, "异常"),
+    LOGIN_FAILURE(100000, "用户名密码错误"),
     DATA_NOT_EXIST(100001, "信息不存在"),
     ;
     private Integer code;

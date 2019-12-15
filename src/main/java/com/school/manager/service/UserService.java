@@ -1,10 +1,10 @@
 package com.school.manager.service;
 
 import com.google.common.collect.Lists;
+import com.school.manager.common.Constant;
 import com.school.manager.dao.UserDao;
 import com.school.manager.dto.req.UserReq;
 import com.school.manager.dto.resp.UserResp;
-import com.school.manager.common.Constant;
 import com.school.manager.enums.StateEnum;
 import com.school.manager.enums.StatusCode;
 import com.school.manager.pojo.User;
@@ -158,5 +158,21 @@ public class UserService {
         // 删除用户角色关联关系
         //userRoleService.deleteUserRoleBuUserId(user.getId());
         // TODO: 2019/12/15 还要删除用户的其他关联关系
+    }
+
+    /**
+     * 登录
+     *
+     * @param request 请求对象
+     * @return 用户信息
+     */
+    public UserResp login(UserReq request) {
+        User loginUser = userDao.login(request.getJobNumber(), request.getPwd());
+        Optional.ofNullable(loginUser).orElseThrow(() -> new RuntimeException(StatusCode.LOGIN_FAILURE.getDesc()));
+        UserResp userResp = BeanMapper.def().map(loginUser, UserResp.class);
+        if (StringUtils.equals(Constant.ADMIN, userResp.getJobNumber())) {
+            userResp.setIsAdmin(Boolean.TRUE);
+        }
+        return userResp;
     }
 }

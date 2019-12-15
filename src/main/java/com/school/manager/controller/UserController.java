@@ -34,8 +34,12 @@ public class UserController {
 
     @ApiOperation("登录")
     @PostMapping("/login")
-    public Result login(@RequestBody UserReq Request) {
-        return new Result();
+    public Result<UserResp> login(@RequestBody UserReq request) {
+        try {
+            return Result.success(userService.login(request));
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
     }
 
     @ApiOperation("用户列表")
