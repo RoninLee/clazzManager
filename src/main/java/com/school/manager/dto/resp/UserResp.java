@@ -19,4 +19,6 @@ public class UserResp extends User implements Serializable {
     private static final long serialVersionUID = -6673938853219935607L;
     @ApiModelProperty("是否管理员,默认否")
     private Boolean isAdmin = Boolean.FALSE;
+    @ApiModelProperty("token")
+    private String token;
 }

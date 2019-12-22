@@ -5,10 +5,12 @@ import com.school.manager.common.Constant;
 import com.school.manager.dao.UserDao;
 import com.school.manager.dto.req.UserReq;
 import com.school.manager.dto.resp.UserResp;
+import com.school.manager.enums.RoleEnum;
 import com.school.manager.enums.StateEnum;
 import com.school.manager.enums.StatusCode;
 import com.school.manager.pojo.User;
 import com.school.manager.pojo.UserPwd;
+import com.school.manager.pojo.UserRole;
 import com.school.manager.utils.BeanMapper;
 import com.school.manager.utils.IdWorker;
 import com.school.manager.utils.Md5Util;
@@ -29,6 +31,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author RoninLee
@@ -44,6 +48,8 @@ public class UserService {
     private UserPwdService userPwdService;
     @Autowired
     private UserRoleService userRoleService;
+    @Autowired
+    private UserGradeSubjectService userGradeSubjectService;
     @Autowired
     private IdWorker idWorker;
 
@@ -129,6 +135,21 @@ public class UserService {
         String defaultPwd = "Sxzx2019";
         userPwd.setPwd(Md5Util.md5(defaultPwd));
         userPwdService.saveOrUpdate(userPwd);
+        // 用户角色
+        List<UserRole> userRoleList = Lists.newArrayList();
+        UserRole userRole = new UserRole();
+        userRole.setId(idWorker.nextId());
+        userRole.setUserId(user.getId());
+        userRole.setRoleId(RoleEnum.teacher.getCode());
+        userRoleList.add(userRole);
+        if (request.getIsGroupLeader()) {
+            UserRole userRoleLeader = new UserRole();
+            userRoleLeader.setId(idWorker.nextId());
+            userRoleLeader.setUserId(user.getId());
+            userRoleLeader.setRoleId(RoleEnum.group_leader.getCode());
+            userRoleList.add(userRoleLeader);
+        }
+        userRoleService.batchSave(userRoleList);
         return user.getId();
     }
 
@@ -143,6 +164,18 @@ public class UserService {
         userDao.save(user);
         UserPwd userPwd = BeanMapper.def().map(request, UserPwd.class);
         userPwdService.saveOrUpdate(userPwd);
+        // 判断是否组长角色
+        if (request.getIsGroupLeader()) {
+            List<UserRole> userRolesByUserId = userRoleService.findUserRolesByUserId(user.getId());
+            List<Long> roleIds = userRolesByUserId.stream().map(UserRole::getRoleId).collect(Collectors.toList());
+            if (!roleIds.contains(RoleEnum.group_leader.getCode())) {
+                UserRole userRole = new UserRole();
+                userRole.setUserId(user.getId());
+                userRole.setRoleId(RoleEnum.group_leader.getCode());
+                userRole.setId(idWorker.nextId());
+                userRoleService.save(userRole);
+            }
+        }
         return request.getId();
     }
 
@@ -155,9 +188,11 @@ public class UserService {
         User user = userDao.findById(id).orElseThrow(() -> new RuntimeException(StatusCode.DATA_NOT_EXIST.getDesc()));
         user.setState(StateEnum.invalid.getCode());
         userDao.save(user);
-        // 删除用户角色关联关系
-        //userRoleService.deleteUserRoleBuUserId(user.getId());
-        // TODO: 2019/12/15 还要删除用户的其他关联关系
+        //删除用户角色关联关系
+        userRoleService.deleteUserRoleBuUserId(user.getId());
+        // 删除用户和年级学科关系
+        userGradeSubjectService.deleteAllByUserId(user.getId());
+        // TODO: 2019/12/22 要不要删除教案相关记录
     }
 
     /**
@@ -173,6 +208,7 @@ public class UserService {
         if (StringUtils.equals(Constant.ADMIN, userResp.getJobNumber())) {
             userResp.setIsAdmin(Boolean.TRUE);
         }
+        userResp.setToken(UUID.randomUUID().toString());
         return userResp;
     }
 }

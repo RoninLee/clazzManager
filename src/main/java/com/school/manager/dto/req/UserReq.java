@@ -5,6 +5,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 /**
  * @author RoninLee
  * @description 用户信息
@@ -16,14 +19,22 @@ public class UserReq extends PageReq {
     private static final long serialVersionUID = 3000236649439495201L;
     @ApiModelProperty("id")
     private Long id;
+
     @ApiModelProperty("名称")
+    @NotBlank(message = "名称不能为空")
     private String name;
+
     @ApiModelProperty("密码")
     private String pwd;
+
     @ApiModelProperty("工号")
+    @NotBlank(message = "工号不能为空")
     private String jobNumber;
-    //@ApiModelProperty("角色")
-    //private List<Long> role;
+
+    @ApiModelProperty("是否为组长")
+    @NotNull(message = "是否班组长不能为空")
+    private Boolean isGroupLeader;
+
     @ApiModelProperty("状态")
     private Integer state;
 }

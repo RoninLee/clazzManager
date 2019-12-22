@@ -6,7 +6,10 @@ package com.school.manager.common;
  */
 public interface Constant {
     Integer PAGE_INDEX = 0;
-    Integer SQL_PAGE_INDEX = 1;
     Integer PAGE_SIZE = 20;
     String ADMIN = "admin";
+    String POINT = ".";
+    String DASH = "-";
+    String FORWARD_SLASH = "/";
+    String BACKSLASH = "\\\\";
 }

@@ -23,6 +23,15 @@ public class UserRoleService {
     }
 
     /**
+     * 新增用户角色关联关系
+     *
+     * @param role 用户角色关联关系
+     */
+    public void save(UserRole role) {
+        userRoleDao.save(role);
+    }
+
+    /**
      * 批量新增用户角色关联关系
      *
      * @param userRoleList 用户角色关联关系列表

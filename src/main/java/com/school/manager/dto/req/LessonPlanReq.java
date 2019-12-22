@@ -1,21 +1,18 @@
-package com.school.manager.pojo;
+package com.school.manager.dto.req;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
  * @author RoninLee
- * @description 教案
+ * @description 教案请求对象
  */
 @Data
-@Entity
-@Table(name = "lesson_plan")
-public class LessonPlan implements Serializable {
-    private static final long serialVersionUID = -4704148842993975785L;
+public class LessonPlanReq implements Serializable {
+    private static final long serialVersionUID = 8359904526770297586L;
     @Id
     private Long id;
     /**
@@ -54,4 +51,6 @@ public class LessonPlan implements Serializable {
      * 练习题存储的文件名字
      */
     private String exercisesFileName;
+
+    private MultipartFile file;
 }

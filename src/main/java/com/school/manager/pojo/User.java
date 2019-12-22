@@ -31,4 +31,8 @@ public class User implements Serializable {
      * 状态
      */
     private Integer state;
+    /**
+     * 是否组长
+     */
+    private Boolean isGroupLeader;
 }

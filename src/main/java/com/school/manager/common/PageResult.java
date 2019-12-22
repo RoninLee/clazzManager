@@ -13,6 +13,7 @@ import lombok.EqualsAndHashCode;
 public class PageResult<T> extends Result<T> {
     private static final long serialVersionUID = -6819637503391799995L;
     private Long total;
+    private Integer pages;
 
     public PageResult() {
         super();

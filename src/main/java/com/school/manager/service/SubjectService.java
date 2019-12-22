@@ -48,7 +48,7 @@ public class SubjectService {
      */
     public List<SubjectResp> list(SubjectReq request) {
         Integer pageSize = Optional.ofNullable(request.getPageSize()).orElse(Constant.PAGE_SIZE);
-        Integer pageIndex = Optional.ofNullable(request.getPageIndex()).map(index -> (index - 1) * pageSize).orElse(Constant.SQL_PAGE_INDEX);
+        Integer pageIndex = Optional.ofNullable(request.getPageIndex()).map(index -> (index - 1) * pageSize).orElse(Constant.PAGE_INDEX);
         return BeanMapper.def().mapList(subjectDao.list(pageIndex, pageSize), Subject.class, SubjectResp.class);
     }
 
@@ -75,5 +75,6 @@ public class SubjectService {
     public void remove(Long id) {
         Subject subject = subjectDao.findById(id).orElseThrow(() -> new RuntimeException(StatusCode.DATA_NOT_EXIST.getDesc()));
         subjectDao.delete(subject);
+        // TODO: 2019/12/22 删除人员年级学科关联关系
     }
 }
