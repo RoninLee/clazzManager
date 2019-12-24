@@ -30,6 +30,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -99,6 +100,10 @@ public class UserService {
                 }
                 Predicate state = criteriaBuilder.equal(root.get("state").as(Integer.class), StateEnum.valid.getCode());
                 list.add(state);
+                // 管理员id
+                String adminId = "-1";
+                Predicate admin = criteriaBuilder.notEqual(root.get("id").as(String.class), adminId);
+                list.add(admin);
                 Predicate[] par = new Predicate[list.size()];
                 list.toArray(par);
                 return criteriaBuilder.and(par);
@@ -112,7 +117,7 @@ public class UserService {
      * @param id id
      * @return 人员信息
      */
-    public UserResp findById(Long id) {
+    public UserResp findById(String id) {
         return BeanMapper.def().map(userDao.findById(id).orElseThrow(() -> new RuntimeException(StatusCode.DATA_NOT_EXIST.getDesc())), UserResp.class);
     }
 
@@ -121,12 +126,14 @@ public class UserService {
      *
      * @param request 用户信息
      */
-    public Long save(UserReq request) {
+    public String save(UserReq request) {
         // 转换对象
         User user = BeanMapper.def().map(request, User.class);
         // 雪花算法生成id
-        user.setId(idWorker.nextId());
+        user.setId(String.valueOf(idWorker.nextId()));
         user.setState(StateEnum.valid.getCode());
+        Boolean isGroupLeader = Optional.ofNullable(request.getIsGroupLeader()).orElse(Boolean.FALSE);
+        user.setIsGroupLeader(isGroupLeader);
         userDao.save(user);
         // 用户密码
         UserPwd userPwd = new UserPwd();
@@ -138,13 +145,13 @@ public class UserService {
         // 用户角色
         List<UserRole> userRoleList = Lists.newArrayList();
         UserRole userRole = new UserRole();
-        userRole.setId(idWorker.nextId());
+        userRole.setId(String.valueOf(idWorker.nextId()));
         userRole.setUserId(user.getId());
         userRole.setRoleId(RoleEnum.teacher.getCode());
         userRoleList.add(userRole);
-        if (request.getIsGroupLeader()) {
+        if (isGroupLeader) {
             UserRole userRoleLeader = new UserRole();
-            userRoleLeader.setId(idWorker.nextId());
+            userRoleLeader.setId(String.valueOf(idWorker.nextId()));
             userRoleLeader.setUserId(user.getId());
             userRoleLeader.setRoleId(RoleEnum.group_leader.getCode());
             userRoleList.add(userRoleLeader);
@@ -158,21 +165,27 @@ public class UserService {
      *
      * @param request 用户信息
      */
-    public Long update(UserReq request) {
+    public String update(UserReq request) {
+        User userByJobNumber = userDao.findUserByJobNumber(request.getJobNumber());
+        if (Objects.nonNull(userByJobNumber)) {
+            throw new RuntimeException("工号已存在！");
+        }
         User user = BeanMapper.def().map(request, User.class);
         user.setState(StateEnum.valid.getCode());
         userDao.save(user);
-        UserPwd userPwd = BeanMapper.def().map(request, UserPwd.class);
-        userPwdService.saveOrUpdate(userPwd);
+        if (StringUtils.isNotBlank(request.getPwd())) {
+            UserPwd userPwd = BeanMapper.def().map(request, UserPwd.class);
+            userPwdService.saveOrUpdate(userPwd);
+        }
         // 判断是否组长角色
         if (request.getIsGroupLeader()) {
             List<UserRole> userRolesByUserId = userRoleService.findUserRolesByUserId(user.getId());
-            List<Long> roleIds = userRolesByUserId.stream().map(UserRole::getRoleId).collect(Collectors.toList());
+            List<String> roleIds = userRolesByUserId.stream().map(UserRole::getRoleId).collect(Collectors.toList());
             if (!roleIds.contains(RoleEnum.group_leader.getCode())) {
                 UserRole userRole = new UserRole();
                 userRole.setUserId(user.getId());
                 userRole.setRoleId(RoleEnum.group_leader.getCode());
-                userRole.setId(idWorker.nextId());
+                userRole.setId(String.valueOf(idWorker.nextId()));
                 userRoleService.save(userRole);
             }
         }
@@ -180,14 +193,16 @@ public class UserService {
     }
 
     /**
-     * 逻辑删除用户
+     * 删除用户
      *
      * @param id 用户id
      */
-    public void removeById(Long id) {
+    public void removeById(String id) {
         User user = userDao.findById(id).orElseThrow(() -> new RuntimeException(StatusCode.DATA_NOT_EXIST.getDesc()));
-        user.setState(StateEnum.invalid.getCode());
-        userDao.save(user);
+        //user.setState(StateEnum.invalid.getCode());
+        //userDao.save(user);
+        userDao.deleteById(id);
+        userPwdService.delete(id);
         //删除用户角色关联关系
         userRoleService.deleteUserRoleBuUserId(user.getId());
         // 删除用户和年级学科关系

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -55,7 +56,7 @@ public class UserController {
 
     @ApiOperation("用户信息")
     @PostMapping("info")
-    public Result<UserResp> userInfo(@RequestBody CommonSelOrDelReq<Long> request) {
+    public Result<UserResp> userInfo(@RequestBody CommonSelOrDelReq<String> request) {
         try {
             return Result.success(userService.findById(request.getId()));
         } catch (Exception e) {
@@ -65,7 +66,7 @@ public class UserController {
 
     @ApiOperation("新增人员")
     @PostMapping("/save")
-    public Result<UserResp> save(@RequestBody UserReq request) {
+    public Result<UserResp> save(@RequestBody @Valid UserReq request) {
         try {
             return Result.success(userService.findById(userService.save(request)));
         } catch (Exception e) {
@@ -75,7 +76,7 @@ public class UserController {
 
     @ApiOperation("更新人员信息")
     @PostMapping("/update")
-    public Result<UserResp> update(@RequestBody UserReq request) {
+    public Result<UserResp> update(@RequestBody @Valid UserReq request) {
         try {
             return Result.success(userService.findById(userService.update(request)));
         } catch (Exception e) {
@@ -85,7 +86,7 @@ public class UserController {
 
     @ApiOperation("删除人员信息")
     @PostMapping("/remove")
-    public Result<Object> remove(@RequestBody CommonSelOrDelReq<Long> request) {
+    public Result<Object> remove(@RequestBody CommonSelOrDelReq<String> request) {
         try {
             userService.removeById(request.getId());
             return Result.success();

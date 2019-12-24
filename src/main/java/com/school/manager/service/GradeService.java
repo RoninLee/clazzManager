@@ -8,6 +8,7 @@ import com.school.manager.enums.StatusCode;
 import com.school.manager.pojo.Grade;
 import com.school.manager.utils.BeanMapper;
 import com.school.manager.utils.IdWorker;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -36,7 +36,7 @@ public class GradeService {
      * @param id 年级id
      * @return 年级信息
      */
-    public GradeResp info(Long id) {
+    public GradeResp info(String id) {
         return BeanMapper.def().map(gradeDao.findById(id).orElseThrow(() -> new RuntimeException(StatusCode.DATA_NOT_EXIST.getDesc())), GradeResp.class);
     }
 
@@ -57,8 +57,8 @@ public class GradeService {
      */
     public GradeResp saveOrUpdate(GradeReq request) {
         Grade grade = BeanMapper.def().map(request, Grade.class);
-        if (Objects.isNull(grade.getId()) || grade.getId() == 0) {
-            grade.setId(idWorker.nextId());
+        if (StringUtils.isBlank(request.getId())) {
+            grade.setId(String.valueOf(idWorker.nextId()));
         }
         gradeDao.save(grade);
         return this.info(grade.getId());
@@ -69,7 +69,7 @@ public class GradeService {
      *
      * @param id 年级id
      */
-    public void remove(Long id) {
+    public void remove(String id) {
         gradeDao.deleteById(id);
         // TODO: 2019/12/15 删除年级相关关联关系
     }

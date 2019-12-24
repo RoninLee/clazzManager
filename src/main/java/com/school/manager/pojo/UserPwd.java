@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class UserPwd implements Serializable {
     private static final long serialVersionUID = -4170020575014480457L;
     @Id
-    private Long id;
+    private String id;
     /**
      * 密文密码
      */

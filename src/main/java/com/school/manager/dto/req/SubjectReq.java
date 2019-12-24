@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 public class SubjectReq extends PageReq {
     private static final long serialVersionUID = -4848400876441460846L;
     @ApiModelProperty("id")
-    private Long id;
+    private String id;
     @ApiModelProperty("学科名称")
     private String name;
 }

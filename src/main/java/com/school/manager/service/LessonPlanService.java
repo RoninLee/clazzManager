@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 
 /**
@@ -40,8 +39,8 @@ public class LessonPlanService {
      * @param chapterId 章节id
      * @return 文件信息
      */
-    public FileResp upload(MultipartFile file, String type, Long userId, Long chapterId) {
-        if (file.isEmpty() || StringUtils.isBlank(type) || Objects.isNull(userId) || Objects.isNull(chapterId)) {
+    public FileResp upload(MultipartFile file, String type, String userId, String chapterId) {
+        if (file.isEmpty() || StringUtils.isBlank(type) || StringUtils.isBlank(userId) || StringUtils.isBlank(chapterId)) {
             throw new RuntimeException(StatusCode.REQUEST_IS_NULL.getDesc());
         }
         String filename = file.getOriginalFilename();

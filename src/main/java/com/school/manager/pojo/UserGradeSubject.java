@@ -17,17 +17,17 @@ import java.io.Serializable;
 public class UserGradeSubject implements Serializable {
     private static final long serialVersionUID = 2725028113680219719L;
     @Id
-    private Long id;
+    private String id;
     /**
      * 用户id
      */
-    private Long userId;
+    private String userId;
     /**
      * 年级id
      */
-    private Long gradeId;
+    private String gradeId;
     /**
      * 学科id
      */
-    private Long subjectId;
+    private String subjectId;
 }

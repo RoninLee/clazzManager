@@ -29,8 +29,8 @@ public class LessonPlanController {
     @PostMapping("upload")
     public Result<Object> upload(@RequestParam(value = "file", required = true) MultipartFile file,
                                  @RequestParam(value = "type", required = true) String type,
-                                 @RequestParam(value = "userId", required = true) Long userId,
-                                 @RequestParam(value = "chapterId", required = true) Long chapterId) {
+                                 @RequestParam(value = "userId", required = true) String userId,
+                                 @RequestParam(value = "chapterId", required = true) String chapterId) {
         return Result.success(lessonPlanService.upload(file, type, userId, chapterId));
     }
 }

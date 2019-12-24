@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @author RoninLee
  * @description 年级管理
  */
-public interface GradeDao extends JpaRepository<Grade, Long>, JpaSpecificationExecutor<Grade> {
+public interface GradeDao extends JpaRepository<Grade, String>, JpaSpecificationExecutor<Grade> {
 }

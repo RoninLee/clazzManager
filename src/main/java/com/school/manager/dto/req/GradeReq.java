@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 public class GradeReq extends PageReq {
     private static final long serialVersionUID = 7547307610574457880L;
     @ApiModelProperty("id")
-    private Long id;
+    private String id;
     @ApiModelProperty("年级名称")
     private String name;
 }

@@ -11,7 +11,7 @@ import java.util.List;
  * @author RoninLee
  * @description 学科管理
  */
-public interface SubjectDao extends JpaRepository<Subject, Long>, JpaSpecificationExecutor<Subject> {
+public interface SubjectDao extends JpaRepository<Subject, String>, JpaSpecificationExecutor<Subject> {
     /**
      * 分页查询
      *

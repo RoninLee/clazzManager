@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class Grade implements Serializable {
     private static final long serialVersionUID = -6145718171115830691L;
     @Id
-    private Long id;
+    private String id;
     /**
      * 年级名称
      */

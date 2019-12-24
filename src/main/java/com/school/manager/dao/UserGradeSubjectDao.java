@@ -13,13 +13,13 @@ import org.springframework.data.jpa.repository.Query;
  * @author RoninLee
  * @description 人员年级学科关联关系
  */
-public interface UserGradeSubjectDao extends JpaRepository<UserGradeSubject, Long>, JpaSpecificationExecutor<UserGradeSubject> {
+public interface UserGradeSubjectDao extends JpaRepository<UserGradeSubject, String>, JpaSpecificationExecutor<UserGradeSubject> {
     /**
      * 根据用户id批量删除
      *
      * @param userId 用户id
      */
-    void deleteAllByUserId(Long userId);
+    void deleteAllByUserId(String userId);
 
     /**
      * 模糊查询

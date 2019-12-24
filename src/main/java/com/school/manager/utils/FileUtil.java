@@ -1,5 +1,6 @@
 package com.school.manager.utils;
 
+import com.school.manager.common.Constant;
 import com.school.manager.common.Result;
 import com.school.manager.entity.FileConfigConstant;
 import lombok.extern.slf4j.Slf4j;
@@ -104,7 +105,7 @@ public class FileUtil {
     public Result save(@RequestParam("file") MultipartFile file, @RequestParam String checkNum, @RequestParam String facilityTypeNum) {
         String fileName = "";
         if (!file.isEmpty()) {
-            if (!file.getOriginalFilename().contains(".")) {
+            if (!file.getOriginalFilename().contains(Constant.POINT)) {
                 return Result.error("上传失败:文件没有后缀名");
             }
             //文件名=设备类型-时间戳.后缀

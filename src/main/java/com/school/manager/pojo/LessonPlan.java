@@ -17,15 +17,15 @@ import java.io.Serializable;
 public class LessonPlan implements Serializable {
     private static final long serialVersionUID = -4704148842993975785L;
     @Id
-    private Long id;
+    private String id;
     /**
      * 章节id
      */
-    private Long chapterId;
+    private String chapterId;
     /**
      * 用户id
      */
-    private Long userId;
+    private String userId;
     /**
      * 在线文档内容
      */

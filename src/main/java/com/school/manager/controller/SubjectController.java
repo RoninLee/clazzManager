@@ -30,7 +30,7 @@ public class SubjectController {
 
     @ApiOperation("学科信息")
     @PostMapping("/info")
-    public Result<SubjectResp> info(@RequestBody CommonSelOrDelReq<Long> request) {
+    public Result<SubjectResp> info(@RequestBody CommonSelOrDelReq<String> request) {
         try {
             return Result.success(subjectService.info(request.getId()));
         } catch (Exception e) {
@@ -60,7 +60,7 @@ public class SubjectController {
 
     @ApiOperation("删除学科")
     @PostMapping("/remove")
-    public Result<Object> remove(@RequestBody CommonSelOrDelReq<Long> request) {
+    public Result<Object> remove(@RequestBody CommonSelOrDelReq<String> request) {
         try {
             subjectService.remove(request.getId());
             return Result.success();

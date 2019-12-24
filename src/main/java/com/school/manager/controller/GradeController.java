@@ -40,7 +40,7 @@ public class GradeController {
 
     @ApiOperation("年级信息")
     @PostMapping("/info")
-    public Result<GradeResp> info(@RequestBody CommonSelOrDelReq<Long> request) {
+    public Result<GradeResp> info(@RequestBody CommonSelOrDelReq<String> request) {
         try {
             return Result.success(gradeService.info(request.getId()));
         } catch (Exception e) {
@@ -60,7 +60,7 @@ public class GradeController {
 
     @ApiOperation("删除年级")
     @PostMapping("/remove")
-    public Result<Object> remove(@RequestBody CommonSelOrDelReq<Long> request) {
+    public Result<Object> remove(@RequestBody CommonSelOrDelReq<String> request) {
         try {
             gradeService.remove(request.getId());
             return Result.success();

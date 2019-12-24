@@ -44,7 +44,7 @@ public class UserGradeSubjectController {
 
     @ApiOperation("删除关联关系")
     @PostMapping("delete")
-    public Result delete(@RequestBody @Valid CommonSelOrDelReq<Long> request) {
+    public Result delete(@RequestBody @Valid CommonSelOrDelReq<String> request) {
         userGradeSubjectService.delete(request.getId());
         return Result.success();
     }

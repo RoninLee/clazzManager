@@ -10,6 +10,7 @@ import com.school.manager.pojo.UserGradeSubject;
 import com.school.manager.utils.BeanMapper;
 import com.school.manager.utils.IdWorker;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -45,8 +45,8 @@ public class UserGradeSubjectService {
      */
     public void saveOrUpdate(UserGradeSubjectReq request) {
         UserGradeSubject gradeSubject = BeanMapper.def().map(request, UserGradeSubject.class);
-        if (Objects.isNull(gradeSubject.getId())) {
-            gradeSubject.setId(idWorker.nextId());
+        if (StringUtils.isBlank(gradeSubject.getId())) {
+            gradeSubject.setId(String.valueOf(idWorker.nextId()));
         }
         userGradeSubjectDao.save(gradeSubject);
     }
@@ -56,7 +56,7 @@ public class UserGradeSubjectService {
      *
      * @param id id
      */
-    public void delete(Long id) {
+    public void delete(String id) {
         userGradeSubjectDao.deleteById(id);
     }
 
@@ -65,7 +65,7 @@ public class UserGradeSubjectService {
      *
      * @param userId 用户id
      */
-    public void deleteAllByUserId(Long userId) {
+    public void deleteAllByUserId(String userId) {
         userGradeSubjectDao.deleteAllByUserId(userId);
     }
 
@@ -93,7 +93,7 @@ public class UserGradeSubjectService {
      * @param id 关系列表id
      * @return 关系详情
      */
-    public UserGradeSubjectResp findById(Long id) {
+    public UserGradeSubjectResp findById(String id) {
         UserGradeSubject userGradeSubject = userGradeSubjectDao.findById(id).orElseThrow(() -> new RuntimeException(StatusCode.LOGIN_FAILURE.getDesc()));
         return BeanMapper.def().map(userGradeSubject, UserGradeSubjectResp.class);
     }

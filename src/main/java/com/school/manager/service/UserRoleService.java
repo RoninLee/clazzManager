@@ -45,7 +45,7 @@ public class UserRoleService {
      *
      * @return 角色列表
      */
-    public List<UserRole> findUserRolesByUserId(Long userId) {
+    public List<UserRole> findUserRolesByUserId(String userId) {
         return userRoleDao.findUserRolesByUserId(userId);
     }
 
@@ -54,7 +54,7 @@ public class UserRoleService {
      *
      * @param userId 用户id
      */
-    public void deleteUserRoleBuUserId(Long userId) {
+    public void deleteUserRoleBuUserId(String userId) {
         userRoleDao.deleteByUserId(userId);
     }
 
@@ -64,7 +64,7 @@ public class UserRoleService {
      * @param userIds 用户id
      * @return 用户角色关联关系
      */
-    public List<UserRole> findUserRolesByUserIdIn(List<Long> userIds) {
+    public List<UserRole> findUserRolesByUserIdIn(List<String> userIds) {
         return userRoleDao.findUserRolesByUserIdIn(userIds);
     }
 

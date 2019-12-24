@@ -18,10 +18,10 @@ public class UserGradeSubjectResp implements Serializable {
     private static final long serialVersionUID = -2327072156583767788L;
 
     @ApiModelProperty("主键id")
-    private Long id;
+    private String id;
 
     @ApiModelProperty("用户id")
-    private Long userId;
+    private String userId;
 
     @ApiModelProperty("名称")
     private String name;
@@ -30,13 +30,13 @@ public class UserGradeSubjectResp implements Serializable {
     private String jobNumber;
 
     @ApiModelProperty("年级id")
-    private Long gradeId;
+    private String gradeId;
 
     @ApiModelProperty("年级名称")
     private String gradeName;
 
     @ApiModelProperty("学科id")
-    private Long subjectId;
+    private String subjectId;
 
     @ApiModelProperty("学科名称")
     private String subjectName;

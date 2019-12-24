@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @author RoninLee
  * @description 用户密码
  */
-public interface UserPwdDao extends JpaRepository<UserPwd, Long>, JpaSpecificationExecutor<UserPwd> {
+public interface UserPwdDao extends JpaRepository<UserPwd, String>, JpaSpecificationExecutor<UserPwd> {
 }

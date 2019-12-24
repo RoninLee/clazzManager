@@ -8,18 +8,18 @@ public enum RoleEnum {
     /**
      * 角色
      */
-    group_leader(1L, "备课组长"),
-    teacher(2L, "教师"),
+    group_leader("1", "备课组长"),
+    teacher("2", "教师"),
     ;
-    private Long code;
+    private String code;
     private String desc;
 
-    RoleEnum(Long code, String desc) {
+    RoleEnum(String code, String desc) {
         this.code = code;
         this.desc = desc;
     }
 
-    public Long getCode() {
+    public String getCode() {
         return code;
     }
 

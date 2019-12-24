@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class GradeSubjectResp implements Serializable {
     private static final long serialVersionUID = -3737079155090328814L;
     @ApiModelProperty("年级id")
-    private Long gradeId;
+    private String gradeId;
     @ApiModelProperty("学科id")
-    private Long subjectId;
+    private String subjectId;
 }

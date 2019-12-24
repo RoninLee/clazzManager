@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 /**
  * @author RoninLee
@@ -18,7 +17,7 @@ import javax.validation.constraints.NotNull;
 public class UserReq extends PageReq {
     private static final long serialVersionUID = 3000236649439495201L;
     @ApiModelProperty("id")
-    private Long id;
+    private String id;
 
     @ApiModelProperty("名称")
     @NotBlank(message = "名称不能为空")
@@ -32,7 +31,6 @@ public class UserReq extends PageReq {
     private String jobNumber;
 
     @ApiModelProperty("是否为组长")
-    @NotNull(message = "是否班组长不能为空")
     private Boolean isGroupLeader;
 
     @ApiModelProperty("状态")

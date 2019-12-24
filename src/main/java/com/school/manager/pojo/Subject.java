@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class Subject implements Serializable {
     private static final long serialVersionUID = 3478258385162336751L;
     @Id
-    private Long id;
+    private String id;
     /**
      * 学科名称
      */

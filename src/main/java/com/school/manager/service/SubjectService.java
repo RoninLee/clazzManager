@@ -8,6 +8,7 @@ import com.school.manager.enums.StatusCode;
 import com.school.manager.pojo.Subject;
 import com.school.manager.utils.BeanMapper;
 import com.school.manager.utils.IdWorker;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -36,7 +36,7 @@ public class SubjectService {
      * @param id 学科id
      * @return 学科信息
      */
-    public SubjectResp info(Long id) {
+    public SubjectResp info(String id) {
         return BeanMapper.def().map(subjectDao.findById(id).orElseThrow(() -> new RuntimeException(StatusCode.DATA_NOT_EXIST.getDesc())), SubjectResp.class);
     }
 
@@ -60,8 +60,8 @@ public class SubjectService {
      */
     public SubjectResp saveOrUpdate(SubjectReq request) {
         Subject subject = BeanMapper.def().map(request, Subject.class);
-        if (Objects.isNull(subject.getId()) || subject.getId() == 0) {
-            subject.setId(idWorker.nextId());
+        if (StringUtils.isBlank(subject.getId())) {
+            subject.setId(String.valueOf(idWorker.nextId()));
         }
         subjectDao.save(subject);
         return this.info(subject.getId());
@@ -72,7 +72,7 @@ public class SubjectService {
      *
      * @param id 学科id
      */
-    public void remove(Long id) {
+    public void remove(String id) {
         Subject subject = subjectDao.findById(id).orElseThrow(() -> new RuntimeException(StatusCode.DATA_NOT_EXIST.getDesc()));
         subjectDao.delete(subject);
         // TODO: 2019/12/22 删除人员年级学科关联关系

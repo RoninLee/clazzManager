@@ -29,4 +29,12 @@ public class UserPwdService {
         userPwdDao.save(userPwd);
     }
 
+    /**
+     * 删除密码
+     *
+     * @param id 用户ID
+     */
+    public void delete(String id) {
+        userPwdDao.deleteById(id);
+    }
 }

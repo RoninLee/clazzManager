@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class Chapter implements Serializable {
     private static final long serialVersionUID = 3469919845137476832L;
     @Id
-    private Long id;
+    private String id;
     /**
      * 章节名称
      */

@@ -17,17 +17,17 @@ public class UserGradeSubjectReq implements Serializable {
     private static final long serialVersionUID = 3398608512030202555L;
 
     @ApiModelProperty("主键id")
-    private Long id;
+    private String id;
 
     @NotNull(message = "位置用户")
     @ApiModelProperty("用户id")
-    private Long userId;
+    private String userId;
 
     @NotNull(message = "未知年级")
     @ApiModelProperty("年级id")
-    private Long gradeId;
+    private String gradeId;
 
     @NotNull(message = "未知学科")
     @ApiModelProperty("学科id")
-    private Long subjectId;
+    private String subjectId;
 }

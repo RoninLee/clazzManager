@@ -14,15 +14,15 @@ import java.io.Serializable;
 public class LessonPlanReq implements Serializable {
     private static final long serialVersionUID = 8359904526770297586L;
     @Id
-    private Long id;
+    private String id;
     /**
      * 章节id
      */
-    private Long chapterId;
+    private String chapterId;
     /**
      * 用户id
      */
-    private Long userId;
+    private String userId;
     /**
      * 在线文档内容
      */
