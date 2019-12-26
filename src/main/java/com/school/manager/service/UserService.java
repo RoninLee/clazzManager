@@ -167,7 +167,7 @@ public class UserService {
      */
     public String update(UserReq request) {
         User userByJobNumber = userDao.findUserByJobNumber(request.getJobNumber());
-        if (Objects.nonNull(userByJobNumber)) {
+        if (Objects.nonNull(userByJobNumber) && !StringUtils.equals(userByJobNumber.getId(), request.getId())) {
             throw new RuntimeException("工号已存在！");
         }
         User user = BeanMapper.def().map(request, User.class);
