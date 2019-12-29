@@ -2,9 +2,13 @@ package com.school.manager;
 
 import com.school.manager.dao.UserGradeSubjectDao;
 import com.school.manager.dto.resp.UserGradeSubjectResp;
+import com.school.manager.entity.LoginUserInfo;
+import com.school.manager.pojo.User;
+import com.school.manager.pojo.UserPwd;
 import com.school.manager.utils.Md5Util;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.BeanUtils;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +34,20 @@ public class ClazzManagerApplicationTests {
         int totalPages = objects.getTotalPages();
         List<UserGradeSubjectResp> content = objects.getContent();
         System.out.println(totalElements + ";" + totalPages + ";" + content.toString());
+    }
+
+    @Test
+    public void beanCopy() {
+        LoginUserInfo loginUserInfo = new LoginUserInfo();
+        User user = new User();
+        user.setId("1234");
+        user.setUsername("name");
+        UserPwd userPwd = new UserPwd();
+        userPwd.setPassword("wrwer");
+        BeanUtils.copyProperties(user, loginUserInfo);
+        System.out.println(loginUserInfo.toString());
+        BeanUtils.copyProperties(userPwd, loginUserInfo);
+        System.out.println(loginUserInfo.toString());
     }
 
 }

@@ -21,17 +21,17 @@ public class UserReq extends PageReq {
 
     @ApiModelProperty("名称")
     @NotBlank(message = "名称不能为空")
-    private String name;
+    private String username;
 
     @ApiModelProperty("密码")
-    private String pwd;
+    private String password;
 
     @ApiModelProperty("工号")
     @NotBlank(message = "工号不能为空")
     private String jobNumber;
 
     @ApiModelProperty("是否为组长")
-    private Boolean isGroupLeader;
+    private Boolean groupLeaderFlag;
 
     @ApiModelProperty("状态")
     private Integer state;

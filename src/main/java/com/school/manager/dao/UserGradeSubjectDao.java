@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 /**
  * @author RoninLee
  * @description 人员年级学科关联关系
@@ -28,6 +30,14 @@ public interface UserGradeSubjectDao extends JpaRepository<UserGradeSubject, Str
      * @param pageable  分页对象
      * @return 关系列表
      */
-    @Query(value = "select new com.school.manager.dto.resp.UserGradeSubjectResp(ugs.id,u.id,u.name,u.jobNumber,g.id,g.name,s.id,s.name) from UserGradeSubject ugs join User u on ugs.userId = u.id join Grade g on ugs.gradeId = g.id join Subject s on ugs.subjectId = s.id where u.name like concat(:fuzzyName,'%') or u.jobNumber like concat(:fuzzyName,'%')")
+    @Query(value = "select new com.school.manager.dto.resp.UserGradeSubjectResp(ugs.id,u.id,u.username,u.jobNumber,g.id,g.name,s.id,s.name) from UserGradeSubject ugs join User u on ugs.userId = u.id join Grade g on ugs.gradeId = g.id join Subject s on ugs.subjectId = s.id where u.username like concat(:fuzzyName,'%') or u.jobNumber like concat(:fuzzyName,'%')")
     Page<UserGradeSubjectResp> fuzzyQueryList(@Param("fuzzyName") String fuzzyName, Pageable pageable);
+
+    /**
+     * 根据用户id获取年级学科绑定关系
+     *
+     * @param userId 用户id
+     * @return 年级学科绑定关系列表
+     */
+    List<UserGradeSubject> findUserGradeSubjectsByUserId(String userId);
 }

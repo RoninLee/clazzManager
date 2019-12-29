@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author RoninLee
- * @description
+ * @description 文件服务用配置
  */
 @Component
 @ConfigurationProperties(prefix = "system")

@@ -1,23 +1,19 @@
-package com.school.manager.pojo;
+package com.school.manager.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
  * @author RoninLee
- * @description 用户
+ * @description 用户信息
  */
 @Data
-@Entity
-@Table(name = "user")
-public class User implements Serializable {
-    private static final long serialVersionUID = 7131032465227610963L;
-
-    @Id
+public class UserInfo implements Serializable {
+    private static final long serialVersionUID = 5280530276619957149L;
+    /**
+     * 主键id
+     */
     private String id;
     /**
      * 名字
@@ -28,6 +24,10 @@ public class User implements Serializable {
      */
     private String jobNumber;
     /**
+     * 密码
+     */
+    private String password;
+    /**
      * 状态
      */
     private Integer state;
@@ -35,4 +35,5 @@ public class User implements Serializable {
      * 是否组长
      */
     private Boolean groupLeaderFlag;
+
 }

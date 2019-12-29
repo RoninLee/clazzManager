@@ -21,5 +21,5 @@ public class UserPwd implements Serializable {
     /**
      * 密文密码
      */
-    private String pwd;
+    private String password;
 }

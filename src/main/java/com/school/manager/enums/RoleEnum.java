@@ -8,8 +8,9 @@ public enum RoleEnum {
     /**
      * 角色
      */
-    group_leader("1", "备课组长"),
-    teacher("2", "教师"),
+    ADMIN("-1", "admin"),
+    GROUP_LEADER("1", "备课组长"),
+    TEACHER("2", "教师"),
     ;
     private String code;
     private String desc;
