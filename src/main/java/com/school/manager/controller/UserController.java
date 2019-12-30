@@ -3,14 +3,18 @@ package com.school.manager.controller;
 import com.school.manager.common.PageResult;
 import com.school.manager.common.Result;
 import com.school.manager.dto.req.CommonSelOrDelReq;
-import com.school.manager.dto.req.LoginUserReq;
+import com.school.manager.dto.req.LoginReq;
 import com.school.manager.dto.req.UserReq;
+import com.school.manager.dto.resp.LoginResp;
 import com.school.manager.dto.resp.UserResp;
+import com.school.manager.entity.LoginUserInfo;
 import com.school.manager.enums.StatusCode;
 import com.school.manager.pojo.User;
 import com.school.manager.service.UserService;
+import com.school.manager.utils.JwtUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
@@ -32,6 +36,7 @@ import java.util.Objects;
  * @author RoninLee
  * @description 用户管理
  */
+@Slf4j
 @RestController
 @CrossOrigin
 @Api(tags = {"用户管理模块"}, value = "用户管理")
@@ -41,14 +46,23 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @ApiOperation("登录")
     @PostMapping("/login")
-    public Result<UserResp> login(@Valid @RequestBody LoginUserReq request) {
-        UserResp userResp = userService.login(request);
-        if (Objects.nonNull(userResp)) {
-            return Result.success(userResp);
+    public Result<LoginResp> login(@Valid @RequestBody LoginReq request) {
+        log.warn("loginController()入===》当前时间：{}", System.currentTimeMillis());
+        LoginUserInfo loginUserInfo = userService.login(request);
+        if (Objects.isNull(loginUserInfo)) {
+            return Result.error(StatusCode.LOGIN_FAILURE.getDesc());
         }
-        return Result.error(StatusCode.LOGIN_FAILURE.getDesc());
+        LoginResp loginResp = new LoginResp();
+        String token = jwtUtil.createJwt(loginUserInfo.getId(), loginUserInfo.getUsername(), loginUserInfo);
+        loginResp.setToken(token);
+        loginResp.setLoginUserInfo(loginUserInfo);
+        log.warn("loginController()出===》当前时间：{}", System.currentTimeMillis());
+        return Result.success(loginResp);
     }
 
     @ApiOperation("登出")

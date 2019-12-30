@@ -1,6 +1,6 @@
 package com.school.manager.service;
 
-import com.school.manager.dto.req.LoginUserReq;
+import com.school.manager.dto.req.LoginReq;
 import com.school.manager.dto.req.UserReq;
 import com.school.manager.dto.resp.UserResp;
 import com.school.manager.entity.LoginUserInfo;
@@ -20,7 +20,7 @@ public interface UserService {
      * @param request 请求对象
      * @return 用户信息
      */
-    UserResp login(LoginUserReq request);
+    LoginUserInfo login(LoginReq request);
 
     /**
      * 分页查询用户列表
@@ -67,5 +67,5 @@ public interface UserService {
      * @param jobNumber 工号
      * @return 用户详细信息
      */
-    LoginUserInfo info(String jobNumber);
+    com.school.manager.entity.LoginUserInfo info(String jobNumber);
 }

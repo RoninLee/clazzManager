@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * @description 文件服务用配置
  */
 @Component
-@ConfigurationProperties(prefix = "system")
+@ConfigurationProperties(prefix = "system.file")
 @Data
 public class FileConfigConstant {
     public String fileUrl;

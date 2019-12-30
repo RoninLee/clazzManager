@@ -3,7 +3,7 @@ package com.school.manager.service.impl;
 import com.google.common.collect.Lists;
 import com.school.manager.common.Constant;
 import com.school.manager.dao.UserDao;
-import com.school.manager.dto.req.LoginUserReq;
+import com.school.manager.dto.req.LoginReq;
 import com.school.manager.dto.req.UserReq;
 import com.school.manager.dto.resp.UserResp;
 import com.school.manager.entity.LoginUserInfo;
@@ -21,6 +21,7 @@ import com.school.manager.service.UserService;
 import com.school.manager.utils.BeanMapper;
 import com.school.manager.utils.IdWorker;
 import com.school.manager.utils.Md5Util;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,13 +43,13 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
  * @author RoninLee
  * @description 用户管理
  */
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -64,8 +65,6 @@ public class UserServiceImpl implements UserService {
     private IdWorker idWorker;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private LoginServiceImpl loginServiceImpl;
 
 
     /**
@@ -75,15 +74,14 @@ public class UserServiceImpl implements UserService {
      * @return 用户信息
      */
     @Override
-    public UserResp login(LoginUserReq request) {
+    public LoginUserInfo login(LoginReq request) {
+        log.warn("login()入===》当前时间：{}", System.currentTimeMillis());
         LoginUserInfo loginUserInfo = this.info(request.getJobNumber());
         if (passwordEncoder.matches(request.getPwd(), loginUserInfo.getPassword())) {
-            UserResp userResp = new UserResp();
-            userResp.setUsername(loginUserInfo.getUsername());
-            userResp.setJobNumber(loginUserInfo.getJobNumber());
-            userResp.setToken(UUID.randomUUID().toString());
-            return userResp;
+            log.warn("login()出===》当前时间：{}", System.currentTimeMillis());
+            return loginUserInfo;
         }
+        log.warn("login()出===》当前时间：{}", System.currentTimeMillis());
         return null;
     }
 
@@ -259,6 +257,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public LoginUserInfo info(String jobNumber) {
+        log.warn("info()入===》当前时间：{}", System.currentTimeMillis());
         // 根据工号查询用户信息
         User user = userDao.findUserByJobNumber(jobNumber);
         Optional.ofNullable(user).orElseThrow(() -> new RuntimeException(StatusCode.DATA_NOT_EXIST.getDesc()));
@@ -276,6 +275,7 @@ public class UserServiceImpl implements UserService {
         loginUserInfo.setGrades(userGradeSubjects.stream().map(UserGradeSubject::getGradeId).distinct().collect(Collectors.toList()));
         // 学科
         loginUserInfo.setSubjects(userGradeSubjects.stream().map(UserGradeSubject::getSubjectId).distinct().collect(Collectors.toList()));
+        log.warn("info()出===》当前时间：{}", System.currentTimeMillis());
         return loginUserInfo;
     }
 

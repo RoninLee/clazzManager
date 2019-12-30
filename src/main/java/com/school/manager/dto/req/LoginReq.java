@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @Data
 @ApiModel("登录请求对象")
-public class LoginUserReq implements Serializable {
+public class LoginReq implements Serializable {
     private static final long serialVersionUID = 5992111510622867998L;
 
     @NotBlank(message = "登录账号不能为空")

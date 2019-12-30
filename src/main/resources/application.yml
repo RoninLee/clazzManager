@@ -49,4 +49,9 @@ logging:
     com.school.manager: debug
   file: logs/${spring.application.name}.log
 system:
-  filePath: /usr/local/project/app/clm/files
+  file:
+    filePath: /usr/local/project/app/clm/files
+jwt:
+  config:
+    key: ronin
+    ttl: 4
