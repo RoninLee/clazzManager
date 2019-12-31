@@ -33,7 +33,7 @@ public class JwtInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // TODO: 2019/12/30 无论如何都放行，只是单纯验证token是否合法
+        // 无论如何都放行，只是单纯验证token是否合法
         String header = request.getHeader(RequestConstant.AUTHORIZATION);
         // 验证是否存在token
         if (StringUtils.isNotBlank(header)) {
@@ -44,7 +44,8 @@ public class JwtInterceptor implements HandlerInterceptor {
                 try {
                     // 根据token获取用户信息
                     Claims claims = jwtUtil.parseJwt(token);
-                    LoginUserInfo loginUserInfo = JSON.parseObject(JSON.toJSONString(claims.get(RequestConstant.LOGIN_USER_INFO)), new TypeReference<LoginUserInfo>() {});
+                    LoginUserInfo loginUserInfo = JSON.parseObject(JSON.toJSONString(claims.get(RequestConstant.LOGIN_USER_INFO)), new TypeReference<LoginUserInfo>() {
+                    });
                     setLocalContext(loginUserInfo);
                 } catch (Exception e) {
                     throw new SysServiceException(StatusCode.INVALID_TOKEN.getDesc());
