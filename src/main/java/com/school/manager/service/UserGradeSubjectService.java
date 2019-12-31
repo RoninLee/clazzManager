@@ -1,6 +1,6 @@
 package com.school.manager.service;
 
-import com.school.manager.common.PageResult;
+import com.school.manager.common.resp.PageResult;
 import com.school.manager.dto.req.UserGradeSubjectReq;
 import com.school.manager.dto.resp.UserGradeSubjectResp;
 import com.school.manager.pojo.UserGradeSubject;

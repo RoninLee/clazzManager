@@ -15,9 +15,8 @@ public interface LessonPlanService {
      *
      * @param file      文件
      * @param type      类型
-     * @param userId    用户id
      * @param chapterId 章节id
      * @return 文件信息
      */
-    FileResp upload(MultipartFile file, String type, String userId, String chapterId);
+    FileResp upload(MultipartFile file, String type, String chapterId);
 }

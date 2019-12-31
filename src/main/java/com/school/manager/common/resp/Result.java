@@ -1,4 +1,4 @@
-package com.school.manager.common;
+package com.school.manager.common.resp;
 
 import com.school.manager.enums.StatusCode;
 import lombok.Data;
@@ -16,8 +16,8 @@ import java.util.Objects;
 @Data
 public class Result<T> implements Serializable {
     private static final long serialVersionUID = -1686054524991742104L;
-    protected Integer code = StatusCode.success.getCode();
-    protected String msg = StatusCode.success.getDesc();
+    protected Integer code = StatusCode.SUCCESS.getCode();
+    protected String msg = StatusCode.SUCCESS.getDesc();
     protected T data;
 
     public Result() {
@@ -31,11 +31,11 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> Result<T> error(String msg) {
-        return new Result<>(StatusCode.error.getCode(), msg);
+        return new Result<>(StatusCode.ERROR.getCode(), msg);
     }
 
     public static <T> Result<T> error(String msg, T data) {
-        Result<T> result = new Result<>(StatusCode.error.getCode(), msg);
+        Result<T> result = new Result<>(StatusCode.ERROR.getCode(), msg);
         result.setData(data);
         return result;
     }
@@ -47,7 +47,7 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> Result<T> success() {
-        return success(StatusCode.success.getDesc(), null);
+        return success(StatusCode.SUCCESS.getDesc(), null);
     }
 
     public static <T> Result<T> success(String msg) {
@@ -55,14 +55,14 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> Result<T> success(T data) {
-        return success(StatusCode.success.getDesc(), data);
+        return success(StatusCode.SUCCESS.getDesc(), data);
     }
 
     public static <T> Result<T> success(String msg, T data) {
         Result<T> result = new Result<>();
         if (StringUtils.isNotBlank(msg)) {
             result.setMsg(msg);
-            result.setCode(StatusCode.success.getCode());
+            result.setCode(StatusCode.SUCCESS.getCode());
         }
         result.setData(data);
         return result;
@@ -72,6 +72,6 @@ public class Result<T> implements Serializable {
      * 判断结果集是否返回成功
      */
     public boolean isSuccess() {
-        return Objects.equals(this.code, StatusCode.success.getCode());
+        return Objects.equals(this.code, StatusCode.SUCCESS.getCode());
     }
 }

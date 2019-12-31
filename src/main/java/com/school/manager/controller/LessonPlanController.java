@@ -1,6 +1,6 @@
 package com.school.manager.controller;
 
-import com.school.manager.common.Result;
+import com.school.manager.common.resp.Result;
 import com.school.manager.service.LessonPlanService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,8 +29,7 @@ public class LessonPlanController {
     @PostMapping("upload")
     public Result<Object> upload(@RequestParam(value = "file", required = true) MultipartFile file,
                                  @RequestParam(value = "type", required = true) String type,
-                                 @RequestParam(value = "userId", required = true) String userId,
                                  @RequestParam(value = "chapterId", required = true) String chapterId) {
-        return Result.success(lessonPlanService.upload(file, type, userId, chapterId));
+        return Result.success(lessonPlanService.upload(file, type, chapterId));
     }
 }

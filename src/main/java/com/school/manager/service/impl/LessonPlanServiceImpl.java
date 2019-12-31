@@ -1,10 +1,13 @@
 package com.school.manager.service.impl;
 
-import com.school.manager.common.Constant;
+import com.school.manager.common.constant.Constant;
 import com.school.manager.dto.resp.FileResp;
 import com.school.manager.entity.FileConfigConstant;
+import com.school.manager.entity.LoginUserInfo;
 import com.school.manager.enums.StatusCode;
+import com.school.manager.exception.SysServiceException;
 import com.school.manager.service.LessonPlanService;
+import com.school.manager.jwt.LoginUserUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 
 /**
@@ -36,21 +40,23 @@ public class LessonPlanServiceImpl implements LessonPlanService {
      *
      * @param file      文件
      * @param type      类型
-     * @param userId    用户id
      * @param chapterId 章节id
      * @return 文件信息
      */
     @Override
-    public FileResp upload(MultipartFile file, String type, String userId, String chapterId) {
-        if (file.isEmpty() || StringUtils.isBlank(type) || StringUtils.isBlank(userId) || StringUtils.isBlank(chapterId)) {
-            throw new RuntimeException(StatusCode.REQUEST_IS_NULL.getDesc());
+    public FileResp upload(MultipartFile file, String type, String chapterId) {
+        // 获取登录人信息
+        LoginUserInfo loginUserInfo = Optional.ofNullable(LoginUserUtil.getLoginUserInfo()).orElseThrow(() -> new SysServiceException(StatusCode.NO_LOGIN_INFO.getCode(), StatusCode.NO_LOGIN_INFO.getDesc()));
+        // 校验参数
+        if (file.isEmpty() || StringUtils.isBlank(type) || StringUtils.isBlank(loginUserInfo.getId()) || StringUtils.isBlank(chapterId)) {
+            throw new SysServiceException(StatusCode.REQUEST_IS_NULL.getDesc());
         }
         String filename = file.getOriginalFilename();
         if (filename != null && !filename.contains(Constant.POINT)) {
-            throw new RuntimeException(StatusCode.FILE_NO_SUFFIX.getDesc());
+            throw new SysServiceException(StatusCode.FILE_NO_SUFFIX.getDesc());
         }
         // 拼保存后的文件名
-        String newFileName = fileConfigConstant.filePath + Constant.FORWARD_SLASH + type.toUpperCase() + Constant.FORWARD_SLASH + userId + Constant.DASH + chapterId + Constant.DASH + filename;
+        String newFileName = fileConfigConstant.filePath + Constant.FORWARD_SLASH + type.toUpperCase() + Constant.FORWARD_SLASH + loginUserInfo.getId() + Constant.DASH + chapterId + Constant.DASH + filename;
         log.info("新文件名：{}", newFileName);
         File newFile = new File(newFileName);
         if (!newFile.getParentFile().exists()) {
@@ -61,7 +67,7 @@ public class LessonPlanServiceImpl implements LessonPlanService {
             file.transferTo(newFile);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException(StatusCode.FILE_UPLOAD_FAILURE.getDesc());
+            throw new SysServiceException(StatusCode.FILE_UPLOAD_FAILURE.getDesc());
         }
         FileResp fileResp = new FileResp();
         fileResp.setFileName(filename);

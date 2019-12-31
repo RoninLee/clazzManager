@@ -1,10 +1,11 @@
 package com.school.manager.service.impl;
 
-import com.school.manager.common.Constant;
+import com.school.manager.common.constant.Constant;
 import com.school.manager.dao.SubjectDao;
 import com.school.manager.dto.req.SubjectReq;
 import com.school.manager.dto.resp.SubjectResp;
 import com.school.manager.enums.StatusCode;
+import com.school.manager.exception.SysServiceException;
 import com.school.manager.pojo.Subject;
 import com.school.manager.service.SubjectService;
 import com.school.manager.utils.BeanMapper;
@@ -43,7 +44,7 @@ public class SubjectServiceImpl implements SubjectService {
      */
     @Override
     public SubjectResp info(String id) {
-        return BeanMapper.def().map(subjectDao.findById(id).orElseThrow(() -> new RuntimeException(StatusCode.DATA_NOT_EXIST.getDesc())), SubjectResp.class);
+        return BeanMapper.def().map(subjectDao.findById(id).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc())), SubjectResp.class);
     }
 
     /**
@@ -82,7 +83,7 @@ public class SubjectServiceImpl implements SubjectService {
      */
     @Override
     public void remove(String id) {
-        Subject subject = subjectDao.findById(id).orElseThrow(() -> new RuntimeException(StatusCode.DATA_NOT_EXIST.getDesc()));
+        Subject subject = subjectDao.findById(id).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc()));
         subjectDao.delete(subject);
         // TODO: 2019/12/22 删除人员年级学科关联关系
     }

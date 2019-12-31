@@ -1,6 +1,6 @@
 package com.school.manager.controller;
 
-import com.school.manager.common.Result;
+import com.school.manager.common.resp.Result;
 import com.school.manager.dto.req.CommonFuzzySelReq;
 import com.school.manager.dto.req.CommonSelOrDelReq;
 import com.school.manager.dto.req.UserGradeSubjectReq;

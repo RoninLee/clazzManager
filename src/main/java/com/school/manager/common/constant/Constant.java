@@ -1,4 +1,4 @@
-package com.school.manager.common;
+package com.school.manager.common.constant;
 
 /**
  * @author RoninLee
@@ -12,4 +12,5 @@ public interface Constant {
     String DASH = "-";
     String FORWARD_SLASH = "/";
     String BACKSLASH = "\\\\";
+
 }

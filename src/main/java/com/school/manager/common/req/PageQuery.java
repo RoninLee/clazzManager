@@ -1,4 +1,4 @@
-package com.school.manager.common;
+package com.school.manager.common.req;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

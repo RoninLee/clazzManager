@@ -8,8 +8,11 @@ public enum StatusCode {
     /**
      * 状态码
      */
-    success(200, "成功"),
-    error(-200, "异常"),
+    ERROR(-200, "异常"),
+    SUCCESS(200, "成功"),
+    NO_LOGIN_INFO(9997, "无登录信息"),
+    INVALID_TOKEN(9998, "无效token"),
+    NO_PERMISSION(9999, "无权限"),
     LOGIN_FAILURE(100000, "用户名密码错误"),
     DATA_NOT_EXIST(100001, "信息不存在"),
     DATA_EXIST(100002, "数据重复"),

@@ -1,7 +1,7 @@
 package com.school.manager.controller;
 
-import com.school.manager.common.PageResult;
-import com.school.manager.common.Result;
+import com.school.manager.common.resp.PageResult;
+import com.school.manager.common.resp.Result;
 import com.school.manager.dto.req.CommonSelOrDelReq;
 import com.school.manager.dto.req.LoginReq;
 import com.school.manager.dto.req.UserReq;
@@ -17,17 +17,12 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
@@ -63,16 +58,6 @@ public class UserController {
         loginResp.setLoginUserInfo(loginUserInfo);
         log.warn("loginController()出===》当前时间：{}", System.currentTimeMillis());
         return Result.success(loginResp);
-    }
-
-    @ApiOperation("登出")
-    @PostMapping("/logout")
-    private Result<Void> logout(HttpServletRequest request, HttpServletResponse response) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            new SecurityContextLogoutHandler().logout(request, response, authentication);
-        }
-        return Result.success("已退出登录");
     }
 
     @ApiOperation("用户列表")

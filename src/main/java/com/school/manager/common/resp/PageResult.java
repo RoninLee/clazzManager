@@ -1,4 +1,4 @@
-package com.school.manager.common;
+package com.school.manager.common.resp;
 
 import com.school.manager.enums.StatusCode;
 import lombok.Data;
@@ -26,7 +26,7 @@ public class PageResult<T> extends Result<T> {
     }
 
     public static <T> PageResult<T> error(String msg) {
-        return new PageResult<T>(StatusCode.error.getCode(), msg);
+        return new PageResult<T>(StatusCode.ERROR.getCode(), msg);
     }
 
     public static <T> PageResult<T> success(T result, Long total) {

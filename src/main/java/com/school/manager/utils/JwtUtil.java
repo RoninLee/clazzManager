@@ -1,5 +1,6 @@
 package com.school.manager.utils;
 
+import com.school.manager.common.constant.RequestConstant;
 import com.school.manager.entity.LoginUserInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
@@ -60,7 +61,8 @@ public class JwtUtil {
         JwtBuilder builder = Jwts.builder().setId(id)
                 .setSubject(subject)
                 .setIssuedAt(now)
-                .signWith(SignatureAlgorithm.HS256, key).claim("loginUserInfo", loginUserInfo);
+                .signWith(SignatureAlgorithm.HS256, key)
+                .claim(RequestConstant.LOGIN_USER_INFO, loginUserInfo);
         // 设置过期时长
         if (ttl > 0) {
             builder.setExpiration(Date.from(zonedDateTime.plusHours(ttl).toInstant()));

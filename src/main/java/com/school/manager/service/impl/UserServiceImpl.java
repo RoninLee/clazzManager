@@ -1,7 +1,7 @@
 package com.school.manager.service.impl;
 
 import com.google.common.collect.Lists;
-import com.school.manager.common.Constant;
+import com.school.manager.common.constant.Constant;
 import com.school.manager.dao.UserDao;
 import com.school.manager.dto.req.LoginReq;
 import com.school.manager.dto.req.UserReq;
@@ -10,6 +10,8 @@ import com.school.manager.entity.LoginUserInfo;
 import com.school.manager.enums.RoleEnum;
 import com.school.manager.enums.StateEnum;
 import com.school.manager.enums.StatusCode;
+import com.school.manager.exception.SysServiceException;
+import com.school.manager.jwt.LoginUserUtil;
 import com.school.manager.pojo.User;
 import com.school.manager.pojo.UserGradeSubject;
 import com.school.manager.pojo.UserPwd;
@@ -93,6 +95,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Page<User> findValidList(UserReq request) {
+        LoginUserInfo localContext = LoginUserUtil.getLoginUserInfo();
+        System.out.println(localContext.toString());
         // 分页查询页码
         Integer pageIndex = Optional.ofNullable(request.getPageIndex()).map(index -> {
             if (index <= 0) {
@@ -151,7 +155,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserResp findById(String id) {
-        return BeanMapper.def().map(userDao.findById(id).orElseThrow(() -> new RuntimeException(StatusCode.DATA_NOT_EXIST.getDesc())), UserResp.class);
+        return BeanMapper.def().map(userDao.findById(id).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc())), UserResp.class);
     }
 
     /**
@@ -206,7 +210,7 @@ public class UserServiceImpl implements UserService {
     public String update(UserReq request) {
         User userByJobNumber = userDao.findUserByJobNumber(request.getJobNumber());
         if (Objects.nonNull(userByJobNumber) && !StringUtils.equals(userByJobNumber.getId(), request.getId())) {
-            throw new RuntimeException("工号已存在！");
+            throw new SysServiceException("工号已存在！");
         }
         User user = BeanMapper.def().map(request, User.class);
         user.setState(StateEnum.valid.getCode());
@@ -239,7 +243,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
     public void removeById(String id) {
-        User user = userDao.findById(id).orElseThrow(() -> new RuntimeException(StatusCode.DATA_NOT_EXIST.getDesc()));
+        User user = userDao.findById(id).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc()));
         userDao.deleteById(id);
         userPwdService.delete(id);
         //删除用户角色关联关系
@@ -260,7 +264,7 @@ public class UserServiceImpl implements UserService {
         log.warn("info()入===》当前时间：{}", System.currentTimeMillis());
         // 根据工号查询用户信息
         User user = userDao.findUserByJobNumber(jobNumber);
-        Optional.ofNullable(user).orElseThrow(() -> new RuntimeException(StatusCode.DATA_NOT_EXIST.getDesc()));
+        Optional.ofNullable(user).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc()));
         LoginUserInfo loginUserInfo = new LoginUserInfo();
         BeanUtils.copyProperties(user, loginUserInfo);
         // 用户密码

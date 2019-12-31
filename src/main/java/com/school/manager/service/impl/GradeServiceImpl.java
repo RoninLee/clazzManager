@@ -5,6 +5,7 @@ import com.school.manager.dao.GradeDao;
 import com.school.manager.dto.req.GradeReq;
 import com.school.manager.dto.resp.GradeResp;
 import com.school.manager.enums.StatusCode;
+import com.school.manager.exception.SysServiceException;
 import com.school.manager.pojo.Grade;
 import com.school.manager.service.GradeService;
 import com.school.manager.utils.BeanMapper;
@@ -39,7 +40,7 @@ public class GradeServiceImpl implements GradeService {
      */
     @Override
     public GradeResp info(String id) {
-        return BeanMapper.def().map(gradeDao.findById(id).orElseThrow(() -> new RuntimeException(StatusCode.DATA_NOT_EXIST.getDesc())), GradeResp.class);
+        return BeanMapper.def().map(gradeDao.findById(id).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc())), GradeResp.class);
     }
 
     /**

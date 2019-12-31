@@ -1,7 +1,7 @@
 package com.school.manager.utils;
 
-import com.school.manager.common.Constant;
-import com.school.manager.common.Result;
+import com.school.manager.common.constant.Constant;
+import com.school.manager.common.resp.Result;
 import com.school.manager.entity.FileConfigConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

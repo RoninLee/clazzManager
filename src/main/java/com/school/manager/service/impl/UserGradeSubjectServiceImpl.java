@@ -1,11 +1,12 @@
 package com.school.manager.service.impl;
 
-import com.school.manager.common.Constant;
-import com.school.manager.common.PageResult;
+import com.school.manager.common.constant.Constant;
+import com.school.manager.common.resp.PageResult;
 import com.school.manager.dao.UserGradeSubjectDao;
 import com.school.manager.dto.req.UserGradeSubjectReq;
 import com.school.manager.dto.resp.UserGradeSubjectResp;
 import com.school.manager.enums.StatusCode;
+import com.school.manager.exception.SysServiceException;
 import com.school.manager.pojo.UserGradeSubject;
 import com.school.manager.service.UserGradeSubjectService;
 import com.school.manager.utils.BeanMapper;
@@ -100,7 +101,7 @@ public class UserGradeSubjectServiceImpl implements UserGradeSubjectService {
      */
     @Override
     public UserGradeSubjectResp findById(String id) {
-        UserGradeSubject userGradeSubject = userGradeSubjectDao.findById(id).orElseThrow(() -> new RuntimeException(StatusCode.LOGIN_FAILURE.getDesc()));
+        UserGradeSubject userGradeSubject = userGradeSubjectDao.findById(id).orElseThrow(() -> new SysServiceException(StatusCode.LOGIN_FAILURE.getDesc()));
         return BeanMapper.def().map(userGradeSubject, UserGradeSubjectResp.class);
     }
 
