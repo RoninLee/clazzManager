@@ -29,10 +29,8 @@ public class JwtInterceptor implements HandlerInterceptor {
     @Autowired
     private JwtUtil jwtUtil;
 
-    private String loginToken;
-
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // 无论如何都放行，只是单纯验证token是否合法
         String header = request.getHeader(RequestConstant.AUTHORIZATION);
         // 验证是否存在token
@@ -40,7 +38,6 @@ public class JwtInterceptor implements HandlerInterceptor {
             // 验证是否token是否存在约定的开头
             if (header.startsWith(RequestConstant.BEARER)) {
                 String token = header.substring(RequestConstant.BEARER.length());
-                loginToken = token;
                 try {
                     // 根据token获取用户信息
                     Claims claims = jwtUtil.parseJwt(token);
@@ -72,7 +69,7 @@ public class JwtInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
         remove();
     }
 }
