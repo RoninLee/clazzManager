@@ -22,5 +22,5 @@ public class LoginReq implements Serializable {
 
     @NotBlank(message = "密码不能为空")
     @ApiModelProperty("用户密码")
-    private String pwd;
+    private String password;
 }

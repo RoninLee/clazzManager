@@ -1,8 +1,8 @@
 package com.school.manager.service.impl;
 
-import com.school.manager.dao.UserPwdDao;
-import com.school.manager.pojo.UserPwd;
-import com.school.manager.service.UserPwdService;
+import com.school.manager.dao.UserPasswordDao;
+import com.school.manager.pojo.UserPassword;
+import com.school.manager.service.UserPasswordService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -14,21 +14,21 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
-public class UserPwdServiceImpl implements UserPwdService {
-    private final UserPwdDao userPwdDao;
+public class UserPasswordServiceImpl implements UserPasswordService {
+    private final UserPasswordDao userPasswordDao;
 
-    public UserPwdServiceImpl(UserPwdDao userPwdDao) {
-        this.userPwdDao = userPwdDao;
+    public UserPasswordServiceImpl(UserPasswordDao userPasswordDao) {
+        this.userPasswordDao = userPasswordDao;
     }
 
     /**
      * 新增或更新密码
      *
-     * @param userPwd 用户密码
+     * @param userPassword 用户密码
      */
     @Override
-    public void saveOrUpdate(UserPwd userPwd) {
-        userPwdDao.save(userPwd);
+    public void saveOrUpdate(UserPassword userPassword) {
+        userPasswordDao.save(userPassword);
     }
 
     /**
@@ -38,7 +38,7 @@ public class UserPwdServiceImpl implements UserPwdService {
      */
     @Override
     public void delete(String id) {
-        userPwdDao.deleteById(id);
+        userPasswordDao.deleteById(id);
     }
 
     /**
@@ -49,6 +49,6 @@ public class UserPwdServiceImpl implements UserPwdService {
      */
     @Override
     public String findById(String id) {
-        return userPwdDao.findById(id).map(UserPwd::getPassword).orElse(null);
+        return userPasswordDao.findById(id).map(UserPassword::getPassword).orElse(null);
     }
 }

@@ -1,19 +1,19 @@
 package com.school.manager.service;
 
-import com.school.manager.pojo.UserPwd;
+import com.school.manager.pojo.UserPassword;
 
 /**
  * @author RoninLee
  * @description 用户密码管理
  */
-public interface UserPwdService {
+public interface UserPasswordService {
 
     /**
      * 新增或更新密码
      *
-     * @param userPwd 用户密码
+     * @param userPassword 用户密码
      */
-    void saveOrUpdate(UserPwd userPwd);
+    void saveOrUpdate(UserPassword userPassword);
 
     /**
      * 删除密码

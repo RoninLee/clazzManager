@@ -13,8 +13,8 @@ import java.io.Serializable;
  */
 @Data
 @Entity
-@Table(name = "user_pwd")
-public class UserPwd implements Serializable {
+@Table(name = "user_password")
+public class UserPassword implements Serializable {
     private static final long serialVersionUID = -4170020575014480457L;
     @Id
     private String id;

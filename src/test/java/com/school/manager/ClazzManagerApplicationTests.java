@@ -4,7 +4,7 @@ import com.school.manager.dao.UserGradeSubjectDao;
 import com.school.manager.dto.resp.UserGradeSubjectResp;
 import com.school.manager.entity.LoginUserInfo;
 import com.school.manager.pojo.User;
-import com.school.manager.pojo.UserPwd;
+import com.school.manager.pojo.UserPassword;
 import com.school.manager.utils.Md5Util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
@@ -49,12 +49,12 @@ public class ClazzManagerApplicationTests {
         LoginUserInfo loginUserInfo = new LoginUserInfo();
         User user = new User();
         user.setId("1234");
-        user.setUsername("name");
-        UserPwd userPwd = new UserPwd();
-        userPwd.setPassword("wrwer");
+        user.setName("name");
+        UserPassword userPassword = new UserPassword();
+        userPassword.setPassword("wrwer");
         BeanUtils.copyProperties(user, loginUserInfo);
         System.out.println(loginUserInfo.toString());
-        BeanUtils.copyProperties(userPwd, loginUserInfo);
+        BeanUtils.copyProperties(userPassword, loginUserInfo);
         System.out.println(loginUserInfo.toString());
     }
 

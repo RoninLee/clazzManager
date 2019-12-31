@@ -21,7 +21,7 @@ public class UserReq extends PageReq {
 
     @ApiModelProperty("名称")
     @NotBlank(message = "名称不能为空")
-    private String username;
+    private String name;
 
     @ApiModelProperty("密码")
     private String password;

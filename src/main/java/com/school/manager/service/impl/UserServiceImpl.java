@@ -14,10 +14,10 @@ import com.school.manager.exception.SysServiceException;
 import com.school.manager.jwt.LoginUserUtil;
 import com.school.manager.pojo.User;
 import com.school.manager.pojo.UserGradeSubject;
-import com.school.manager.pojo.UserPwd;
+import com.school.manager.pojo.UserPassword;
 import com.school.manager.pojo.UserRole;
 import com.school.manager.service.UserGradeSubjectService;
-import com.school.manager.service.UserPwdService;
+import com.school.manager.service.UserPasswordService;
 import com.school.manager.service.UserRoleService;
 import com.school.manager.service.UserService;
 import com.school.manager.utils.BeanMapper;
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UserDao userDao;
     @Autowired
-    private UserPwdService userPwdService;
+    private UserPasswordService userPasswordService;
     @Autowired
     private UserRoleService userRoleService;
     @Autowired
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
     public LoginUserInfo login(LoginReq request) {
         log.warn("login()入===》当前时间：{}", System.currentTimeMillis());
         LoginUserInfo loginUserInfo = this.info(request.getJobNumber());
-        if (passwordEncoder.matches(request.getPwd(), loginUserInfo.getPassword())) {
+        if (passwordEncoder.matches(request.getPassword(), loginUserInfo.getPassword())) {
             log.warn("login()出===》当前时间：{}", System.currentTimeMillis());
             return loginUserInfo;
         }
@@ -126,8 +126,8 @@ public class UserServiceImpl implements UserService {
             @Override
             public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> list = Lists.newArrayList();
-                if (StringUtils.isNotBlank(request.getUsername())) {
-                    Predicate predicate = criteriaBuilder.like(root.get("name").as(String.class), "%" + request.getUsername() + "%");
+                if (StringUtils.isNotBlank(request.getName())) {
+                    Predicate predicate = criteriaBuilder.like(root.get("name").as(String.class), "%" + request.getName() + "%");
                     list.add(predicate);
                 }
                 if (StringUtils.isNotBlank(request.getJobNumber())) {
@@ -175,13 +175,13 @@ public class UserServiceImpl implements UserService {
         user.setGroupLeaderFlag(isGroupLeader);
         userDao.save(user);
         // 用户密码
-        UserPwd userPwd = new UserPwd();
-        userPwd.setId(user.getId());
+        UserPassword userPassword = new UserPassword();
+        userPassword.setId(user.getId());
         // 默认密码
-        String defaultPwd = "Sxzx2019";
+        String defaultPassword = "Sxzx2019";
         // 采用Spring Security二次加密
-        userPwd.setPassword(passwordEncoder.encode(Md5Util.md5(defaultPwd)));
-        userPwdService.saveOrUpdate(userPwd);
+        userPassword.setPassword(passwordEncoder.encode(Md5Util.md5(defaultPassword)));
+        userPasswordService.saveOrUpdate(userPassword);
         // 用户角色
         List<UserRole> userRoleList = Lists.newArrayList();
         UserRole userRole = new UserRole();
@@ -216,9 +216,9 @@ public class UserServiceImpl implements UserService {
         user.setState(StateEnum.valid.getCode());
         userDao.save(user);
         if (StringUtils.isNotBlank(request.getPassword())) {
-            UserPwd userPwd = BeanMapper.def().map(request, UserPwd.class);
-            userPwd.setPassword(passwordEncoder.encode(request.getPassword()));
-            userPwdService.saveOrUpdate(userPwd);
+            UserPassword userPassword = BeanMapper.def().map(request, UserPassword.class);
+            userPassword.setPassword(passwordEncoder.encode(request.getPassword()));
+            userPasswordService.saveOrUpdate(userPassword);
         }
         // 判断是否组长角色
         if (request.getGroupLeaderFlag()) {
@@ -245,7 +245,7 @@ public class UserServiceImpl implements UserService {
     public void removeById(String id) {
         User user = userDao.findById(id).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc()));
         userDao.deleteById(id);
-        userPwdService.delete(id);
+        userPasswordService.delete(id);
         //删除用户角色关联关系
         userRoleService.deleteUserRoleBuUserId(user.getId());
         // 删除用户和年级学科关系
@@ -268,7 +268,7 @@ public class UserServiceImpl implements UserService {
         LoginUserInfo loginUserInfo = new LoginUserInfo();
         BeanUtils.copyProperties(user, loginUserInfo);
         // 用户密码
-        String password = userPwdService.findById(user.getId());
+        String password = userPasswordService.findById(user.getId());
         loginUserInfo.setPassword(password);
         // 是否管理员
         loginUserInfo.setAdminFlag(StringUtils.equals(user.getJobNumber(), RoleEnum.ADMIN.getDesc()) ? Boolean.TRUE : Boolean.FALSE);

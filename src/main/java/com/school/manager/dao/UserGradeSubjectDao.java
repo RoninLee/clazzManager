@@ -30,7 +30,7 @@ public interface UserGradeSubjectDao extends JpaRepository<UserGradeSubject, Str
      * @param pageable  分页对象
      * @return 关系列表
      */
-    @Query(value = "select new com.school.manager.dto.resp.UserGradeSubjectResp(ugs.id,u.id,u.username,u.jobNumber,g.id,g.name,s.id,s.name) from UserGradeSubject ugs join User u on ugs.userId = u.id join Grade g on ugs.gradeId = g.id join Subject s on ugs.subjectId = s.id where u.username like concat(:fuzzyName,'%') or u.jobNumber like concat(:fuzzyName,'%')")
+    @Query(value = "select new com.school.manager.dto.resp.UserGradeSubjectResp(ugs.id,u.id,u.name,u.jobNumber,g.id,g.name,s.id,s.name) from UserGradeSubject ugs join User u on ugs.userId = u.id join Grade g on ugs.gradeId = g.id join Subject s on ugs.subjectId = s.id where u.name like concat(:fuzzyName,'%') or u.jobNumber like concat(:fuzzyName,'%')")
     Page<UserGradeSubjectResp> fuzzyQueryList(@Param("fuzzyName") String fuzzyName, Pageable pageable);
 
     /**

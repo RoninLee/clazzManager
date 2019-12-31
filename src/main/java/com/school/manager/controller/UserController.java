@@ -53,7 +53,7 @@ public class UserController {
             return Result.error(StatusCode.LOGIN_FAILURE.getDesc());
         }
         LoginResp loginResp = new LoginResp();
-        String token = jwtUtil.createJwt(loginUserInfo.getId(), loginUserInfo.getUsername(), loginUserInfo);
+        String token = jwtUtil.createJwt(loginUserInfo.getId(), loginUserInfo.getName(), loginUserInfo);
         loginResp.setToken(token);
         loginResp.setLoginUserInfo(loginUserInfo);
         log.warn("loginController()出===》当前时间：{}", System.currentTimeMillis());
