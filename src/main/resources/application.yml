@@ -28,7 +28,7 @@ spring:
     show-sql: true
     database: mysql
   redis:
-    host: 61.191.123.196
+    host: 127.0.0.1
     port: 6379
     password: 59233
     timeout: 10s
