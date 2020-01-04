@@ -1,6 +1,6 @@
 package com.school.manager.service;
 
-import com.school.manager.pojo.UserPassword;
+import com.school.manager.pojo.entity.UserPassword;
 
 /**
  * @author RoninLee

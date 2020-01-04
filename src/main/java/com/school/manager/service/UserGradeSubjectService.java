@@ -1,9 +1,10 @@
 package com.school.manager.service;
 
-import com.school.manager.common.resp.PageResult;
-import com.school.manager.dto.req.UserGradeSubjectReq;
-import com.school.manager.dto.resp.UserGradeSubjectResp;
-import com.school.manager.pojo.UserGradeSubject;
+import com.school.manager.pojo.dto.common.PageResult;
+import com.school.manager.pojo.dto.req.UserGradeSubjectSaveReq;
+import com.school.manager.pojo.dto.req.UserGradeSubjectUpdateSaveReq;
+import com.school.manager.pojo.dto.resp.UserGradeSubjectResp;
+import com.school.manager.pojo.entity.UserGradeSubject;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface UserGradeSubjectService {
      *
      * @param request 关联关系
      */
-    void saveOrUpdate(UserGradeSubjectReq request);
+    String save(UserGradeSubjectSaveReq request);
 
     /**
      * 删除关联关系
@@ -55,5 +56,13 @@ public interface UserGradeSubjectService {
      * @param userId 用户id
      * @return 年级学科绑定关系
      */
-    List<UserGradeSubject> findByUserId(String userId);
+    List<UserGradeSubject> listByUserId(String userId);
+
+    /**
+     * 更新人员年级学科关系
+     *
+     * @param request 年级学科信息
+     * @return id
+     */
+    String update(UserGradeSubjectUpdateSaveReq request);
 }

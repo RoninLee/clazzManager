@@ -3,7 +3,6 @@ package com.school.manager.jwt;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.school.manager.common.constant.RequestConstant;
-import com.school.manager.entity.LoginUserInfo;
 import com.school.manager.enums.StatusCode;
 import com.school.manager.exception.SysServiceException;
 import com.school.manager.utils.JwtUtil;

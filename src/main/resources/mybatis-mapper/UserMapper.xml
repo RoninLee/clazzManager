@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.school.manager.pojo.dao.UserDao">
+
+    <resultMap id="BaseResultMap" type="com.school.manager.pojo.entity.User">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="job_number" property="jobNumber" jdbcType="VARCHAR"/>
+        <result column="group_leader_flag" property="groupLeaderFlag" jdbcType="TINYINT"/>
+        <result column="version" property="version" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        name,
+        job_number,
+        group_leader_flag,
+        version
+    </sql>
+
+    <insert id="save" parameterType="com.school.manager.pojo.entity.User">
+        INSERT INTO user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test='null != name'>
+                name,
+            </if>
+            <if test='null != jobNumber'>
+                job_number,
+            </if>
+            <if test='null != groupLeaderFlag'>
+                group_leader_flag,
+            </if>
+            <if test='null != version'>
+                version
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test='null != name'>
+                #{name},
+            </if>
+            <if test='null != jobNumber'>
+                #{jobNumber},
+            </if>
+            <if test='null != groupLeaderFlag'>
+                #{groupLeaderFlag},
+            </if>
+            <if test='null != version'>
+                #{version}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM user
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.school.manager.pojo.entity.User">
+        UPDATE user
+        <set>
+            <if test='null != name'>name = #{name},</if>
+            <if test='null != jobNumber'>job_number = #{jobNumber},</if>
+            <if test='null != groupLeaderFlag'>group_leader_flag = #{groupLeaderFlag},</if>
+            <if test='null != version'>version = #{version}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="info" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultType="com.school.manager.pojo.dto.common.BaseDTO">
+        SELECT id,name
+        FROM user
+        <where>
+            job_number != 'admin'
+            <if test="fuzzyName!=null and fuzzyName!=''">
+                <bind name="_fuzzyName" value="'%'+fuzzyName+'%'"/>
+                and (name like #{_fuzzyName} or job_number like #{_fuzzyName})
+            </if>
+        </where>
+        LIMIT #{pageIndex}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Long">
+        SELECT count(1)
+        FROM user
+        <where>
+            <if test="fuzzyName!=null and fuzzyName!=''">
+                <bind name="_fuzzyName" value="'%'+fuzzyName+'%'"/>
+                name like #{_fuzzyName} or job_number like #{_fuzzyName}
+            </if>
+        </where>
+    </select>
+    <select id="findUserByJobNumber" resultType="user">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        where job_number = #{jobNumber}
+    </select>
+    <select id="dropdownList" resultType="baseDTO">
+        SELECT id,name
+        FROM user
+        <where>
+            job_number != 'admin'
+            <if test="fuzzyName!=null and fuzzyName!=''">
+                <bind name="_fuzzyName" value="'%'+fuzzyName+'%'"/>
+                and (name like #{_fuzzyName} or job_number like #{_fuzzyName})
+            </if>
+        </where>
+    </select>
+
+</mapper>

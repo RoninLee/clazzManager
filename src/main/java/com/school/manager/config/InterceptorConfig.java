@@ -13,6 +13,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
  */
 @Configuration
 public class InterceptorConfig extends WebMvcConfigurationSupport {
+
+    private static final String[] ENDPOINTS = {"/actuator/health", "/actuator/env", "/actuator/metrics/**", "/actuator/trace", "/actuator/dump",
+            "/actuator/jolokia", "/actuator/info", "/actuator/logfile", "/actuator/refresh", "/actuator/flyway", "/actuator/liquibase",
+            "/actuator/heapdump", "/actuator/loggers", "/actuator/auditevents", "/actuator/env/PID", "/actuator/jolokia/**",
+            "/v2/api-docs/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/oauth/verification/**", "/fast/files/**",
+            "/api/saas/wechar/**", "/openapi-anon/**"};
     @Autowired
     private JwtInterceptor jwtInterceptor;
     @Autowired
@@ -30,6 +36,7 @@ public class InterceptorConfig extends WebMvcConfigurationSupport {
                 .addPathPatterns("/grade/**")
                 .addPathPatterns("/subject/**")
                 .addPathPatterns("/userRelation/**")
-                .excludePathPatterns("/user/login");
+                .excludePathPatterns("/user/login")
+                .excludePathPatterns("/user/updatePassword");
     }
 }

@@ -1,6 +1,6 @@
 package com.school.manager.controller;
 
-import com.school.manager.common.resp.Result;
+import com.school.manager.pojo.dto.common.Result;
 import com.school.manager.service.LessonPlanService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

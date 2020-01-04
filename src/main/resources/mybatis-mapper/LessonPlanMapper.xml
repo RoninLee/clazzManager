@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.school.manager.pojo.dao.LessonPlanDao">
+
+    <resultMap id="BaseResultMap" type="com.school.manager.pojo.entity.LessonPlan">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="section_id" property="sectionId" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="lesson_plan_text" property="lessonPlanText" jdbcType="VARCHAR"/>
+        <result column="ppt_name" property="pptName" jdbcType="VARCHAR"/>
+        <result column="ppt_url" property="pptUrl" jdbcType="VARCHAR"/>
+        <result column="ppt_file_name" property="pptFileName" jdbcType="VARCHAR"/>
+        <result column="exercises_name" property="exercisesName" jdbcType="VARCHAR"/>
+        <result column="exercises_url" property="exercisesUrl" jdbcType="VARCHAR"/>
+        <result column="exercises_file_name" property="exercisesFileName" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        section_id,
+        user_id,
+        lesson_plan_text,
+        ppt_name,
+        ppt_url,
+        ppt_file_name,
+        exercises_name,
+        exercises_url,
+        exercises_file_name,
+        version
+    </sql>
+
+    <insert id="save" parameterType="com.school.manager.pojo.entity.LessonPlan">
+        INSERT INTO lesson_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test='null != sectionId'>
+                section_id,
+            </if>
+            <if test='null != userId'>
+                user_id,
+            </if>
+            <if test='null != lessonPlanText'>
+                lesson_plan_text,
+            </if>
+            <if test='null != pptName'>
+                ppt_name,
+            </if>
+            <if test='null != pptUrl'>
+                ppt_url,
+            </if>
+            <if test='null != pptFileName'>
+                ppt_file_name,
+            </if>
+            <if test='null != exercisesName'>
+                exercises_name,
+            </if>
+            <if test='null != exercisesUrl'>
+                exercises_url,
+            </if>
+            <if test='null != exercisesFileName'>
+                exercises_file_name,
+            </if>
+            <if test='null != version'>
+                version
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test='null != sectionId'>
+                #{sectionId},
+            </if>
+            <if test='null != userId'>
+                #{userId},
+            </if>
+            <if test='null != lessonPlanText'>
+                #{lessonPlanText},
+            </if>
+            <if test='null != pptName'>
+                #{pptName},
+            </if>
+            <if test='null != pptUrl'>
+                #{pptUrl},
+            </if>
+            <if test='null != pptFileName'>
+                #{pptFileName},
+            </if>
+            <if test='null != exercisesName'>
+                #{exercisesName},
+            </if>
+            <if test='null != exercisesUrl'>
+                #{exercisesUrl},
+            </if>
+            <if test='null != exercisesFileName'>
+                #{exercisesFileName},
+            </if>
+            <if test='null != version'>
+                #{version}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM lesson_plan
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.school.manager.pojo.entity.LessonPlan">
+        UPDATE lesson_plan
+        <set>
+            <if test='null != sectionId'>section_id = #{sectionId},</if>
+            <if test='null != userId'>user_id = #{userId},</if>
+            <if test='null != lessonPlanText'>lesson_plan_text = #{lessonPlanText},</if>
+            <if test='null != pptName'>ppt_name = #{pptName},</if>
+            <if test='null != pptUrl'>ppt_url = #{pptUrl},</if>
+            <if test='null != pptFileName'>ppt_file_name = #{pptFileName},</if>
+            <if test='null != exercisesName'>exercises_name = #{exercisesName},</if>
+            <if test='null != exercisesUrl'>exercises_url = #{exercisesUrl},</if>
+            <if test='null != exercisesFileName'>exercises_file_name = #{exercisesFileName},</if>
+            <if test='null != version'>version = #{version}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="info" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM lesson_plan
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM lesson_plan
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM lesson_plan
+    </select>
+
+</mapper>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.school.manager.pojo.dao.UserGradeSubjectDao">
+
+    <resultMap id="BaseResultMap" type="com.school.manager.pojo.entity.UserGradeSubject">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="grade_id" property="gradeId" jdbcType="VARCHAR"/>
+        <result column="subject_id" property="subjectId" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        user_id,
+        grade_id,
+        subject_id,
+        version
+    </sql>
+
+    <insert id="save" parameterType="com.school.manager.pojo.entity.UserGradeSubject">
+        INSERT INTO user_grade_subject
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test='null != userId'>
+                user_id,
+            </if>
+            <if test='null != gradeId'>
+                grade_id,
+            </if>
+            <if test='null != subjectId'>
+                subject_id,
+            </if>
+            <if test='null != version'>
+                version
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test='null != userId'>
+                #{userId},
+            </if>
+            <if test='null != gradeId'>
+                #{gradeId},
+            </if>
+            <if test='null != subjectId'>
+                #{subjectId},
+            </if>
+            <if test='null != version'>
+                #{version}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM user_grade_subject
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.school.manager.pojo.entity.UserGradeSubject">
+        UPDATE user_grade_subject
+        <set>
+            <if test='null != userId'>user_id = #{userId},</if>
+            <if test='null != gradeId'>grade_id = #{gradeId},</if>
+            <if test='null != subjectId'>subject_id = #{subjectId},</if>
+            <if test='null != version'>version = #{version}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="info" resultType="com.school.manager.pojo.dto.resp.UserGradeSubjectResp">
+        SELECT ugs.id,
+               u.id   as user_id,
+               u.name as username,
+               u.job_number,
+               g.id   as grade_id,
+               g.name as grade_name,
+               s.id   as subject_id,
+               s.name as subject_name
+        FROM user_grade_subject ugs
+                 join user u on ugs.user_id = u.id
+                 join grade g on ugs.grade_id = g.id
+                 join subject s on ugs.subject_id = s.id
+        WHERE ugs.id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_grade_subject
+        LIMIT #{pageIndex}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM user_grade_subject
+    </select>
+    <select id="deleteAllByUserId">
+        delete
+        from user_grade_subject
+        where user_id = #{userId}
+    </select>
+    <select id="listByUserId" resultType="userGradeSubject">
+        select
+        <include refid="Base_Column_List"/>
+        from user_grade_subject where user_id =#{userId}
+    </select>
+    <select id="getById" resultType="userGradeSubject">
+        select
+        <include refid="Base_Column_List"/>
+        from user_grade_subject
+        where id =#{id}
+    </select>
+
+</mapper>

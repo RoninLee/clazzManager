@@ -1,6 +1,6 @@
 package com.school.manager.service;
 
-import com.school.manager.dto.resp.FileResp;
+import com.school.manager.pojo.dto.resp.FileResp;
 import org.springframework.web.multipart.MultipartFile;
 
 

@@ -1,9 +1,10 @@
 package com.school.manager.controller;
 
-import com.school.manager.common.resp.Result;
-import com.school.manager.dto.req.CommonSelOrDelReq;
-import com.school.manager.dto.req.SubjectReq;
-import com.school.manager.dto.resp.SubjectResp;
+import com.school.manager.pojo.dto.common.Result;
+import com.school.manager.pojo.dto.req.CommonSelOrDelReq;
+import com.school.manager.pojo.dto.req.SubjectSaveReq;
+import com.school.manager.pojo.dto.req.SubjectUpdateReq;
+import com.school.manager.pojo.dto.resp.SubjectResp;
 import com.school.manager.service.SubjectService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -30,7 +32,7 @@ public class SubjectController {
 
     @ApiOperation("学科信息")
     @PostMapping("/info")
-    public Result<SubjectResp> info(@RequestBody CommonSelOrDelReq<String> request) {
+    public Result<SubjectResp> info(@RequestBody @Valid CommonSelOrDelReq<String> request) {
         try {
             return Result.success(subjectService.info(request.getId()));
         } catch (Exception e) {
@@ -40,29 +42,39 @@ public class SubjectController {
 
     @ApiOperation("学科列表")
     @PostMapping("/list")
-    public Result<List<SubjectResp>> list(@RequestBody SubjectReq request) {
+    public Result<List<SubjectResp>> list() {
         try {
-            return Result.success(subjectService.list(request));
+            return Result.success(subjectService.list());
         } catch (Exception e) {
             return Result.error(e.getMessage());
         }
     }
 
-    @ApiOperation("新增或更新学科")
-    @PostMapping("/saveOrUpdate")
-    public Result<SubjectResp> saveOrUpdate(@RequestBody SubjectReq request) {
+    @ApiOperation("新增学科")
+    @PostMapping("/save")
+    public Result<SubjectResp> save(@RequestBody @Valid SubjectSaveReq request) {
         try {
-            return Result.success(subjectService.saveOrUpdate(request));
+            return Result.success(subjectService.save(request));
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
+    }
+
+    @ApiOperation("更新学科")
+    @PostMapping("/update")
+    public Result<SubjectResp> update(@RequestBody @Valid SubjectUpdateReq request) {
+        try {
+            return Result.success(subjectService.update(request));
         } catch (Exception e) {
             return Result.error(e.getMessage());
         }
     }
 
     @ApiOperation("删除学科")
-    @PostMapping("/remove")
-    public Result<Object> remove(@RequestBody CommonSelOrDelReq<String> request) {
+    @PostMapping("/delete")
+    public Result<Object> delete(@RequestBody @Valid CommonSelOrDelReq<String> request) {
         try {
-            subjectService.remove(request.getId());
+            subjectService.delete(request.getId());
             return Result.success();
         } catch (Exception e) {
             return Result.error(e.getMessage());

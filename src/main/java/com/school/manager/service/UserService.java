@@ -1,11 +1,15 @@
 package com.school.manager.service;
 
-import com.school.manager.dto.req.LoginReq;
-import com.school.manager.dto.req.UserReq;
-import com.school.manager.dto.resp.UserResp;
-import com.school.manager.entity.LoginUserInfo;
-import com.school.manager.pojo.User;
-import org.springframework.data.domain.Page;
+import com.school.manager.jwt.LoginUserInfo;
+import com.school.manager.pojo.dto.common.BaseDTO;
+import com.school.manager.pojo.dto.common.FuzzyQueryReq;
+import com.school.manager.pojo.dto.common.PageResult;
+import com.school.manager.pojo.dto.req.LoginReq;
+import com.school.manager.pojo.dto.req.UserSaveReq;
+import com.school.manager.pojo.dto.req.UserUpdateReq;
+import com.school.manager.pojo.dto.resp.UserResp;
+
+import java.util.List;
 
 /**
  * @author RoninLee
@@ -28,7 +32,7 @@ public interface UserService {
      * @param request 请求对象
      * @return 人员列表
      */
-    Page<User> findValidList(UserReq request);
+    PageResult<List<BaseDTO<String>>> list(FuzzyQueryReq request);
 
     /**
      * 通过id查人员
@@ -36,7 +40,7 @@ public interface UserService {
      * @param id id
      * @return 人员信息
      */
-    UserResp findById(String id);
+    UserResp info(String id);
 
     /**
      * 新增用户
@@ -44,7 +48,7 @@ public interface UserService {
      * @param request 用户信息
      * @return 用户id
      */
-    String save(UserReq request);
+    String save(UserSaveReq request);
 
     /**
      * 更新用户
@@ -52,14 +56,14 @@ public interface UserService {
      * @param request 用户信息
      * @return 用户id
      */
-    String update(UserReq request);
+    String update(UserUpdateReq request);
 
     /**
      * 删除用户
      *
      * @param id 用户id
      */
-    void removeById(String id);
+    void delete(String id);
 
     /**
      * 查询用户详情
@@ -67,5 +71,20 @@ public interface UserService {
      * @param jobNumber 工号
      * @return 用户详细信息
      */
-    com.school.manager.entity.LoginUserInfo info(String jobNumber);
+    LoginUserInfo loginUserInfo(String jobNumber);
+
+    /**
+     * 修改密码
+     *
+     * @param oldPassword 原始密码
+     * @param newPassword 新密码
+     */
+    void updatePassword(String oldPassword, String newPassword);
+
+    /**
+     * 用户下拉列表
+     *
+     * @return 用户列表
+     */
+    List<BaseDTO<String>> userList(String name);
 }

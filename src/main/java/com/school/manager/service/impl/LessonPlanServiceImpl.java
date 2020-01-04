@@ -1,9 +1,9 @@
 package com.school.manager.service.impl;
 
 import com.school.manager.common.constant.Constant;
-import com.school.manager.dto.resp.FileResp;
-import com.school.manager.entity.FileConfigConstant;
-import com.school.manager.entity.LoginUserInfo;
+import com.school.manager.pojo.dto.resp.FileResp;
+import com.school.manager.common.FileConfigConstant;
+import com.school.manager.jwt.LoginUserInfo;
 import com.school.manager.enums.StatusCode;
 import com.school.manager.exception.SysServiceException;
 import com.school.manager.service.LessonPlanService;

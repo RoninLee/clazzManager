@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.school.manager.pojo.dao.GradeDao">
+
+    <resultMap id="BaseResultMap" type="com.school.manager.pojo.entity.Grade">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        name,
+        version
+    </sql>
+
+    <insert id="save" parameterType="com.school.manager.pojo.entity.Grade">
+        INSERT INTO grade
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test='null != name'>
+                name,
+            </if>
+            <if test='null != version'>
+                version
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test='null != name'>
+                #{name},
+            </if>
+            <if test='null != version'>
+                #{version}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM grade
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.school.manager.pojo.entity.Grade">
+        UPDATE grade
+        <set>
+            <if test='null != name'>name = #{name},</if>
+            <if test='null != version'>version = #{version}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="info" resultType="com.school.manager.pojo.entity.Grade">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM grade
+        WHERE id = #{id}
+    </select>
+    <select id="list" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from grade
+    </select>
+    <select id="dropdownList" resultType="baseDTO">
+        select id, name
+        from grade
+    </select>
+
+</mapper>

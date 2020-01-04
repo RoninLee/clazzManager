@@ -1,22 +1,21 @@
 package com.school.manager.service.impl;
 
-import com.school.manager.common.constant.Constant;
-import com.school.manager.common.resp.PageResult;
-import com.school.manager.dao.UserGradeSubjectDao;
-import com.school.manager.dto.req.UserGradeSubjectReq;
-import com.school.manager.dto.resp.UserGradeSubjectResp;
+import com.google.common.collect.Lists;
+import com.school.manager.common.constant.LongConstant;
 import com.school.manager.enums.StatusCode;
 import com.school.manager.exception.SysServiceException;
-import com.school.manager.pojo.UserGradeSubject;
+import com.school.manager.pojo.dao.UserGradeSubjectDao;
+import com.school.manager.pojo.dto.common.PageResult;
+import com.school.manager.pojo.dto.req.UserGradeSubjectSaveReq;
+import com.school.manager.pojo.dto.req.UserGradeSubjectUpdateSaveReq;
+import com.school.manager.pojo.dto.resp.UserGradeSubjectResp;
+import com.school.manager.pojo.entity.UserGradeSubject;
 import com.school.manager.service.UserGradeSubjectService;
 import com.school.manager.utils.BeanMapper;
 import com.school.manager.utils.IdWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -24,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -46,12 +46,13 @@ public class UserGradeSubjectServiceImpl implements UserGradeSubjectService {
      * @param request 关联关系
      */
     @Override
-    public void saveOrUpdate(UserGradeSubjectReq request) {
+    public String save(UserGradeSubjectSaveReq request) {
         UserGradeSubject gradeSubject = BeanMapper.def().map(request, UserGradeSubject.class);
         if (StringUtils.isBlank(gradeSubject.getId())) {
             gradeSubject.setId(String.valueOf(idWorker.nextId()));
         }
         userGradeSubjectDao.save(gradeSubject);
+        return gradeSubject.getId();
     }
 
     /**
@@ -61,7 +62,7 @@ public class UserGradeSubjectServiceImpl implements UserGradeSubjectService {
      */
     @Override
     public void delete(String id) {
-        userGradeSubjectDao.deleteById(id);
+        userGradeSubjectDao.delete(id);
     }
 
     /**
@@ -82,15 +83,8 @@ public class UserGradeSubjectServiceImpl implements UserGradeSubjectService {
      */
     @Override
     public PageResult<List<UserGradeSubjectResp>> fuzzyQueryList(String fuzzyName, Integer pageIndex, Integer pageSize) {
-        int size = Optional.ofNullable(pageSize).orElse(Constant.PAGE_SIZE);
-        int index = Optional.ofNullable(pageIndex).map(i -> Math.abs((i - 1) * size)).orElse(Constant.PAGE_INDEX);
-        Pageable pageable = PageRequest.of(index, size);
-        Page<UserGradeSubjectResp> fuzzyQueryList = userGradeSubjectDao.fuzzyQueryList(fuzzyName, pageable);
-        PageResult<List<UserGradeSubjectResp>> pageResult = new PageResult<>();
-        pageResult.setTotal(fuzzyQueryList.getTotalElements());
-        pageResult.setData(fuzzyQueryList.getContent());
-        pageResult.setPages(fuzzyQueryList.getTotalPages());
-        return pageResult;
+        // TODO: 2020/1/5 怎么展示列表 待商榷
+        return PageResult.success(Lists.newArrayList(), 1L);
     }
 
     /**
@@ -101,8 +95,7 @@ public class UserGradeSubjectServiceImpl implements UserGradeSubjectService {
      */
     @Override
     public UserGradeSubjectResp findById(String id) {
-        UserGradeSubject userGradeSubject = userGradeSubjectDao.findById(id).orElseThrow(() -> new SysServiceException(StatusCode.LOGIN_FAILURE.getDesc()));
-        return BeanMapper.def().map(userGradeSubject, UserGradeSubjectResp.class);
+        return Optional.ofNullable(userGradeSubjectDao.info(id)).orElseThrow(() -> new SysServiceException(StatusCode.LOGIN_FAILURE.getDesc()));
     }
 
     /**
@@ -112,7 +105,25 @@ public class UserGradeSubjectServiceImpl implements UserGradeSubjectService {
      * @return 年级学科绑定关系
      */
     @Override
-    public List<UserGradeSubject> findByUserId(String userId) {
-        return userGradeSubjectDao.findUserGradeSubjectsByUserId(userId);
+    public List<UserGradeSubject> listByUserId(String userId) {
+        return userGradeSubjectDao.listByUserId(userId);
+    }
+
+    /**
+     * 更新人员年级学科关系
+     *
+     * @param request 年级学科信息
+     * @return id
+     */
+    @Override
+    public String update(UserGradeSubjectUpdateSaveReq request) {
+        UserGradeSubject source = Optional.ofNullable(userGradeSubjectDao.getById(request.getId())).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc()));
+        if (!Objects.equals(source.getVersion(), request.getVersion())) {
+            throw new SysServiceException(StatusCode.DATA_CHANGED.getDesc());
+        }
+        UserGradeSubject userGradeSubject = BeanMapper.def().map(request, UserGradeSubject.class);
+        userGradeSubject.setVersion(userGradeSubject.getVersion() + LongConstant.ONE);
+        userGradeSubjectDao.update(userGradeSubject);
+        return userGradeSubject.getId();
     }
 }

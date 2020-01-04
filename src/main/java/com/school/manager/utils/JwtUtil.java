@@ -1,7 +1,7 @@
 package com.school.manager.utils;
 
 import com.school.manager.common.constant.RequestConstant;
-import com.school.manager.entity.LoginUserInfo;
+import com.school.manager.jwt.LoginUserInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;

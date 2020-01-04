@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.school.manager.pojo.dao.SubjectDao">
+
+    <resultMap id="BaseResultMap" type="com.school.manager.pojo.entity.Subject">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        name,
+        version
+    </sql>
+
+    <insert id="save" parameterType="com.school.manager.pojo.entity.Subject">
+        INSERT INTO subject
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test='null != name'>
+                name,
+            </if>
+            <if test='null != version'>
+                version
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test='null != name'>
+                #{name},
+            </if>
+            <if test='null != version'>
+                #{version}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM subject
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.school.manager.pojo.entity.Subject">
+        UPDATE subject
+        <set>
+            <if test='null != name'>name = #{name},</if>
+            <if test='null != version'>version = #{version}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="info" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM subject
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM subject
+        LIMIT #{pageIndex}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM subject
+    </select>
+    <select id="list" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from subject
+    </select>
+    <select id="dropdownList" resultType="baseDTO">
+        select id,name
+        from subject
+        <where>
+            <if test="name!=null and name !=''">
+                <bind name="_name" value="'%'+name+'%'"/>
+                and name like #{_name}
+            </if>
+        </where>
+    </select>
+
+</mapper>

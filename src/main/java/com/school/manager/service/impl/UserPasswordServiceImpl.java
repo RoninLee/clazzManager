@@ -1,12 +1,15 @@
 package com.school.manager.service.impl;
 
-import com.school.manager.dao.UserPasswordDao;
-import com.school.manager.pojo.UserPassword;
+import com.school.manager.pojo.dao.UserPasswordDao;
+import com.school.manager.pojo.entity.UserPassword;
 import com.school.manager.service.UserPasswordService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * @author RoninLee
@@ -15,11 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
 public class UserPasswordServiceImpl implements UserPasswordService {
-    private final UserPasswordDao userPasswordDao;
 
-    public UserPasswordServiceImpl(UserPasswordDao userPasswordDao) {
-        this.userPasswordDao = userPasswordDao;
-    }
+    @Resource
+    private UserPasswordDao userPasswordDao;
 
     /**
      * 新增或更新密码
@@ -38,7 +39,7 @@ public class UserPasswordServiceImpl implements UserPasswordService {
      */
     @Override
     public void delete(String id) {
-        userPasswordDao.deleteById(id);
+        userPasswordDao.delete(id);
     }
 
     /**
@@ -49,6 +50,6 @@ public class UserPasswordServiceImpl implements UserPasswordService {
      */
     @Override
     public String findById(String id) {
-        return userPasswordDao.findById(id).map(UserPassword::getPassword).orElse(null);
+        return Optional.ofNullable(userPasswordDao.findById(id)).map(UserPassword::getPassword).orElse(null);
     }
 }

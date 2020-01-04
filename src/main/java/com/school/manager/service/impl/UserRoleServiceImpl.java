@@ -1,7 +1,7 @@
 package com.school.manager.service.impl;
 
-import com.school.manager.dao.UserRoleDao;
-import com.school.manager.pojo.UserRole;
+import com.school.manager.pojo.dao.UserRoleDao;
+import com.school.manager.pojo.entity.UserRole;
 import com.school.manager.service.UserRoleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -62,16 +62,4 @@ public class UserRoleServiceImpl implements UserRoleService {
     public void deleteUserRoleBuUserId(String userId) {
         userRoleDao.deleteByUserId(userId);
     }
-
-    /**
-     * 批量根据用户id查询用户角色关联关系
-     *
-     * @param userIds 用户id
-     * @return 用户角色关联关系
-     */
-    @Override
-    public List<UserRole> findUserRolesByUserIdIn(List<String> userIds) {
-        return userRoleDao.findUserRolesByUserIdIn(userIds);
-    }
-
 }

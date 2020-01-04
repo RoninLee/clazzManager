@@ -1,7 +1,5 @@
 package com.school.manager.jwt;
 
-import com.school.manager.entity.LoginUserInfo;
-
 /**
  * @author RoninLee
  * @description 登录用户信息工具

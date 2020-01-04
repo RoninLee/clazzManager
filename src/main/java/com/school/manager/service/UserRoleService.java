@@ -1,6 +1,6 @@
 package com.school.manager.service;
 
-import com.school.manager.pojo.UserRole;
+import com.school.manager.pojo.entity.UserRole;
 
 import java.util.List;
 
@@ -37,13 +37,4 @@ public interface UserRoleService {
      * @param userId 用户id
      */
     void deleteUserRoleBuUserId(String userId);
-
-    /**
-     * 批量根据用户id查询用户角色关联关系
-     *
-     * @param userIds 用户id
-     * @return 用户角色关联关系
-     */
-    List<UserRole> findUserRolesByUserIdIn(List<String> userIds);
-
 }

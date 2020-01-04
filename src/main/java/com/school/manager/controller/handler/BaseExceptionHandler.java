@@ -1,6 +1,6 @@
 package com.school.manager.controller.handler;
 
-import com.school.manager.common.resp.Result;
+import com.school.manager.pojo.dto.common.Result;
 import com.school.manager.enums.StatusCode;
 import com.school.manager.exception.SysServiceException;
 import org.springframework.dao.DataIntegrityViolationException;

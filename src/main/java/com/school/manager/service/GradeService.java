@@ -1,7 +1,9 @@
 package com.school.manager.service;
 
-import com.school.manager.dto.req.GradeReq;
-import com.school.manager.dto.resp.GradeResp;
+import com.school.manager.pojo.dto.common.BaseDTO;
+import com.school.manager.pojo.dto.req.GradeSaveReq;
+import com.school.manager.pojo.dto.req.GradeUpdateReq;
+import com.school.manager.pojo.dto.resp.GradeResp;
 
 import java.util.List;
 
@@ -30,9 +32,9 @@ public interface GradeService {
      * 新增或更新年级
      *
      * @param request 请求对象
-     * @return 年级信息
+     * @return 年级id
      */
-    GradeResp saveOrUpdate(GradeReq request);
+    String save(GradeSaveReq request);
 
     /**
      * 删除年级
@@ -41,4 +43,18 @@ public interface GradeService {
      */
     void remove(String id);
 
+    /**
+     * 年级下拉列表
+     *
+     * @return 年级列表
+     */
+    List<BaseDTO<String>> dropdownList();
+
+    /**
+     * 更新
+     *
+     * @param request 年级信息
+     * @return 年级id
+     */
+    String update(GradeUpdateReq request);
 }

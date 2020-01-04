@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.school.manager.pojo.dao.ChapterDao">
+
+    <resultMap id="BaseResultMap" type="com.school.manager.pojo.entity.Chapter">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="grade_id" property="gradeId" jdbcType="VARCHAR"/>
+        <result column="subject_id" property="subjectId" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="parent_id" property="parentId" jdbcType="VARCHAR"/>
+        <result column="root_id" property="rootId" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, grade_id, subject_id, name, parent_id, root_id, version
+    </sql>
+
+    <insert id="save" parameterType="com.school.manager.pojo.entity.Chapter">
+        INSERT INTO chapter
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test='null != gradeId'>
+                grade_id,
+            </if>
+            <if test='null != subjectId'>
+                subject_id,
+            </if>
+            <if test='null != name'>
+                name,
+            </if>
+            <if test='null != parentId'>
+                parent_id,
+            </if>
+            <if test='null != rootId'>
+                root_id,
+            </if>
+            <if test='null != version'>
+                version,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test='null != gradeId'>
+                #{gradeId},
+            </if>
+            <if test='null != subjectId'>
+                #{subjectId},
+            </if>
+            <if test='null != name'>
+                #{name},
+            </if>
+            <if test='null != parentId'>
+                #{parentId},
+            </if>
+            <if test='null != rootId'>
+                #{rootId},
+            </if>
+            <if test='null != version'>
+                #{version},
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM chapter
+        WHERE id = #{id}
+    </delete>
+
+    <select id="info" resultType="chapter">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM chapter
+        WHERE id = #{id}
+    </select>
+
+    <update id="update" parameterType="com.school.manager.pojo.entity.Chapter">
+        UPDATE chapter
+        <set>
+            <if test='null != gradeId'>grade_id = #{gradeId},</if>
+            <if test='null != subjectId'>subject_id = #{subjectId},</if>
+            <if test='null != name'>name = #{name},</if>
+            <if test='null != parentId'>parent_id = #{parentId},</if>
+            <if test='null != rootId'>root_id = #{rootId},</if>
+            <if test='null != version'>version = #{version},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>

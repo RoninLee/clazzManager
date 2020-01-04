@@ -1,7 +1,9 @@
 package com.school.manager.service;
 
-import com.school.manager.dto.req.SubjectReq;
-import com.school.manager.dto.resp.SubjectResp;
+import com.school.manager.pojo.dto.common.BaseDTO;
+import com.school.manager.pojo.dto.req.SubjectSaveReq;
+import com.school.manager.pojo.dto.req.SubjectUpdateReq;
+import com.school.manager.pojo.dto.resp.SubjectResp;
 
 import java.util.List;
 
@@ -22,10 +24,9 @@ public interface SubjectService {
     /**
      * 查询学科列表
      *
-     * @param request 请求对象
      * @return 学科列表
      */
-    List<SubjectResp> list(SubjectReq request);
+    List<SubjectResp> list();
 
     /**
      * 新增或保存学科
@@ -33,12 +34,28 @@ public interface SubjectService {
      * @param request 请求对象
      * @return 学科信息
      */
-    SubjectResp saveOrUpdate(SubjectReq request);
+    SubjectResp save(SubjectSaveReq request);
 
     /**
      * 删除学科
      *
      * @param id 学科id
      */
-    void remove(String id);
+    void delete(String id);
+
+    /**
+     * 学科下拉列表
+     *
+     * @param name 模糊查询名称
+     * @return 学科下拉
+     */
+    List<BaseDTO<String>> subjectList(String name);
+
+    /**
+     * 更新学科
+     *
+     * @param request 学科
+     * @return 学科id
+     */
+    String update(SubjectUpdateReq request);
 }

@@ -24,25 +24,13 @@ spring:
     maxPoolPreparedStatementPerConnectionSize: 20
     filters:  stat,wall,log4j2
     connectionPropertie:  druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-  jpa:
-    show-sql: true
-    database: mysql
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    password: 59233
-    timeout: 10s
-    lettuce:
-      pool:
-        min-idle: 0
-        max-idle: 8
-        max-active: 8
-        max-wait: -1ms
   session:
     timeout: 14400
 mybatis:
-  type-aliases-package: com.school.manager.entity
-  mapper-locations: classpath:mapper/*.xml
+  mapper-locations: classpath:/mybatis-mapper/*.xml
+  type-aliases-package: com.school.manager
+  configuration:
+    map-underscore-to-camel-case: true
 logging:
   level:
     root: info

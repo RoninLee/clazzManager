@@ -1,21 +1,24 @@
 package com.school.manager.service.impl;
 
 import com.google.common.collect.Lists;
-import com.school.manager.common.constant.Constant;
-import com.school.manager.dao.UserDao;
-import com.school.manager.dto.req.LoginReq;
-import com.school.manager.dto.req.UserReq;
-import com.school.manager.dto.resp.UserResp;
-import com.school.manager.entity.LoginUserInfo;
+import com.school.manager.common.constant.LongConstant;
 import com.school.manager.enums.RoleEnum;
-import com.school.manager.enums.StateEnum;
 import com.school.manager.enums.StatusCode;
 import com.school.manager.exception.SysServiceException;
+import com.school.manager.jwt.LoginUserInfo;
 import com.school.manager.jwt.LoginUserUtil;
-import com.school.manager.pojo.User;
-import com.school.manager.pojo.UserGradeSubject;
-import com.school.manager.pojo.UserPassword;
-import com.school.manager.pojo.UserRole;
+import com.school.manager.pojo.dao.UserDao;
+import com.school.manager.pojo.dto.common.BaseDTO;
+import com.school.manager.pojo.dto.common.FuzzyQueryReq;
+import com.school.manager.pojo.dto.common.PageResult;
+import com.school.manager.pojo.dto.req.LoginReq;
+import com.school.manager.pojo.dto.req.UserSaveReq;
+import com.school.manager.pojo.dto.req.UserUpdateReq;
+import com.school.manager.pojo.dto.resp.UserResp;
+import com.school.manager.pojo.entity.User;
+import com.school.manager.pojo.entity.UserGradeSubject;
+import com.school.manager.pojo.entity.UserPassword;
+import com.school.manager.pojo.entity.UserRole;
 import com.school.manager.service.UserGradeSubjectService;
 import com.school.manager.service.UserPasswordService;
 import com.school.manager.service.UserRoleService;
@@ -27,10 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -38,10 +37,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -77,13 +72,10 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public LoginUserInfo login(LoginReq request) {
-        log.warn("login()入===》当前时间：{}", System.currentTimeMillis());
-        LoginUserInfo loginUserInfo = this.info(request.getJobNumber());
+        LoginUserInfo loginUserInfo = this.loginUserInfo(request.getJobNumber());
         if (passwordEncoder.matches(request.getPassword(), loginUserInfo.getPassword())) {
-            log.warn("login()出===》当前时间：{}", System.currentTimeMillis());
             return loginUserInfo;
         }
-        log.warn("login()出===》当前时间：{}", System.currentTimeMillis());
         return null;
     }
 
@@ -94,57 +86,11 @@ public class UserServiceImpl implements UserService {
      * @return 人员列表
      */
     @Override
-    public Page<User> findValidList(UserReq request) {
-        LoginUserInfo localContext = LoginUserUtil.getLoginUserInfo();
-        System.out.println(localContext.toString());
-        // 分页查询页码
-        Integer pageIndex = Optional.ofNullable(request.getPageIndex()).map(index -> {
-            if (index <= 0) {
-                return Constant.PAGE_INDEX;
-            }
-            // 框架第一页默认0开始
-            return index - 1;
-        }).orElse(Constant.PAGE_INDEX);
-        // 分页查询每页数量
-        Integer pageSize = Optional.ofNullable(request.getPageSize()).map(size -> {
-            if (size < 0) {
-                return Constant.PAGE_SIZE;
-            }
-            return size;
-        }).orElse(Constant.PAGE_SIZE);
-        Pageable pageable = PageRequest.of(pageIndex, pageSize);
-        return userDao.findAll(new Specification<User>() {
-            private static final long serialVersionUID = 8554879066378122342L;
-
-            /**
-             *
-             * @param root 根对象，也就是要把条件封装到那个对象中，where 类名=user.getId()
-             * @param criteriaQuery 封装的都是查询关键字，比如group by order by等
-             * @param criteriaBuilder 用来封装条件对象的，如果直接返回null，表示不需要任何条件
-             * @return Predicate
-             */
-            @Override
-            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> list = Lists.newArrayList();
-                if (StringUtils.isNotBlank(request.getName())) {
-                    Predicate predicate = criteriaBuilder.like(root.get("name").as(String.class), "%" + request.getName() + "%");
-                    list.add(predicate);
-                }
-                if (StringUtils.isNotBlank(request.getJobNumber())) {
-                    Predicate predicate = criteriaBuilder.like(root.get("jobNumber").as(String.class), "%" + request.getJobNumber() + "%");
-                    list.add(predicate);
-                }
-                Predicate state = criteriaBuilder.equal(root.get("state").as(Integer.class), StateEnum.valid.getCode());
-                list.add(state);
-                // 管理员id
-                String adminId = "-1";
-                Predicate admin = criteriaBuilder.notEqual(root.get("id").as(String.class), adminId);
-                list.add(admin);
-                Predicate[] par = new Predicate[list.size()];
-                list.toArray(par);
-                return criteriaBuilder.and(par);
-            }
-        }, pageable);
+    public PageResult<List<BaseDTO<String>>> list(FuzzyQueryReq request) {
+        int pageIndex = (request.getPageIndex() - 1) * request.getPageSize();
+        List<BaseDTO<String>> userList = userDao.pageList(request.getName(), pageIndex, request.getPageSize());
+        Long listCount = userDao.pageListCount(request.getName());
+        return PageResult.success(userList, listCount);
     }
 
     /**
@@ -154,8 +100,8 @@ public class UserServiceImpl implements UserService {
      * @return 人员信息
      */
     @Override
-    public UserResp findById(String id) {
-        return BeanMapper.def().map(userDao.findById(id).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc())), UserResp.class);
+    public UserResp info(String id) {
+        return BeanMapper.def().map(Optional.ofNullable(userDao.info(id)).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc())), UserResp.class);
     }
 
     /**
@@ -165,14 +111,14 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
-    public String save(UserReq request) {
+    public String save(UserSaveReq request) {
         // 转换对象
         User user = BeanMapper.def().map(request, User.class);
         // 雪花算法生成id
         user.setId(String.valueOf(idWorker.nextId()));
-        user.setState(StateEnum.valid.getCode());
         Boolean isGroupLeader = Optional.ofNullable(request.getGroupLeaderFlag()).orElse(Boolean.FALSE);
         user.setGroupLeaderFlag(isGroupLeader);
+        user.setVersion(LongConstant.ONE);
         userDao.save(user);
         // 用户密码
         UserPassword userPassword = new UserPassword();
@@ -207,21 +153,23 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
-    public String update(UserReq request) {
+    public String update(UserUpdateReq request) {
+        User source = Optional.ofNullable(userDao.info(request.getId())).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc()));
+        // 乐观锁
+        if (!Objects.equals(source.getVersion(), request.getVersion())) {
+            throw new SysServiceException(StatusCode.DATA_CHANGED.getDesc());
+        }
+        // 检验账号是否已经存在
         User userByJobNumber = userDao.findUserByJobNumber(request.getJobNumber());
         if (Objects.nonNull(userByJobNumber) && !StringUtils.equals(userByJobNumber.getId(), request.getId())) {
-            throw new SysServiceException("工号已存在！");
+            throw new SysServiceException(StatusCode.JOB_NUMBER_EXIST.getDesc());
         }
         User user = BeanMapper.def().map(request, User.class);
-        user.setState(StateEnum.valid.getCode());
-        userDao.save(user);
-        if (StringUtils.isNotBlank(request.getPassword())) {
-            UserPassword userPassword = BeanMapper.def().map(request, UserPassword.class);
-            userPassword.setPassword(passwordEncoder.encode(request.getPassword()));
-            userPasswordService.saveOrUpdate(userPassword);
-        }
+        user.setVersion(user.getVersion() + LongConstant.ONE);
         // 判断是否组长角色
-        if (request.getGroupLeaderFlag()) {
+        Boolean groupLeaderFlag = Optional.ofNullable(request.getGroupLeaderFlag()).orElse(Boolean.FALSE);
+        if (groupLeaderFlag) {
+            user.setGroupLeaderFlag(groupLeaderFlag);
             List<UserRole> userRolesByUserId = userRoleService.findUserRolesByUserId(user.getId());
             List<String> roleIds = userRolesByUserId.stream().map(UserRole::getRoleId).collect(Collectors.toList());
             if (!roleIds.contains(RoleEnum.GROUP_LEADER.getCode())) {
@@ -232,6 +180,7 @@ public class UserServiceImpl implements UserService {
                 userRoleService.save(userRole);
             }
         }
+        userDao.save(user);
         return request.getId();
     }
 
@@ -242,14 +191,13 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
-    public void removeById(String id) {
-        User user = userDao.findById(id).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc()));
-        userDao.deleteById(id);
+    public void delete(String id) {
+        userDao.delete(id);
         userPasswordService.delete(id);
         //删除用户角色关联关系
-        userRoleService.deleteUserRoleBuUserId(user.getId());
+        userRoleService.deleteUserRoleBuUserId(id);
         // 删除用户和年级学科关系
-        userGradeSubjectService.deleteAllByUserId(user.getId());
+        userGradeSubjectService.deleteAllByUserId(id);
         // TODO: 2019/12/22 要不要删除教案相关记录
     }
 
@@ -260,8 +208,7 @@ public class UserServiceImpl implements UserService {
      * @return 用户详细信息
      */
     @Override
-    public LoginUserInfo info(String jobNumber) {
-        log.warn("info()入===》当前时间：{}", System.currentTimeMillis());
+    public LoginUserInfo loginUserInfo(String jobNumber) {
         // 根据工号查询用户信息
         User user = userDao.findUserByJobNumber(jobNumber);
         Optional.ofNullable(user).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc()));
@@ -272,16 +219,43 @@ public class UserServiceImpl implements UserService {
         loginUserInfo.setPassword(password);
         // 是否管理员
         loginUserInfo.setAdminFlag(StringUtils.equals(user.getJobNumber(), RoleEnum.ADMIN.getDesc()) ? Boolean.TRUE : Boolean.FALSE);
-        List<UserGradeSubject> userGradeSubjects = userGradeSubjectService.findByUserId(user.getId());
+        List<UserGradeSubject> userGradeSubjects = userGradeSubjectService.listByUserId(user.getId());
         // 用户、年级、学科绑定关系
         loginUserInfo.setUserGradeSubjects(userGradeSubjects);
         // 年级
         loginUserInfo.setGrades(userGradeSubjects.stream().map(UserGradeSubject::getGradeId).distinct().collect(Collectors.toList()));
         // 学科
         loginUserInfo.setSubjects(userGradeSubjects.stream().map(UserGradeSubject::getSubjectId).distinct().collect(Collectors.toList()));
-        log.warn("info()出===》当前时间：{}", System.currentTimeMillis());
         return loginUserInfo;
     }
 
+    /**
+     * 修改密码
+     *
+     * @param oldPassword 原始密码
+     * @param newPassword 新密码
+     */
+    @Override
+    public void updatePassword(String oldPassword, String newPassword) {
+        LoginUserInfo loginUserInfo = Optional.ofNullable(LoginUserUtil.getLoginUserInfo()).orElseThrow(() -> new SysServiceException(StatusCode.NO_LOGIN_INFO.getDesc()));
+        String password = userPasswordService.findById(loginUserInfo.getId());
+        if (!passwordEncoder.matches(oldPassword, password)) {
+            throw new SysServiceException(StatusCode.WRONG_PASSWORD.getDesc());
+        }
+        UserPassword userPassword = new UserPassword();
+        userPassword.setId(loginUserInfo.getId());
+        userPassword.setPassword(passwordEncoder.encode(newPassword));
+        userPasswordService.saveOrUpdate(userPassword);
+    }
 
+    /**
+     * 用户下拉列表
+     *
+     * @param name 模糊查询
+     * @return 用户列表
+     */
+    @Override
+    public List<BaseDTO<String>> userList(String name) {
+        return Optional.ofNullable(userDao.dropdownList(name)).orElse(Lists.newArrayList());
+    }
 }

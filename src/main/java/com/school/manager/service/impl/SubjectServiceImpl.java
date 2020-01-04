@@ -1,23 +1,27 @@
 package com.school.manager.service.impl;
 
-import com.school.manager.common.constant.Constant;
-import com.school.manager.dao.SubjectDao;
-import com.school.manager.dto.req.SubjectReq;
-import com.school.manager.dto.resp.SubjectResp;
+import com.google.common.collect.Lists;
+import com.school.manager.common.constant.LongConstant;
 import com.school.manager.enums.StatusCode;
 import com.school.manager.exception.SysServiceException;
-import com.school.manager.pojo.Subject;
+import com.school.manager.pojo.dao.SubjectDao;
+import com.school.manager.pojo.dto.common.BaseDTO;
+import com.school.manager.pojo.dto.req.SubjectSaveReq;
+import com.school.manager.pojo.dto.req.SubjectUpdateReq;
+import com.school.manager.pojo.dto.resp.SubjectResp;
+import com.school.manager.pojo.entity.Subject;
 import com.school.manager.service.SubjectService;
 import com.school.manager.utils.BeanMapper;
 import com.school.manager.utils.IdWorker;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -27,14 +31,11 @@ import java.util.Optional;
 @Service
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
 public class SubjectServiceImpl implements SubjectService {
-    private final SubjectDao subjectDao;
-    private IdWorker idWorker;
 
+    @Resource
+    private SubjectDao subjectDao;
     @Autowired
-    public SubjectServiceImpl(SubjectDao subjectDao, IdWorker idWorker) {
-        this.subjectDao = subjectDao;
-        this.idWorker = idWorker;
-    }
+    private IdWorker idWorker;
 
     /**
      * 通过学科id查询学科信息
@@ -44,20 +45,17 @@ public class SubjectServiceImpl implements SubjectService {
      */
     @Override
     public SubjectResp info(String id) {
-        return BeanMapper.def().map(subjectDao.findById(id).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc())), SubjectResp.class);
+        return BeanMapper.def().map(Optional.ofNullable(subjectDao.info(id)).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc())), SubjectResp.class);
     }
 
     /**
      * 查询学科列表
      *
-     * @param request 请求对象
      * @return 学科列表
      */
     @Override
-    public List<SubjectResp> list(SubjectReq request) {
-        Integer pageSize = Optional.ofNullable(request.getPageSize()).orElse(Constant.PAGE_SIZE);
-        Integer pageIndex = Optional.ofNullable(request.getPageIndex()).map(index -> (index - 1) * pageSize).orElse(Constant.PAGE_INDEX);
-        return BeanMapper.def().mapList(subjectDao.list(pageIndex, pageSize), Subject.class, SubjectResp.class);
+    public List<SubjectResp> list() {
+        return Optional.ofNullable(subjectDao.list()).orElse(Lists.newArrayList());
     }
 
     /**
@@ -67,11 +65,10 @@ public class SubjectServiceImpl implements SubjectService {
      * @return 学科信息
      */
     @Override
-    public SubjectResp saveOrUpdate(SubjectReq request) {
+    public SubjectResp save(SubjectSaveReq request) {
         Subject subject = BeanMapper.def().map(request, Subject.class);
-        if (StringUtils.isBlank(subject.getId())) {
-            subject.setId(String.valueOf(idWorker.nextId()));
-        }
+        subject.setId(String.valueOf(idWorker.nextId()));
+        subject.setVersion(LongConstant.ONE);
         subjectDao.save(subject);
         return this.info(subject.getId());
     }
@@ -82,9 +79,38 @@ public class SubjectServiceImpl implements SubjectService {
      * @param id 学科id
      */
     @Override
-    public void remove(String id) {
-        Subject subject = subjectDao.findById(id).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc()));
-        subjectDao.delete(subject);
+    public void delete(String id) {
+        subjectDao.delete(id);
         // TODO: 2019/12/22 删除人员年级学科关联关系
+    }
+
+    /**
+     * 学科下拉列表
+     *
+     * @param name 模糊查询
+     * @return 学科下拉
+     */
+    @Override
+    public List<BaseDTO<String>> subjectList(String name) {
+        return Optional.ofNullable(subjectDao.dropdownList(name)).orElse(Lists.newArrayList());
+    }
+
+    /**
+     * 更新学科
+     *
+     * @param request 学科
+     * @return 学科id
+     */
+    @Override
+    public String update(SubjectUpdateReq request) {
+        Subject source = Optional.ofNullable(subjectDao.info(request.getId())).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc()));
+        // 乐观锁
+        if (!Objects.equals(request.getVersion(), source.getVersion())) {
+            throw new SysServiceException(StatusCode.DATA_CHANGED.getDesc());
+        }
+        Subject subject = BeanMapper.def().map(request, Subject.class);
+        subject.setVersion(subject.getVersion() + LongConstant.ONE);
+        subjectDao.update(subject);
+        return null;
     }
 }

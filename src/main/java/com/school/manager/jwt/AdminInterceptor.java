@@ -1,6 +1,5 @@
 package com.school.manager.jwt;
 
-import com.school.manager.entity.LoginUserInfo;
 import com.school.manager.enums.StatusCode;
 import com.school.manager.exception.SysServiceException;
 import org.springframework.stereotype.Component;

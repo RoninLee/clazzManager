@@ -1,22 +1,24 @@
 package com.school.manager.controller;
 
-import com.school.manager.common.resp.PageResult;
-import com.school.manager.common.resp.Result;
-import com.school.manager.dto.req.CommonSelOrDelReq;
-import com.school.manager.dto.req.LoginReq;
-import com.school.manager.dto.req.UserReq;
-import com.school.manager.dto.resp.LoginResp;
-import com.school.manager.dto.resp.UserResp;
-import com.school.manager.entity.LoginUserInfo;
 import com.school.manager.enums.StatusCode;
-import com.school.manager.pojo.User;
+import com.school.manager.jwt.LoginUserInfo;
+import com.school.manager.pojo.dto.common.BaseDTO;
+import com.school.manager.pojo.dto.common.FuzzyQueryReq;
+import com.school.manager.pojo.dto.common.PageResult;
+import com.school.manager.pojo.dto.common.Result;
+import com.school.manager.pojo.dto.req.CommonSelOrDelReq;
+import com.school.manager.pojo.dto.req.LoginReq;
+import com.school.manager.pojo.dto.req.UserPasswordUpdateReq;
+import com.school.manager.pojo.dto.req.UserSaveReq;
+import com.school.manager.pojo.dto.req.UserUpdateReq;
+import com.school.manager.pojo.dto.resp.LoginResp;
+import com.school.manager.pojo.dto.resp.UserResp;
 import com.school.manager.service.UserService;
 import com.school.manager.utils.JwtUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,7 +49,6 @@ public class UserController {
     @ApiOperation("登录")
     @PostMapping("/login")
     public Result<LoginResp> login(@Valid @RequestBody LoginReq request) {
-        log.warn("loginController()入===》当前时间：{}", System.currentTimeMillis());
         LoginUserInfo loginUserInfo = userService.login(request);
         if (Objects.isNull(loginUserInfo)) {
             return Result.error(StatusCode.LOGIN_FAILURE.getDesc());
@@ -56,46 +57,32 @@ public class UserController {
         String token = jwtUtil.createJwt(loginUserInfo.getId(), loginUserInfo.getName(), loginUserInfo);
         loginResp.setToken(token);
         loginResp.setLoginUserInfo(loginUserInfo);
-        log.warn("loginController()出===》当前时间：{}", System.currentTimeMillis());
         return Result.success(loginResp);
     }
 
     @ApiOperation("用户列表")
     @PostMapping("/list")
-    public PageResult<List<User>> userList(@RequestBody UserReq request) {
-        try {
-            Page<User> userPage = userService.findValidList(request);
-            return PageResult.success(userPage.getContent(), userPage.getTotalElements());
-        } catch (Exception e) {
-            return PageResult.error(e.getMessage());
-        }
+    public PageResult<List<BaseDTO<String>>> userList(@RequestBody @Valid FuzzyQueryReq request) {
+        return userService.list(request);
     }
 
     @ApiOperation("用户信息")
     @PostMapping("info")
-    public Result<UserResp> userInfo(@RequestBody CommonSelOrDelReq<String> request) {
-        try {
-            return Result.success(userService.findById(request.getId()));
-        } catch (Exception e) {
-            return Result.error(e.getMessage());
-        }
+    public Result<UserResp> userInfo(@RequestBody @Valid CommonSelOrDelReq<String> request) {
+        return Result.success(userService.info(request.getId()));
     }
 
     @ApiOperation("新增人员")
     @PostMapping("/save")
-    public Result<UserResp> save(@RequestBody @Valid UserReq request) {
-        try {
-            return Result.success(userService.findById(userService.save(request)));
-        } catch (Exception e) {
-            return Result.error(e.getMessage());
-        }
+    public Result<UserResp> save(@RequestBody @Valid UserSaveReq request) {
+        return Result.success(userService.info(userService.save(request)));
     }
 
     @ApiOperation("更新人员信息")
     @PostMapping("/update")
-    public Result<UserResp> update(@RequestBody @Valid UserReq request) {
+    public Result<UserResp> update(@RequestBody @Valid UserUpdateReq request) {
         try {
-            return Result.success(userService.findById(userService.update(request)));
+            return Result.success(userService.info(userService.update(request)));
         } catch (Exception e) {
             return Result.error(e.getMessage());
         }
@@ -105,10 +92,17 @@ public class UserController {
     @PostMapping("/remove")
     public Result<Object> remove(@RequestBody CommonSelOrDelReq<String> request) {
         try {
-            userService.removeById(request.getId());
+            userService.delete(request.getId());
             return Result.success();
         } catch (Exception e) {
             return Result.error(e.getMessage());
         }
+    }
+
+    @ApiOperation("更改密码")
+    @PostMapping("/updatePassword")
+    public Result<Object> updatePassword(@RequestBody @Valid UserPasswordUpdateReq request) {
+        userService.updatePassword(request.getOldPassword(), request.getNewPassword());
+        return Result.success();
     }
 }
