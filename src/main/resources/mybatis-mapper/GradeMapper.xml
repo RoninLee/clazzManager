@@ -62,7 +62,7 @@
         <include refid="Base_Column_List"/>
         from grade
     </select>
-    <select id="dropdownList" resultType="baseDTO">
+    <select id="dropdownList" resultType="com.school.manager.pojo.dto.common.BaseDTO">
         select id, name
         from grade
     </select>

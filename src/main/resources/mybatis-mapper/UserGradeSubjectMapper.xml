@@ -100,12 +100,12 @@
         from user_grade_subject
         where user_id = #{userId}
     </select>
-    <select id="listByUserId" resultType="userGradeSubject">
+    <select id="listByUserId" resultType="com.school.manager.pojo.entity.UserGradeSubject">
         select
         <include refid="Base_Column_List"/>
         from user_grade_subject where user_id =#{userId}
     </select>
-    <select id="getById" resultType="userGradeSubject">
+    <select id="getById" resultType="com.school.manager.pojo.entity.UserGradeSubject">
         select
         <include refid="Base_Column_List"/>
         from user_grade_subject

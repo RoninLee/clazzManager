@@ -99,13 +99,13 @@
             </if>
         </where>
     </select>
-    <select id="findUserByJobNumber" resultType="user">
+    <select id="findUserByJobNumber" resultType="com.school.manager.pojo.entity.User">
         select
         <include refid="Base_Column_List"/>
         from user
         where job_number = #{jobNumber}
     </select>
-    <select id="dropdownList" resultType="baseDTO">
+    <select id="dropdownList" resultType="com.school.manager.pojo.dto.common.BaseDTO">
         SELECT id,name
         FROM user
         <where>

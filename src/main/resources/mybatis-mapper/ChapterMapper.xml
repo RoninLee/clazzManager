@@ -67,7 +67,7 @@
         WHERE id = #{id}
     </delete>
 
-    <select id="info" resultType="chapter">
+    <select id="info" resultType="com.school.manager.pojo.entity.Chapter">
         SELECT
         <include refid="Base_Column_List"/>
         FROM chapter
