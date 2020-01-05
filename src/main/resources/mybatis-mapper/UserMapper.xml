@@ -22,6 +22,9 @@
     <insert id="save" parameterType="com.school.manager.pojo.entity.User">
         INSERT INTO user
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test='null != id'>
+                id,
+            </if>
             <if test='null != name'>
                 name,
             </if>
@@ -36,6 +39,9 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test='null != id'>
+                #{id},
+            </if>
             <if test='null != name'>
                 #{name},
             </if>
@@ -110,9 +116,9 @@
         FROM user
         <where>
             job_number != 'admin'
-            <if test="fuzzyName!=null and fuzzyName!=''">
-                <bind name="_fuzzyName" value="'%'+fuzzyName+'%'"/>
-                and (name like #{_fuzzyName} or job_number like #{_fuzzyName})
+            <if test="name!=null and name!=''">
+                <bind name="_name" value="'%'+name+'%'"/>
+                and (name like #{_name} or job_number like #{_name})
             </if>
         </where>
     </select>

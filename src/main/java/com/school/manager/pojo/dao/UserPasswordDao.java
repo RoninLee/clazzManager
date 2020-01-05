@@ -31,4 +31,11 @@ public interface UserPasswordDao {
      * @return 密码信息
      */
     UserPassword findById(String id);
+
+    /**
+     * 更新密码
+     *
+     * @param userPassword 密码信息
+     */
+    void update(UserPassword userPassword);
 }

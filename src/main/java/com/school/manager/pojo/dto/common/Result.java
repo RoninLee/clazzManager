@@ -50,10 +50,6 @@ public class Result<T> implements Serializable {
         return success(StatusCode.SUCCESS.getDesc(), null);
     }
 
-    public static <T> Result<T> success(String msg) {
-        return success(msg, null);
-    }
-
     public static <T> Result<T> success(T data) {
         return success(StatusCode.SUCCESS.getDesc(), data);
     }

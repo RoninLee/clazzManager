@@ -1,10 +1,11 @@
 package com.school.manager.controller;
 
+import com.school.manager.pojo.dto.common.CommonSelOrDelReq;
 import com.school.manager.pojo.dto.common.Result;
 import com.school.manager.pojo.dto.req.ChapterSaveReq;
 import com.school.manager.pojo.dto.req.ChapterUpdateReq;
-import com.school.manager.pojo.dto.req.CommonSelOrDelReq;
 import com.school.manager.pojo.dto.resp.ChapterInfoResp;
+import com.school.manager.pojo.dto.resp.GradeSubjectResp;
 import com.school.manager.service.ChapterService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author RoninLee
@@ -47,9 +49,14 @@ public class ChapterController {
     }
 
     @ApiOperation("[查询] 根据主键 id 查询")
-    @PostMapping("/load")
-    public Result<ChapterInfoResp> load(@RequestBody @Valid CommonSelOrDelReq<String> request) {
+    @PostMapping("/info")
+    public Result<ChapterInfoResp> info(@RequestBody @Valid CommonSelOrDelReq<String> request) {
         return Result.success(chapterService.info(request.getId()));
     }
 
+    @ApiOperation("年级学科下拉列表")
+    @PostMapping("/gradeSubjectDropdownList")
+    public Result<List<GradeSubjectResp>> gradeSubjectDropdownList() {
+        return Result.success(chapterService.gradeSubjectDropdownList());
+    }
 }

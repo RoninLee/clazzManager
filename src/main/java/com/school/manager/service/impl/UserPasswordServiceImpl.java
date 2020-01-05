@@ -28,8 +28,18 @@ public class UserPasswordServiceImpl implements UserPasswordService {
      * @param userPassword 用户密码
      */
     @Override
-    public void saveOrUpdate(UserPassword userPassword) {
+    public void save(UserPassword userPassword) {
         userPasswordDao.save(userPassword);
+    }
+
+    /**
+     * 新增或更新密码
+     *
+     * @param userPassword 用户密码
+     */
+    @Override
+    public void update(UserPassword userPassword) {
+        userPasswordDao.update(userPassword);
     }
 
     /**

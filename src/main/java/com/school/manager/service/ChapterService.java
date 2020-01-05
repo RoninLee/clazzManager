@@ -3,6 +3,9 @@ package com.school.manager.service;
 import com.school.manager.pojo.dto.req.ChapterSaveReq;
 import com.school.manager.pojo.dto.req.ChapterUpdateReq;
 import com.school.manager.pojo.dto.resp.ChapterInfoResp;
+import com.school.manager.pojo.dto.resp.GradeSubjectResp;
+
+import java.util.List;
 
 /**
  * @author RoninLee
@@ -39,6 +42,13 @@ public interface ChapterService {
      * @return 返回对象
      */
     ChapterInfoResp info(String id);
+
+    /**
+     * 当前用户所绑定的年级学科下拉列表
+     *
+     * @return 当前用户所绑定的年级学科下拉列表
+     */
+    List<GradeSubjectResp> gradeSubjectDropdownList();
 
     // TODO: 2020/1/4 章节树接口 redis
 }

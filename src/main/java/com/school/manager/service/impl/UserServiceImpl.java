@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
         String defaultPassword = "Sxzx2019";
         // 采用Spring Security二次加密
         userPassword.setPassword(passwordEncoder.encode(Md5Util.md5(defaultPassword)));
-        userPasswordService.saveOrUpdate(userPassword);
+        userPasswordService.save(userPassword);
         // 用户角色
         List<UserRole> userRoleList = Lists.newArrayList();
         UserRole userRole = new UserRole();
@@ -180,7 +180,7 @@ public class UserServiceImpl implements UserService {
                 userRoleService.save(userRole);
             }
         }
-        userDao.save(user);
+        userDao.update(user);
         return request.getId();
     }
 
@@ -245,7 +245,7 @@ public class UserServiceImpl implements UserService {
         UserPassword userPassword = new UserPassword();
         userPassword.setId(loginUserInfo.getId());
         userPassword.setPassword(passwordEncoder.encode(newPassword));
-        userPasswordService.saveOrUpdate(userPassword);
+        userPasswordService.update(userPassword);
     }
 
     /**

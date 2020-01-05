@@ -9,11 +9,18 @@ import com.school.manager.pojo.entity.UserPassword;
 public interface UserPasswordService {
 
     /**
-     * 新增或更新密码
+     * 新增密码
      *
      * @param userPassword 用户密码
      */
-    void saveOrUpdate(UserPassword userPassword);
+    void save(UserPassword userPassword);
+
+    /**
+     * 更新密码
+     *
+     * @param userPassword 用户密码
+     */
+    void update(UserPassword userPassword);
 
     /**
      * 删除密码

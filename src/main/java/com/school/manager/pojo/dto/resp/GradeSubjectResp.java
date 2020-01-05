@@ -14,8 +14,16 @@ import java.io.Serializable;
 @ApiModel("年级学科关联关系")
 public class GradeSubjectResp implements Serializable {
     private static final long serialVersionUID = -3737079155090328814L;
+
     @ApiModelProperty("年级id")
     private String gradeId;
+
+    @ApiModelProperty("年级名称")
+    private String gradeName;
+
     @ApiModelProperty("学科id")
     private String subjectId;
+
+    @ApiModelProperty("学科名称")
+    private String subjectName;
 }

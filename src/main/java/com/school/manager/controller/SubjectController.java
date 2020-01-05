@@ -1,7 +1,7 @@
 package com.school.manager.controller;
 
 import com.school.manager.pojo.dto.common.Result;
-import com.school.manager.pojo.dto.req.CommonSelOrDelReq;
+import com.school.manager.pojo.dto.common.CommonSelOrDelReq;
 import com.school.manager.pojo.dto.req.SubjectSaveReq;
 import com.school.manager.pojo.dto.req.SubjectUpdateReq;
 import com.school.manager.pojo.dto.resp.SubjectResp;
@@ -62,7 +62,7 @@ public class SubjectController {
 
     @ApiOperation("更新学科")
     @PostMapping("/update")
-    public Result<SubjectResp> update(@RequestBody @Valid SubjectUpdateReq request) {
+    public Result<String> update(@RequestBody @Valid SubjectUpdateReq request) {
         try {
             return Result.success(subjectService.update(request));
         } catch (Exception e) {

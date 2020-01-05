@@ -1,7 +1,11 @@
 package com.school.manager.pojo.dao;
 
+import com.school.manager.pojo.dto.resp.GradeSubjectResp;
 import com.school.manager.pojo.entity.Chapter;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author RoninLee
@@ -23,7 +27,7 @@ public interface ChapterDao {
      * @author RoninLee
      * @date 2020/01/04
      **/
-    int delete(String id);
+    int delete(@Param("id") String id);
 
     /**
      * [更新]
@@ -39,5 +43,15 @@ public interface ChapterDao {
      * @author RoninLee
      * @date 2020/01/04
      **/
-    Chapter info(String id);
+    Chapter info(@Param("id") String id);
+
+    /**
+     * 查询是当前节点否存在子节点
+     *
+     * @param id 当前节点id
+     * @return 子节点数量
+     */
+    int childNodes(@Param("id") String id);
+
+    List<GradeSubjectResp> gradeSubjectDropdownList(@Param("userId") String userId);
 }

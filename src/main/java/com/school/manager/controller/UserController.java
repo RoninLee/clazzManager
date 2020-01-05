@@ -6,7 +6,7 @@ import com.school.manager.pojo.dto.common.BaseDTO;
 import com.school.manager.pojo.dto.common.FuzzyQueryReq;
 import com.school.manager.pojo.dto.common.PageResult;
 import com.school.manager.pojo.dto.common.Result;
-import com.school.manager.pojo.dto.req.CommonSelOrDelReq;
+import com.school.manager.pojo.dto.common.CommonSelOrDelReq;
 import com.school.manager.pojo.dto.req.LoginReq;
 import com.school.manager.pojo.dto.req.UserPasswordUpdateReq;
 import com.school.manager.pojo.dto.req.UserSaveReq;
@@ -89,8 +89,8 @@ public class UserController {
     }
 
     @ApiOperation("删除人员信息")
-    @PostMapping("/remove")
-    public Result<Object> remove(@RequestBody CommonSelOrDelReq<String> request) {
+    @PostMapping("/delete")
+    public Result<Object> delete(@RequestBody CommonSelOrDelReq<String> request) {
         try {
             userService.delete(request.getId());
             return Result.success();

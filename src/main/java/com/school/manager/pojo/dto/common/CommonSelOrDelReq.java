@@ -1,4 +1,4 @@
-package com.school.manager.pojo.dto.req;
+package com.school.manager.pojo.dto.common;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

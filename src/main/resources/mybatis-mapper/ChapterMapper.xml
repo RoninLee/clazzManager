@@ -20,6 +20,9 @@
     <insert id="save" parameterType="com.school.manager.pojo.entity.Chapter">
         INSERT INTO chapter
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test='null != id'>
+                id,
+            </if>
             <if test='null != gradeId'>
                 grade_id,
             </if>
@@ -40,6 +43,9 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test='null != id'>
+                #{id},
+            </if>
             <if test='null != gradeId'>
                 #{gradeId},
             </if>
@@ -72,6 +78,18 @@
         <include refid="Base_Column_List"/>
         FROM chapter
         WHERE id = #{id}
+    </select>
+    <select id="childNodes" resultType="java.lang.Integer">
+        select count(1)
+        from chapter
+        where parent_id = #{id}
+    </select>
+    <select id="gradeSubjectDropdownList" resultType="com.school.manager.pojo.dto.resp.GradeSubjectResp">
+        select g.id as grade_id, g.name as grade_name, s.id as subject_id, s.name as subject_name
+        from user_grade_subject ugs
+                 join grade g on ugs.grade_id = g.id
+                 join subject s on ugs.subject_id = s.id
+        where ugs.user_id = #{userId}
     </select>
 
     <update id="update" parameterType="com.school.manager.pojo.entity.Chapter">

@@ -41,7 +41,7 @@ public interface GradeService {
      *
      * @param id 年级id
      */
-    void remove(String id);
+    void delete(String id);
 
     /**
      * 年级下拉列表

@@ -22,6 +22,9 @@
     <insert id="save" parameterType="com.school.manager.pojo.entity.UserGradeSubject">
         INSERT INTO user_grade_subject
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test='null != id'>
+                id,
+            </if>
             <if test='null != userId'>
                 user_id,
             </if>
@@ -36,6 +39,9 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test='null != id'>
+                #{id},
+            </if>
             <if test='null != userId'>
                 #{userId},
             </if>

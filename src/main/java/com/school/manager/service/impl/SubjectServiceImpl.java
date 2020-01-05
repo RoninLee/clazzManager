@@ -111,6 +111,6 @@ public class SubjectServiceImpl implements SubjectService {
         Subject subject = BeanMapper.def().map(request, Subject.class);
         subject.setVersion(subject.getVersion() + LongConstant.ONE);
         subjectDao.update(subject);
-        return null;
+        return subject.getId();
     }
 }

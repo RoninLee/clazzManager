@@ -1,6 +1,5 @@
-package com.school.manager.pojo.dto.req;
+package com.school.manager.pojo.dto.common;
 
-import com.school.manager.pojo.dto.common.PageReq;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

@@ -12,7 +12,6 @@ import java.io.Serializable;
  * @description 用户关联关系响应对象
  */
 @Data
-@AllArgsConstructor
 @ApiModel("用户关联关系相应对象")
 public class UserGradeSubjectResp implements Serializable {
     private static final long serialVersionUID = -2327072156583767788L;

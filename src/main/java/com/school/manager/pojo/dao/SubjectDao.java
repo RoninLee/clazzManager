@@ -4,6 +4,7 @@ import com.school.manager.pojo.dto.common.BaseDTO;
 import com.school.manager.pojo.dto.resp.SubjectResp;
 import com.school.manager.pojo.entity.Subject;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -75,5 +76,5 @@ public interface SubjectDao {
      * @param name 模糊查询
      * @return 学科下拉列表
      */
-    List<BaseDTO<String>> dropdownList(String name);
+    List<BaseDTO<String>> dropdownList(@Param("name") String name);
 }

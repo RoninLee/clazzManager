@@ -30,6 +30,8 @@ public enum StatusCode {
 
     PARENT_NOT_EXIST(100003, "父节点不存在"),
 
+    EXIST_CHILD_NODE(100008, "当前节点存在子节点"),
+
     SAVE_FAILED(100004, "新增失败"),
 
     UPDATE_FAILED(100005, "更新失败"),

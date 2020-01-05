@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -30,7 +31,7 @@ import java.util.Optional;
 @Service
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
 public class GradeServiceImpl implements GradeService {
-    @Autowired
+    @Resource
     private GradeDao gradeDao;
     @Autowired
     private IdWorker idWorker;
@@ -77,7 +78,7 @@ public class GradeServiceImpl implements GradeService {
      * @param id 年级id
      */
     @Override
-    public void remove(String id) {
+    public void delete(String id) {
         gradeDao.delete(id);
         // TODO: 2019/12/15 删除年级相关关联关系
     }
