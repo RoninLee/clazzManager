@@ -7,6 +7,7 @@ import com.school.manager.pojo.dto.common.PageResult;
 import com.school.manager.pojo.dto.req.LoginReq;
 import com.school.manager.pojo.dto.req.UserSaveReq;
 import com.school.manager.pojo.dto.req.UserUpdateReq;
+import com.school.manager.pojo.dto.resp.UserDropdownListResp;
 import com.school.manager.pojo.dto.resp.UserResp;
 
 import java.util.List;
@@ -84,7 +85,8 @@ public interface UserService {
     /**
      * 用户下拉列表
      *
+     * @param name 模糊查询字段
      * @return 用户列表
      */
-    List<BaseDTO<String>> userList(String name);
+    List<UserDropdownListResp> userList(String name);
 }

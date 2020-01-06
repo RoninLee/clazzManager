@@ -14,6 +14,7 @@ import com.school.manager.pojo.dto.common.PageResult;
 import com.school.manager.pojo.dto.req.LoginReq;
 import com.school.manager.pojo.dto.req.UserSaveReq;
 import com.school.manager.pojo.dto.req.UserUpdateReq;
+import com.school.manager.pojo.dto.resp.UserDropdownListResp;
 import com.school.manager.pojo.dto.resp.UserResp;
 import com.school.manager.pojo.entity.User;
 import com.school.manager.pojo.entity.UserGradeSubject;
@@ -255,7 +256,7 @@ public class UserServiceImpl implements UserService {
      * @return 用户列表
      */
     @Override
-    public List<BaseDTO<String>> userList(String name) {
+    public List<UserDropdownListResp> userList(String name) {
         return Optional.ofNullable(userDao.dropdownList(name)).orElse(Lists.newArrayList());
     }
 }

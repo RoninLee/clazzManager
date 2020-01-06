@@ -7,6 +7,7 @@ import com.school.manager.pojo.dto.common.CommonFuzzySelReq;
 import com.school.manager.pojo.dto.common.CommonSelOrDelReq;
 import com.school.manager.pojo.dto.req.UserGradeSubjectSaveReq;
 import com.school.manager.pojo.dto.req.UserGradeSubjectUpdateSaveReq;
+import com.school.manager.pojo.dto.resp.UserDropdownListResp;
 import com.school.manager.pojo.dto.resp.UserGradeSubjectResp;
 import com.school.manager.service.GradeService;
 import com.school.manager.service.SubjectService;
@@ -73,7 +74,7 @@ public class UserGradeSubjectController {
 
     @ApiOperation("用户列表")
     @PostMapping("/userList")
-    public Result<List<BaseDTO<String>>> userList(@RequestBody FuzzyQueryReq request) {
+    public Result<List<UserDropdownListResp>> userList(@RequestBody FuzzyQueryReq request) {
         return Result.success(userService.userList(request.getName()));
     }
 

@@ -111,8 +111,8 @@
         from user
         where job_number = #{jobNumber}
     </select>
-    <select id="dropdownList" resultType="com.school.manager.pojo.dto.common.BaseDTO">
-        SELECT id,name
+    <select id="dropdownList" resultType="com.school.manager.pojo.dto.resp.UserDropdownListResp">
+        SELECT id,name,job_number
         FROM user
         <where>
             job_number != 'admin'

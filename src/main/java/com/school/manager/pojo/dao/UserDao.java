@@ -1,6 +1,7 @@
 package com.school.manager.pojo.dao;
 
 import com.school.manager.pojo.dto.common.BaseDTO;
+import com.school.manager.pojo.dto.resp.UserDropdownListResp;
 import com.school.manager.pojo.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -75,6 +76,6 @@ public interface UserDao {
      * @param name 模糊查询
      * @return 用户下拉列表
      */
-    List<BaseDTO<String>> dropdownList(@Param("name") String name);
+    List<UserDropdownListResp> dropdownList(@Param("name") String name);
 
 }
