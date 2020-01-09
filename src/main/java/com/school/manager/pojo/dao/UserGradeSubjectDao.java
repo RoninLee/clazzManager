@@ -3,6 +3,7 @@ package com.school.manager.pojo.dao;
 import com.school.manager.pojo.dto.resp.UserGradeSubjectResp;
 import com.school.manager.pojo.entity.UserGradeSubject;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -76,4 +77,14 @@ public interface UserGradeSubjectDao {
      * @return 关联关系
      */
     UserGradeSubject getById(String id);
+
+    /**
+     * 查询列表
+     *
+     * @param fuzzyName 用户名和工号模糊查询
+     * @param index     开始
+     * @param pageSize  数量
+     * @return 列表
+     */
+    List<UserGradeSubjectResp> list(@Param("fuzzyName") String fuzzyName, @Param("index") Integer index, @Param("pageSize") Integer pageSize);
 }

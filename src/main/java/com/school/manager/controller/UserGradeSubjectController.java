@@ -61,8 +61,8 @@ public class UserGradeSubjectController {
 
     @ApiOperation("列表")
     @PostMapping("/list")
-    public Result<List<UserGradeSubjectResp>> fuzzyQueryList(@RequestBody CommonFuzzySelReq request) {
-        return userGradeSubjectService.fuzzyQueryList(request.getName(), request.getPageIndex(), request.getPageSize());
+    public Result<List<UserGradeSubjectResp>> fuzzyQueryList(@RequestBody @Valid CommonFuzzySelReq request) {
+        return Result.success(userGradeSubjectService.fuzzyQueryList(request.getName(), request.getPageIndex(), request.getPageSize()));
     }
 
     @ApiOperation("删除关联关系")

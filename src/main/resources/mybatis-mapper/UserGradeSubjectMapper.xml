@@ -117,5 +117,27 @@
         from user_grade_subject
         where id =#{id}
     </select>
+    <select id="list" resultType="com.school.manager.pojo.dto.resp.UserGradeSubjectResp">
+        select
+        ugs.id,
+        u.id as user_id,
+        u.name as username,
+        u.job_number,
+        g.id as grade_id,
+        g.name as grade_name,
+        s.id as subject_id,
+        s.name as subject_name
+        from user_grade_subject ugs
+        join user u on ugs.user_id = u.id
+        join grade g on ugs.grade_id = g.id
+        join subject s on ugs.subject_id = s.id
+        <where>
+            <if test="fuzzyName!=null and fuzzyName !=''">
+                <bind name="_name" value="'%'+fuzzyName+'%'"/>
+               u.name like #{_name} or u.job_number like #{_name}
+            </if>
+        </where>
+        limit #{index},#{pageSize}
+    </select>
 
 </mapper>

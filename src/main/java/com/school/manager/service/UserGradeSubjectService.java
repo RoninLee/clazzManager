@@ -1,6 +1,5 @@
 package com.school.manager.service;
 
-import com.school.manager.pojo.dto.common.PageResult;
 import com.school.manager.pojo.dto.req.UserGradeSubjectSaveReq;
 import com.school.manager.pojo.dto.req.UserGradeSubjectUpdateSaveReq;
 import com.school.manager.pojo.dto.resp.UserGradeSubjectResp;
@@ -38,9 +37,11 @@ public interface UserGradeSubjectService {
      * 模糊查询用户关系列表
      *
      * @param fuzzyName 查询内容
+     * @param pageIndex 页码
+     * @param pageSize  每页数量
      * @return 关系列表
      */
-    PageResult<List<UserGradeSubjectResp>> fuzzyQueryList(String fuzzyName, Integer pageIndex, Integer pageSize);
+    List<UserGradeSubjectResp> fuzzyQueryList(String fuzzyName, Integer pageIndex, Integer pageSize);
 
     /**
      * 根据关系id获取关系详情

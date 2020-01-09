@@ -1,11 +1,9 @@
 package com.school.manager.service.impl;
 
-import com.google.common.collect.Lists;
 import com.school.manager.common.constant.LongConstant;
 import com.school.manager.enums.StatusCode;
 import com.school.manager.exception.SysServiceException;
 import com.school.manager.pojo.dao.UserGradeSubjectDao;
-import com.school.manager.pojo.dto.common.PageResult;
 import com.school.manager.pojo.dto.req.UserGradeSubjectSaveReq;
 import com.school.manager.pojo.dto.req.UserGradeSubjectUpdateSaveReq;
 import com.school.manager.pojo.dto.resp.UserGradeSubjectResp;
@@ -82,9 +80,9 @@ public class UserGradeSubjectServiceImpl implements UserGradeSubjectService {
      * @return 关系列表
      */
     @Override
-    public PageResult<List<UserGradeSubjectResp>> fuzzyQueryList(String fuzzyName, Integer pageIndex, Integer pageSize) {
-        // TODO: 2020/1/5 怎么展示列表 待商榷
-        return PageResult.success(Lists.newArrayList(), 1L);
+    public List<UserGradeSubjectResp> fuzzyQueryList(String fuzzyName, Integer pageIndex, Integer pageSize) {
+        Integer index = (pageIndex - 1) * pageSize;
+        return userGradeSubjectDao.list(fuzzyName, index, pageSize);
     }
 
     /**
