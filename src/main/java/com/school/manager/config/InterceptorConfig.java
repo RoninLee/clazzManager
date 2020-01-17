@@ -5,6 +5,7 @@ import com.school.manager.jwt.JwtInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 /**
@@ -29,7 +30,8 @@ public class InterceptorConfig extends WebMvcConfigurationSupport {
         // 注册拦截器要声明拦截器对象和拦截器的请求
         registry.addInterceptor(jwtInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/user/login");
+                .excludePathPatterns("/user/login")
+                .excludePathPatterns("/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
 
         registry.addInterceptor(adminInterceptor)
                 .addPathPatterns("/user/**")
@@ -37,6 +39,15 @@ public class InterceptorConfig extends WebMvcConfigurationSupport {
                 .addPathPatterns("/subject/**")
                 .addPathPatterns("/userRelation/**")
                 .excludePathPatterns("/user/login")
-                .excludePathPatterns("/user/updatePassword");
+                .excludePathPatterns("/user/updatePassword")
+                .excludePathPatterns("/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
+    }
+
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 }
