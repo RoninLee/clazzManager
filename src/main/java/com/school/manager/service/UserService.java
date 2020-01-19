@@ -33,7 +33,7 @@ public interface UserService {
      * @param request 请求对象
      * @return 人员列表
      */
-    PageResult<List<BaseDTO<String>>> list(FuzzyQueryReq request);
+    PageResult<List<UserResp>> list(FuzzyQueryReq request);
 
     /**
      * 通过id查人员

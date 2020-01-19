@@ -62,7 +62,7 @@ public class UserController {
 
     @ApiOperation("用户列表")
     @PostMapping("/list")
-    public PageResult<List<BaseDTO<String>>> userList(@RequestBody @Valid FuzzyQueryReq request) {
+    public PageResult<List<UserResp>> userList(@RequestBody @Valid FuzzyQueryReq request) {
         return userService.list(request);
     }
 

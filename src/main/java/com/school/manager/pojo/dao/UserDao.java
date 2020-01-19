@@ -2,6 +2,7 @@ package com.school.manager.pojo.dao;
 
 import com.school.manager.pojo.dto.common.BaseDTO;
 import com.school.manager.pojo.dto.resp.UserDropdownListResp;
+import com.school.manager.pojo.dto.resp.UserResp;
 import com.school.manager.pojo.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -60,7 +61,7 @@ public interface UserDao {
      * @author RoninLee
      * @date 2020/01/04
      **/
-    List<BaseDTO<String>> pageList(@Param("fuzzyName") String fuzzyName, @Param("pageIndex") int pageIndex, @Param("pageSize") int pageSize);
+    List<UserResp> pageList(@Param("fuzzyName") String fuzzyName, @Param("pageIndex") int pageIndex, @Param("pageSize") int pageSize);
 
     /**
      * [查询] 分页查询 count

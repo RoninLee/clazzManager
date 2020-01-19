@@ -87,9 +87,9 @@ public class UserServiceImpl implements UserService {
      * @return 人员列表
      */
     @Override
-    public PageResult<List<BaseDTO<String>>> list(FuzzyQueryReq request) {
+    public PageResult<List<UserResp>> list(FuzzyQueryReq request) {
         int pageIndex = (request.getPageIndex() - 1) * request.getPageSize();
-        List<BaseDTO<String>> userList = userDao.pageList(request.getName(), pageIndex, request.getPageSize());
+        List<UserResp> userList = userDao.pageList(request.getName(), pageIndex, request.getPageSize());
         Long listCount = userDao.pageListCount(request.getName());
         return PageResult.success(userList, listCount);
     }

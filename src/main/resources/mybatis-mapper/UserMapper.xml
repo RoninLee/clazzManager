@@ -82,8 +82,8 @@
         WHERE id = #{id}
     </select>
 
-    <select id="pageList" resultType="com.school.manager.pojo.dto.common.BaseDTO">
-        SELECT id,name
+    <select id="pageList" resultType="com.school.manager.pojo.dto.resp.UserResp">
+        SELECT id, name, job_number, group_leader_flag, version
         FROM user
         <where>
             job_number != 'admin'
