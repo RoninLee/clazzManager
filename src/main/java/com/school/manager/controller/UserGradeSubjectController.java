@@ -53,6 +53,12 @@ public class UserGradeSubjectController {
         return Result.success(userGradeSubjectService.save(request));
     }
 
+    @ApiOperation("年级学科绑定关系详情")
+    @PostMapping("/info")
+    public Result<UserGradeSubjectResp> info(@RequestBody @Valid CommonSelOrDelReq<String> request) {
+        return Result.success(userGradeSubjectService.findById(request.getId()));
+    }
+
     @ApiOperation("更新年级学科")
     @PostMapping("/update")
     public Result<String> update(@RequestBody @Valid UserGradeSubjectUpdateSaveReq request) {

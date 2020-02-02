@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Data
 public class LessonPlanReq implements Serializable {
     private static final long serialVersionUID = 8359904526770297586L;
-        /**
+    /**
      * 主键id
      */
     private String id;

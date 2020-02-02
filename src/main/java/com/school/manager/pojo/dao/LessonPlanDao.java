@@ -1,8 +1,11 @@
 package com.school.manager.pojo.dao;
 
+import com.school.manager.pojo.dto.common.BaseDTO;
 import com.school.manager.pojo.entity.LessonPlan;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,7 +45,7 @@ public interface LessonPlanDao {
      * @author RoninLee
      * @date 2020/01/04
      **/
-    LessonPlan info(int id);
+    LessonPlan info(String id);
 
     /**
      * [查询] 分页查询
@@ -50,7 +53,7 @@ public interface LessonPlanDao {
      * @author RoninLee
      * @date 2020/01/04
      **/
-    List<LessonPlan> pageList(int offset, int pageSize);
+    List<LessonPlan> pageList(@Param("relationId") String relationId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("pageIndex") int pageIndex, @Param("pageSize") int pageSize);
 
     /**
      * [查询] 分页查询 count
@@ -58,5 +61,13 @@ public interface LessonPlanDao {
      * @author RoninLee
      * @date 2020/01/04
      **/
-    int pageListCount(int offset, int pagesize);
+    Long pageListCount(@Param("relationId") String relationId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+    /**
+     * 根据用户id查询年级学科
+     *
+     * @param userId 用户id
+     * @return <关联关系id,年级+学科>
+     */
+    List<BaseDTO<String>> gradeSubList(String userId);
 }

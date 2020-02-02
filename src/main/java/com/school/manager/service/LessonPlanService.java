@@ -1,7 +1,15 @@
 package com.school.manager.service;
 
-import com.school.manager.pojo.dto.resp.FileResp;
+import com.school.manager.pojo.dto.common.BaseDTO;
+import com.school.manager.pojo.dto.common.PageResult;
+import com.school.manager.pojo.dto.req.LessonPlanListReq;
+import com.school.manager.pojo.dto.req.LessonPlanSaveReq;
+import com.school.manager.pojo.dto.req.LessonPlanUpdateReq;
+import com.school.manager.pojo.dto.common.FileInfo;
+import com.school.manager.pojo.dto.resp.LessonPlanInfoResp;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 /**
@@ -9,6 +17,14 @@ import org.springframework.web.multipart.MultipartFile;
  * @description 教案管理
  */
 public interface LessonPlanService {
+
+
+    /**
+     * 查询当前用户所绑定的年级和学科
+     *
+     * @return 年级学科列表
+     */
+    List<BaseDTO<String>> gradeSubList();
 
     /**
      * 上传文件
@@ -18,5 +34,44 @@ public interface LessonPlanService {
      * @param chapterId 章节id
      * @return 文件信息
      */
-    FileResp upload(MultipartFile file, String type, String chapterId);
+    FileInfo upload(MultipartFile file, String type, String chapterId);
+
+    /**
+     * 保存教案
+     *
+     * @param request 请求对象
+     * @return 教案id
+     */
+    String save(LessonPlanSaveReq request);
+
+    /**
+     * 更新教案
+     *
+     * @param request 请求对象
+     * @return 教案id
+     */
+    String update(LessonPlanUpdateReq request);
+
+    /**
+     * 教案详情
+     *
+     * @param id 教案id
+     * @return 教案详情
+     */
+    LessonPlanInfoResp info(String id);
+
+    /**
+     * 教案列表
+     *
+     * @param request 教案列表请求对象
+     * @return 教案列表
+     */
+    PageResult<List<LessonPlanInfoResp>> list(LessonPlanListReq request);
+
+    /**
+     * 删除教案
+     *
+     * @param id 教案id
+     */
+    void delete(String id);
 }

@@ -1,4 +1,4 @@
-package com.school.manager.pojo.dto.resp;
+package com.school.manager.pojo.dto.common;
 
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @description
  */
 @Data
-public class FileResp implements Serializable {
+public class FileInfo implements Serializable {
     private static final long serialVersionUID = -2666376210493147617L;
     private String fileName;
     private String fileUrl;

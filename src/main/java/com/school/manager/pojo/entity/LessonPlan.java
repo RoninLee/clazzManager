@@ -3,6 +3,7 @@ package com.school.manager.pojo.entity;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author RoninLee
@@ -18,9 +19,9 @@ public class LessonPlan implements Serializable {
     private String id;
 
     /**
-     * 章节id
+     * 用户年级学科关联关系id
      */
-    private String sectionId;
+    private String relationId;
 
     /**
      * 人员id
@@ -66,4 +67,25 @@ public class LessonPlan implements Serializable {
      * 版本
      */
     private Long version;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 创建人员
+     */
+    private String createAcc;
+
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
+
+    /**
+     * 更新人员
+     */
+    private String updateAcc;
+
 }
