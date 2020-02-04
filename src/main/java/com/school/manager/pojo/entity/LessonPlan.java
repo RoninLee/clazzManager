@@ -19,14 +19,29 @@ public class LessonPlan implements Serializable {
     private String id;
 
     /**
-     * 用户年级学科关联关系id
+     * 用户年级学科关系id
      */
     private String relationId;
+
+    /**
+     * 用户年级学科关系name
+     */
+    private String relationName;
 
     /**
      * 人员id
      */
     private String userId;
+
+    /**
+     * 章名称
+     */
+    private String chapter;
+
+    /**
+     * 节名称
+     */
+    private String section;
 
     /**
      * 在线文档内容
@@ -72,20 +87,5 @@ public class LessonPlan implements Serializable {
      * 创建时间
      */
     private Date createTime;
-
-    /**
-     * 创建人员
-     */
-    private String createAcc;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-    /**
-     * 更新人员
-     */
-    private String updateAcc;
 
 }

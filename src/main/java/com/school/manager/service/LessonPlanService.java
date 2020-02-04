@@ -1,12 +1,13 @@
 package com.school.manager.service;
 
 import com.school.manager.pojo.dto.common.BaseDTO;
-import com.school.manager.pojo.dto.common.PageResult;
+import com.school.manager.pojo.dto.common.Result;
 import com.school.manager.pojo.dto.req.LessonPlanListReq;
 import com.school.manager.pojo.dto.req.LessonPlanSaveReq;
 import com.school.manager.pojo.dto.req.LessonPlanUpdateReq;
 import com.school.manager.pojo.dto.common.FileInfo;
 import com.school.manager.pojo.dto.resp.LessonPlanInfoResp;
+import com.school.manager.pojo.dto.resp.LessonPlanListResp;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -66,7 +67,7 @@ public interface LessonPlanService {
      * @param request 教案列表请求对象
      * @return 教案列表
      */
-    PageResult<List<LessonPlanInfoResp>> list(LessonPlanListReq request);
+    Result<List<LessonPlanListResp>> list(LessonPlanListReq request);
 
     /**
      * 删除教案

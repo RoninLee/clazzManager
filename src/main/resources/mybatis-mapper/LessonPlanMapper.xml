@@ -5,7 +5,10 @@
     <resultMap id="BaseResultMap" type="com.school.manager.pojo.entity.LessonPlan">
         <result column="id" property="id"/>
         <result column="relation_id" property="relationId"/>
+        <result column="relation_name" property="relationName"/>
         <result column="user_id" property="userId"/>
+        <result column="chapter" property="chapter"/>
+        <result column="section" property="section"/>
         <result column="lesson_plan_text" property="lessonPlanText"/>
         <result column="ppt_name" property="pptName"/>
         <result column="ppt_url" property="pptUrl"/>
@@ -15,27 +18,38 @@
         <result column="exercises_file_name" property="exercisesFileName"/>
         <result column="version" property="version"/>
         <result column="create_time" property="createTime"/>
-        <result column="create_acc" property="createAcc"/>
-        <result column="update_time" property="updateTime"/>
-        <result column="update_acc" property="updateAcc"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,
-                relation_id,
-                user_id,
-                lesson_plan_text,
-                ppt_name,
-                ppt_url,
-                ppt_file_name,
-                exercises_name,
-                exercises_url,
-                exercises_file_name,
-                version,
-                create_time,
-                create_acc,
-                update_time,
-                update_acc
+        relation_id,
+        relation_name,
+        user_id,
+        chapter,
+        section,
+        lesson_plan_text,
+        ppt_name,
+        ppt_url,
+        ppt_file_name,
+        exercises_name,
+        exercises_url,
+        exercises_file_name,
+        version,
+        create_time
+    </sql>
+
+    <sql id="Base_List_Column_List">
+        id,
+        relation_id,
+        relation_name,
+        user_id,
+        chapter,
+        section,
+        ppt_name,
+        ppt_file_name,
+        exercises_name,
+        exercises_file_name,
+        create_time
     </sql>
 
     <insert id="save" parameterType="com.school.manager.pojo.entity.LessonPlan">
@@ -47,8 +61,17 @@
             <if test='null != relationId'>
                 relation_id,
             </if>
+            <if test='null != relationName'>
+                relation_name,
+            </if>
             <if test='null != userId'>
                 user_id,
+            </if>
+            <if test='null != chapter'>
+                chapter,
+            </if>
+            <if test='null != section'>
+                section,
             </if>
             <if test='null != lessonPlanText'>
                 lesson_plan_text,
@@ -75,16 +98,7 @@
                 version,
             </if>
             <if test='null != createTime'>
-                create_time,
-            </if>
-            <if test='null != createAcc'>
-                create_acc,
-            </if>
-            <if test='null != updateTime'>
-                update_time,
-            </if>
-            <if test='null != updateAcc'>
-                update_acc
+                create_time
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -94,8 +108,17 @@
             <if test='null != relationId'>
                 #{relationId},
             </if>
+            <if test='null != relationName'>
+                #{relationName},
+            </if>
             <if test='null != userId'>
                 #{userId},
+            </if>
+            <if test='null != chapter'>
+                #{chapter},
+            </if>
+            <if test='null != section'>
+                #{section},
             </if>
             <if test='null != lessonPlanText'>
                 #{lessonPlanText},
@@ -122,16 +145,7 @@
                 #{version},
             </if>
             <if test='null != createTime'>
-                #{createTime},
-            </if>
-            <if test='null != createAcc'>
-                #{createAcc},
-            </if>
-            <if test='null != updateTime'>
-                #{updateTime},
-            </if>
-            <if test='null != updateAcc'>
-                #{updateAcc}
+                #{createTime}
             </if>
         </trim>
     </insert>
@@ -146,7 +160,10 @@
         UPDATE lesson_plan
         <set>
             <if test='null != relationId'>relation_id = #{relationId},</if>
+            <if test='null != relationName'>relation_name = #{relationName},</if>
             <if test='null != userId'>user_id = #{userId},</if>
+            <if test='null != chapter'>chapter = #{chapter},</if>
+            <if test='null != section'>section = #{section},</if>
             <if test='null != lessonPlanText'>lesson_plan_text = #{lessonPlanText},</if>
             <if test='null != pptName'>ppt_name = #{pptName},</if>
             <if test='null != pptUrl'>ppt_url = #{pptUrl},</if>
@@ -155,10 +172,7 @@
             <if test='null != exercisesUrl'>exercises_url = #{exercisesUrl},</if>
             <if test='null != exercisesFileName'>exercises_file_name = #{exercisesFileName},</if>
             <if test='null != version'>version = #{version},</if>
-            <if test='null != createTime'>create_time = #{createTime},</if>
-            <if test='null != createAcc'>create_acc = #{createAcc},</if>
-            <if test='null != updateTime'>update_time = #{updateTime},</if>
-            <if test='null != updateAcc'>update_acc = #{updateAcc}</if>
+            <if test='null != createTime'>create_time = #{createTime}</if>
         </set>
         WHERE id = #{id}
     </update>
@@ -171,9 +185,9 @@
         WHERE id = #{id}
     </select>
 
-    <select id="pageList" resultMap="BaseResultMap">
+    <select id="pageList" resultType="com.school.manager.pojo.dto.resp.LessonPlanListResp">
         SELECT
-        <include refid="Base_Column_List"/>
+        <include refid="Base_List_Column_List"/>
         FROM lesson_plan
         <where>
             <if test="null != relationId">
@@ -191,6 +205,7 @@
 
     <select id="pageListCount" resultType="java.lang.Long">
         SELECT count(1)
+        FROM lesson_plan
         <where>
             <if test="null != relationId">
                 and relation_id = #{relationId}
@@ -202,7 +217,6 @@
                 and create_time <![CDATA[<=]]> #{endDate}
             </if>
         </where>
-        FROM lesson_plan
     </select>
 
     <select id="gradeSubList" resultType="com.school.manager.pojo.dto.common.BaseDTO">

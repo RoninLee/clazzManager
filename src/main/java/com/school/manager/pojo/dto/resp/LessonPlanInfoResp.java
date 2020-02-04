@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author lizelong01
@@ -15,8 +16,20 @@ public class LessonPlanInfoResp implements Serializable {
     @ApiModelProperty("主键id     primary key")
     private String id;
 
-    @ApiModelProperty("用户年级学科关联关系id")
+    @ApiModelProperty("用户年级学科关系id")
     private String relationId;
+
+    @ApiModelProperty("用户年级学科关系name")
+    private String relationName;
+
+    @ApiModelProperty("人员id")
+    private String userId;
+
+    @ApiModelProperty("章名称")
+    private String chapter;
+
+    @ApiModelProperty("节名称")
+    private String section;
 
     @ApiModelProperty("在线文档内容")
     private String lessonPlanText;
@@ -41,5 +54,8 @@ public class LessonPlanInfoResp implements Serializable {
 
     @ApiModelProperty("版本")
     private Long version;
+
+    @ApiModelProperty("创建时间")
+    private Date createTime;
 
 }

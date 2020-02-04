@@ -2,17 +2,22 @@ package com.school.manager.controller;
 
 import com.school.manager.pojo.dto.common.BaseDTO;
 import com.school.manager.pojo.dto.common.CommonSelOrDelReq;
-import com.school.manager.pojo.dto.common.PageReq;
 import com.school.manager.pojo.dto.common.Result;
 import com.school.manager.pojo.dto.req.LessonPlanListReq;
 import com.school.manager.pojo.dto.req.LessonPlanSaveReq;
 import com.school.manager.pojo.dto.req.LessonPlanUpdateReq;
 import com.school.manager.pojo.dto.resp.LessonPlanInfoResp;
+import com.school.manager.pojo.dto.resp.LessonPlanListResp;
 import com.school.manager.service.LessonPlanService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -47,13 +52,13 @@ public class LessonPlanController {
 
     @ApiOperation("增加教案")
     @PostMapping("save")
-    public Result<String> save(@RequestBody LessonPlanSaveReq request) {
+    public Result<String> save(@RequestBody @Valid LessonPlanSaveReq request) {
         return Result.success(lessonPlanService.save(request));
     }
 
     @ApiOperation("修改教案")
     @PostMapping("update")
-    public Result<String> update(@RequestBody LessonPlanUpdateReq request) {
+    public Result<String> update(@RequestBody @Valid LessonPlanUpdateReq request) {
         return Result.success(lessonPlanService.update(request));
     }
 
@@ -65,7 +70,7 @@ public class LessonPlanController {
 
     @ApiOperation("教案列表")
     @PostMapping("list")
-    public Result<List<LessonPlanInfoResp>> list(@RequestBody @Valid LessonPlanListReq request) {
+    public Result<List<LessonPlanListResp>> list(@RequestBody @Valid LessonPlanListReq request) {
         return lessonPlanService.list(request);
     }
 

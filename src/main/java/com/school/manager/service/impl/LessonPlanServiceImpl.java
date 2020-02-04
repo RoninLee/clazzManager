@@ -1,23 +1,24 @@
 package com.school.manager.service.impl;
 
+import com.school.manager.common.FileConfigConstant;
 import com.school.manager.common.constant.Constant;
 import com.school.manager.common.constant.LongConstant;
+import com.school.manager.enums.StatusCode;
+import com.school.manager.exception.SysServiceException;
+import com.school.manager.jwt.LoginUserInfo;
+import com.school.manager.jwt.LoginUserUtil;
 import com.school.manager.pojo.dao.LessonPlanDao;
 import com.school.manager.pojo.dto.common.BaseDTO;
+import com.school.manager.pojo.dto.common.FileInfo;
 import com.school.manager.pojo.dto.common.PageResult;
 import com.school.manager.pojo.dto.common.Result;
 import com.school.manager.pojo.dto.req.LessonPlanListReq;
 import com.school.manager.pojo.dto.req.LessonPlanSaveReq;
 import com.school.manager.pojo.dto.req.LessonPlanUpdateReq;
-import com.school.manager.pojo.dto.common.FileInfo;
-import com.school.manager.common.FileConfigConstant;
-import com.school.manager.jwt.LoginUserInfo;
-import com.school.manager.enums.StatusCode;
-import com.school.manager.exception.SysServiceException;
 import com.school.manager.pojo.dto.resp.LessonPlanInfoResp;
+import com.school.manager.pojo.dto.resp.LessonPlanListResp;
 import com.school.manager.pojo.entity.LessonPlan;
 import com.school.manager.service.LessonPlanService;
-import com.school.manager.jwt.LoginUserUtil;
 import com.school.manager.utils.BeanMapper;
 import com.school.manager.utils.IdWorker;
 import lombok.extern.slf4j.Slf4j;
@@ -115,11 +116,11 @@ public class LessonPlanServiceImpl implements LessonPlanService {
      */
     @Override
     public String save(LessonPlanSaveReq request) {
+        // TODO: 2020/2/4 在线文档 转义 \"
         LessonPlan lessonPlan = BeanMapper.def().map(request, LessonPlan.class);
         lessonPlan.setId(String.valueOf(idWorker.nextId()));
         LoginUserInfo loginUserInfo = LoginUserUtil.getLoginUserInfo();
         lessonPlan.setUserId(loginUserInfo.getId());
-        lessonPlan.setCreateAcc(loginUserInfo.getJobNumber());
         lessonPlan.setCreateTime(new Date());
         lessonPlan.setVersion(LongConstant.ONE);
         lessonPlanDao.save(lessonPlan);
@@ -136,9 +137,6 @@ public class LessonPlanServiceImpl implements LessonPlanService {
     public String update(LessonPlanUpdateReq request) {
         LessonPlan lessonPlan = BeanMapper.def().map(request, LessonPlan.class);
         lessonPlan.setVersion(lessonPlan.getVersion() + LongConstant.ONE);
-        lessonPlan.setUpdateTime(new Date());
-        LoginUserInfo loginUserInfo = LoginUserUtil.getLoginUserInfo();
-        lessonPlan.setUpdateAcc(loginUserInfo.getId());
         lessonPlanDao.update(lessonPlan);
         return lessonPlan.getId();
     }
@@ -151,6 +149,7 @@ public class LessonPlanServiceImpl implements LessonPlanService {
      */
     @Override
     public LessonPlanInfoResp info(String id) {
+        // TODO: 2020/2/4 在线文档 转义 \"
         LessonPlan lessonPlan = lessonPlanDao.info(id);
         return BeanMapper.def().map(lessonPlan, LessonPlanInfoResp.class);
     }
@@ -162,21 +161,19 @@ public class LessonPlanServiceImpl implements LessonPlanService {
      * @return 教案列表
      */
     @Override
-    public PageResult<List<LessonPlanInfoResp>> list(LessonPlanListReq request) {
-
+    public Result<List<LessonPlanListResp>> list(LessonPlanListReq request) {
         Integer pageSize = request.getPageSize();
-        Integer pageIndex = request.getPageIndex();
+        int pageIndex = (request.getPageIndex() - 1) * pageSize;
         List<Date> createTime = request.getCreateTime();
         Date startDate = null, endDate = null;
         if (null != createTime && !createTime.isEmpty()) {
             startDate = createTime.get(0);
             endDate = createTime.get(1);
         }
-        List<LessonPlan> lessonPlanList = lessonPlanDao.pageList(request.getRelationId(), startDate, endDate, pageIndex, pageSize);
+        List<LessonPlanListResp> lessonPlanList = lessonPlanDao.pageList(request.getRelationId(), startDate, endDate, pageIndex, pageSize);
         Long pageListCount = lessonPlanDao.pageListCount(request.getRelationId(), startDate, endDate);
-        List<LessonPlanInfoResp> lessonPlanInfoRespList = BeanMapper.def().mapList(lessonPlanList, LessonPlan.class, LessonPlanInfoResp.class);
-        PageResult<List<LessonPlanInfoResp>> pageResult = new PageResult<>();
-        pageResult.setData(lessonPlanInfoRespList);
+        PageResult<List<LessonPlanListResp>> pageResult = new PageResult<>();
+        pageResult.setData(lessonPlanList);
         pageResult.setTotal(pageListCount);
         return pageResult;
     }
