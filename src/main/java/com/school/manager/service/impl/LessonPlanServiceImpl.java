@@ -71,17 +71,15 @@ public class LessonPlanServiceImpl implements LessonPlanService {
     /**
      * 上传文件
      *
-     * @param file      文件
-     * @param type      类型
-     * @param chapterId 章节id
+     * @param file 文件
      * @return 文件信息
      */
     @Override
-    public FileInfo upload(MultipartFile file, String type, String chapterId) {
+    public FileInfo upload(MultipartFile file) {
         // 获取登录人信息
         LoginUserInfo loginUserInfo = Optional.ofNullable(LoginUserUtil.getLoginUserInfo()).orElseThrow(() -> new SysServiceException(StatusCode.NO_LOGIN_INFO.getCode(), StatusCode.NO_LOGIN_INFO.getDesc()));
         // 校验参数
-        if (file.isEmpty() || StringUtils.isBlank(type) || StringUtils.isBlank(loginUserInfo.getId()) || StringUtils.isBlank(chapterId)) {
+        if (file.isEmpty() || StringUtils.isBlank(loginUserInfo.getId())) {
             throw new SysServiceException(StatusCode.REQUEST_IS_NULL.getDesc());
         }
         String filename = file.getOriginalFilename();
@@ -89,8 +87,7 @@ public class LessonPlanServiceImpl implements LessonPlanService {
             throw new SysServiceException(StatusCode.FILE_NO_SUFFIX.getDesc());
         }
         // 拼保存后的文件名
-        String newFileName = fileConfigConstant.filePath + Constant.FORWARD_SLASH + type.toUpperCase() + Constant.FORWARD_SLASH + loginUserInfo.getId() + Constant.DASH + chapterId + Constant.DASH + filename;
-        log.info("新文件名：{}", newFileName);
+        String newFileName = fileConfigConstant.filePath + Constant.FORWARD_SLASH + loginUserInfo.getId() + Constant.FORWARD_SLASH + filename;
         File newFile = new File(newFileName);
         if (!newFile.getParentFile().exists()) {
             newFile.getParentFile().mkdirs();

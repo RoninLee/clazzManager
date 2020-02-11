@@ -40,7 +40,8 @@ logging:
   file: logs/${spring.application.name}.log
 system:
   file:
-    filePath: /usr/local/project/app/clm/files
+    filePath: /usr/local/project/files
+#    filePath: C:/usr/files
 jwt:
   config:
     key: ronin

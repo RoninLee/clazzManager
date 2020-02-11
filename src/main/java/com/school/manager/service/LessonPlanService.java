@@ -30,12 +30,10 @@ public interface LessonPlanService {
     /**
      * 上传文件
      *
-     * @param file      文件
-     * @param type      类型
-     * @param chapterId 章节id
+     * @param file 文件
      * @return 文件信息
      */
-    FileInfo upload(MultipartFile file, String type, String chapterId);
+    FileInfo upload(MultipartFile file);
 
     /**
      * 保存教案

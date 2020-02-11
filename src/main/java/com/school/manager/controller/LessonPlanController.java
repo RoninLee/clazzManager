@@ -38,10 +38,8 @@ public class LessonPlanController {
 
     @ApiOperation("文件上传")
     @PostMapping("upload")
-    public Result<Object> upload(@RequestParam(value = "file") MultipartFile file,
-                                 @RequestParam(value = "type") String type,
-                                 @RequestParam(value = "chapterId") String chapterId) {
-        return Result.success(lessonPlanService.upload(file, type, chapterId));
+    public Result<Object> upload(@RequestParam(value = "file") MultipartFile file) {
+        return Result.success(lessonPlanService.upload(file));
     }
 
     @ApiOperation("当前用户所绑定的年级学科列表")
