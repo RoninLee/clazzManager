@@ -69,14 +69,16 @@ public class UserController {
         LoginUserInfoResp loginUserInfoResp = new LoginUserInfoResp();
         loginUserInfoResp.setUsername(loginUserInfo.getName());
         loginUserInfoResp.setJobNumber(loginUserInfo.getJobNumber());
+        // 组装用户角色信息
         List<String> roles = Lists.newLinkedList();
         if (loginUserInfo.getAdminFlag()) {
             roles.add(Constant.ADMIN);
+        } else {
+            if (loginUserInfo.getGroupLeaderFlag()) {
+                roles.add(Constant.GROUPER);
+            }
+            roles.add(Constant.STUFF);
         }
-        if (loginUserInfo.getGroupLeaderFlag()) {
-            roles.add(Constant.GROUPER);
-        }
-        roles.add(Constant.STUFF);
         loginUserInfoResp.setRoleList(roles);
         return Result.success(loginUserInfoResp);
     }
