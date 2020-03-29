@@ -1,17 +1,21 @@
 package com.school.manager.controller;
 
+import com.google.common.collect.Lists;
+import com.school.manager.common.constant.Constant;
 import com.school.manager.enums.StatusCode;
+import com.school.manager.exception.SysServiceException;
 import com.school.manager.jwt.LoginUserInfo;
-import com.school.manager.pojo.dto.common.BaseDTO;
+import com.school.manager.jwt.LoginUserUtil;
+import com.school.manager.pojo.dto.common.CommonSelOrDelReq;
 import com.school.manager.pojo.dto.common.FuzzyQueryReq;
 import com.school.manager.pojo.dto.common.PageResult;
 import com.school.manager.pojo.dto.common.Result;
-import com.school.manager.pojo.dto.common.CommonSelOrDelReq;
 import com.school.manager.pojo.dto.req.LoginReq;
 import com.school.manager.pojo.dto.req.UserPasswordUpdateReq;
 import com.school.manager.pojo.dto.req.UserSaveReq;
 import com.school.manager.pojo.dto.req.UserUpdateReq;
 import com.school.manager.pojo.dto.resp.LoginResp;
+import com.school.manager.pojo.dto.resp.LoginUserInfoResp;
 import com.school.manager.pojo.dto.resp.UserResp;
 import com.school.manager.service.UserService;
 import com.school.manager.utils.JwtUtil;
@@ -19,15 +23,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author RoninLee
@@ -58,6 +59,26 @@ public class UserController {
         loginResp.setToken(token);
         loginResp.setLoginUserInfo(loginUserInfo);
         return Result.success(loginResp);
+    }
+
+    @ApiOperation("获取登录用户信息")
+    @GetMapping("/loginUserInfo")
+    public Result<LoginUserInfoResp> loginUserInfo() {
+        // 通过token解析拿到用户信息
+        LoginUserInfo loginUserInfo = Optional.ofNullable(LoginUserUtil.getLoginUserInfo()).orElseThrow(() -> new SysServiceException(StatusCode.NO_LOGIN_INFO.getDesc()));
+        LoginUserInfoResp loginUserInfoResp = new LoginUserInfoResp();
+        loginUserInfoResp.setUsername(loginUserInfo.getName());
+        loginUserInfoResp.setJobNumber(loginUserInfo.getJobNumber());
+        List<String> roles = Lists.newLinkedList();
+        if (loginUserInfo.getAdminFlag()) {
+            roles.add(Constant.ADMIN);
+        }
+        if (loginUserInfo.getGroupLeaderFlag()) {
+            roles.add(Constant.GROUPER);
+        }
+        roles.add(Constant.STUFF);
+        loginUserInfoResp.setRoleList(roles);
+        return Result.success(loginUserInfoResp);
     }
 
     @ApiOperation("用户列表")

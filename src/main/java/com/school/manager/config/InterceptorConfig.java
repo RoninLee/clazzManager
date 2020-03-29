@@ -38,7 +38,7 @@ public class InterceptorConfig extends WebMvcConfigurationSupport {
                 .addPathPatterns("/grade/**")
                 .addPathPatterns("/subject/**")
                 .addPathPatterns("/userRelation/**")
-                .excludePathPatterns("/user/login")
+                .excludePathPatterns("/user/login", "/user/loginUserInfo")
                 .excludePathPatterns("/user/updatePassword")
                 .excludePathPatterns("/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
     }

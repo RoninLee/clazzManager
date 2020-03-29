@@ -7,10 +7,12 @@ package com.school.manager.common.constant;
 public interface Constant {
     Integer PAGE_INDEX = 0;
     Integer PAGE_SIZE = 20;
-    String ADMIN = "admin";
     String POINT = ".";
     String DASH = "-";
     String FORWARD_SLASH = "/";
     String BACKSLASH = "\\\\";
+    String ADMIN = "admin";
+    String STUFF = "stuff";
+    String GROUPER = "grouper";
 
 }
