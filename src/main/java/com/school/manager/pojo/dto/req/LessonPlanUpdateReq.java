@@ -38,23 +38,17 @@ public class LessonPlanUpdateReq implements Serializable {
     @ApiModelProperty("在线文档内容")
     private String lessonPlanText;
 
-    @ApiModelProperty("上传文件的ppt名字")
+    @ApiModelProperty("ppt附件名字")
     private String pptName;
 
     @ApiModelProperty("ppt附件地址")
     private String pptUrl;
 
-    @ApiModelProperty("上传后的ppt文件名")
-    private String pptFileName;
-
-    @ApiModelProperty("上传的练习题名字")
+    @ApiModelProperty("练习题附件名字")
     private String exercisesName;
 
     @ApiModelProperty("练习题附件地址")
     private String exercisesUrl;
-
-    @ApiModelProperty("上传后的练习题名字")
-    private String exercisesFileName;
 
     @NotNull(message = "未知版本号")
     @ApiModelProperty("版本")

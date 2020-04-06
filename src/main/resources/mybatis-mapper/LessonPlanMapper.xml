@@ -12,10 +12,8 @@
         <result column="lesson_plan_text" property="lessonPlanText"/>
         <result column="ppt_name" property="pptName"/>
         <result column="ppt_url" property="pptUrl"/>
-        <result column="ppt_file_name" property="pptFileName"/>
         <result column="exercises_name" property="exercisesName"/>
         <result column="exercises_url" property="exercisesUrl"/>
-        <result column="exercises_file_name" property="exercisesFileName"/>
         <result column="version" property="version"/>
         <result column="create_time" property="createTime"/>
     </resultMap>
@@ -30,10 +28,8 @@
         lesson_plan_text,
         ppt_name,
         ppt_url,
-        ppt_file_name,
         exercises_name,
         exercises_url,
-        exercises_file_name,
         version,
         create_time
     </sql>
@@ -46,9 +42,7 @@
         chapter,
         section,
         ppt_name,
-        ppt_file_name,
         exercises_name,
-        exercises_file_name,
         create_time
     </sql>
 
@@ -82,17 +76,11 @@
             <if test='null != pptUrl'>
                 ppt_url,
             </if>
-            <if test='null != pptFileName'>
-                ppt_file_name,
-            </if>
             <if test='null != exercisesName'>
                 exercises_name,
             </if>
             <if test='null != exercisesUrl'>
                 exercises_url,
-            </if>
-            <if test='null != exercisesFileName'>
-                exercises_file_name,
             </if>
             <if test='null != version'>
                 version,
@@ -129,17 +117,11 @@
             <if test='null != pptUrl'>
                 #{pptUrl},
             </if>
-            <if test='null != pptFileName'>
-                #{pptFileName},
-            </if>
             <if test='null != exercisesName'>
                 #{exercisesName},
             </if>
             <if test='null != exercisesUrl'>
                 #{exercisesUrl},
-            </if>
-            <if test='null != exercisesFileName'>
-                #{exercisesFileName},
             </if>
             <if test='null != version'>
                 #{version},
@@ -167,10 +149,8 @@
             <if test='null != lessonPlanText'>lesson_plan_text = #{lessonPlanText},</if>
             <if test='null != pptName'>ppt_name = #{pptName},</if>
             <if test='null != pptUrl'>ppt_url = #{pptUrl},</if>
-            <if test='null != pptFileName'>ppt_file_name = #{pptFileName},</if>
             <if test='null != exercisesName'>exercises_name = #{exercisesName},</if>
             <if test='null != exercisesUrl'>exercises_url = #{exercisesUrl},</if>
-            <if test='null != exercisesFileName'>exercises_file_name = #{exercisesFileName},</if>
             <if test='null != version'>version = #{version},</if>
             <if test='null != createTime'>create_time = #{createTime}</if>
         </set>

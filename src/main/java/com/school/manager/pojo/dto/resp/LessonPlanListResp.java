@@ -28,17 +28,11 @@ public class LessonPlanListResp implements Serializable {
     @ApiModelProperty("节名称")
     private String section;
 
-    @ApiModelProperty("上传文件的ppt名字")
+    @ApiModelProperty("ppt附件名")
     private String pptName;
 
-    @ApiModelProperty("上传后的ppt文件名")
-    private String pptFileName;
-
-    @ApiModelProperty("上传的练习题名字")
+    @ApiModelProperty("练习题附件名")
     private String exercisesName;
-
-    @ApiModelProperty("上传后的练习题名字")
-    private String exercisesFileName;
 
     @ApiModelProperty("创建时间")
     private Date createTime;

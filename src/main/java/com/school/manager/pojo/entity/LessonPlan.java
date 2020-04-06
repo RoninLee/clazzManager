@@ -49,7 +49,7 @@ public class LessonPlan implements Serializable {
     private String lessonPlanText;
 
     /**
-     * 上传文件的ppt名字
+     * ppt附件名
      */
     private String pptName;
 
@@ -59,12 +59,7 @@ public class LessonPlan implements Serializable {
     private String pptUrl;
 
     /**
-     * 上传后的ppt文件名
-     */
-    private String pptFileName;
-
-    /**
-     * 上传的练习题名字
+     * 练习题附件名
      */
     private String exercisesName;
 
@@ -72,11 +67,6 @@ public class LessonPlan implements Serializable {
      * 练习题附件地址
      */
     private String exercisesUrl;
-
-    /**
-     * 上传后的练习题名字
-     */
-    private String exercisesFileName;
 
     /**
      * 版本

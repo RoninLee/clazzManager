@@ -73,4 +73,19 @@ public interface LessonPlanService {
      * @param id 教案id
      */
     void delete(String id);
+
+    /**
+     * 导出教案
+     *
+     * @param id 教案id
+     */
+    void export(String id);
+
+    /**
+     * 附件下载
+     *
+     * @param lessonId 教案id
+     * @param fileType 附件类型
+     */
+    void download(String lessonId, Integer fileType);
 }
