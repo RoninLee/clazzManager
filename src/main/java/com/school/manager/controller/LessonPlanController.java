@@ -12,6 +12,7 @@ import com.school.manager.pojo.dto.resp.LessonPlanListResp;
 import com.school.manager.service.LessonPlanService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -77,13 +78,14 @@ public class LessonPlanController {
 
     @ApiOperation("导出教案")
     @GetMapping("export/{id}")
-    public void export(@PathVariable String id) {
+    public void export(@ApiParam(name = "教案ID", required = true) @PathVariable String id) {
         lessonPlanService.export(id);
     }
 
     @ApiOperation("下载附件")
     @GetMapping("download/{lessonId}/{fileType}")
-    public void download(@PathVariable String lessonId, @PathVariable Integer fileType) {
+    public void download(@ApiParam(name = "教案ID", required = true) @PathVariable String lessonId,
+                         @ApiParam(name = "附件类型", value = "ppt:1 exercises:2", required = true) @PathVariable Integer fileType) {
         lessonPlanService.download(lessonId, fileType);
     }
 }
