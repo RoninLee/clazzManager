@@ -1,5 +1,6 @@
 package com.school.manager.service;
 
+import com.deepoove.poi.XWPFTemplate;
 import com.school.manager.pojo.dto.common.BaseDTO;
 import com.school.manager.pojo.dto.common.Result;
 import com.school.manager.pojo.dto.req.LessonPlanListReq;
@@ -8,6 +9,7 @@ import com.school.manager.pojo.dto.req.LessonPlanUpdateReq;
 import com.school.manager.pojo.dto.common.FileInfo;
 import com.school.manager.pojo.dto.resp.LessonPlanInfoResp;
 import com.school.manager.pojo.dto.resp.LessonPlanListResp;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -78,14 +80,15 @@ public interface LessonPlanService {
      * 导出教案
      *
      * @param id 教案id
+     * @return
      */
-    void export(String id);
+    XWPFTemplate export(String id);
 
     /**
      * 附件下载
-     *
-     * @param lessonId 教案id
+     *  @param lessonId 教案id
      * @param fileType 附件类型
+     * @return
      */
-    void download(String lessonId, Integer fileType);
+    ResponseEntity<Object> download(String lessonId, Integer fileType);
 }

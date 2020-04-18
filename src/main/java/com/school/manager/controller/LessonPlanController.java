@@ -1,9 +1,13 @@
 package com.school.manager.controller;
 
+import com.deepoove.poi.XWPFTemplate;
+import com.school.manager.enums.StatusCode;
+import com.school.manager.exception.SysServiceException;
 import com.school.manager.pojo.dto.common.BaseDTO;
 import com.school.manager.pojo.dto.common.CommonSelOrDelReq;
 import com.school.manager.pojo.dto.common.FileInfo;
 import com.school.manager.pojo.dto.common.Result;
+import com.school.manager.pojo.dto.req.AttachmentDownloadReq;
 import com.school.manager.pojo.dto.req.LessonPlanListReq;
 import com.school.manager.pojo.dto.req.LessonPlanSaveReq;
 import com.school.manager.pojo.dto.req.LessonPlanUpdateReq;
@@ -12,12 +16,17 @@ import com.school.manager.pojo.dto.resp.LessonPlanListResp;
 import com.school.manager.service.LessonPlanService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -77,15 +86,37 @@ public class LessonPlanController {
     }
 
     @ApiOperation("导出教案")
-    @GetMapping("export/{id}")
-    public void export(@ApiParam(name = "教案ID", required = true) @PathVariable String id) {
-        lessonPlanService.export(id);
+    @PostMapping("export")
+    public ResponseEntity<byte[]> export(@RequestBody @Valid CommonSelOrDelReq<String> request) {
+        XWPFTemplate template = lessonPlanService.export(request.getId());
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            template.write(bos);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentDispositionFormData("attachment", System.currentTimeMillis() + ".docx");
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            return new ResponseEntity<>(bos.toByteArray(), headers, HttpStatus.OK);
+        } catch (IOException e) {
+            throw new SysServiceException(StatusCode.ERROR.getCode(), e.getMessage());
+        } finally {
+            try {
+                bos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (template != null) {
+                try {
+                    template.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @ApiOperation("下载附件")
-    @GetMapping("download/{lessonId}/{fileType}")
-    public void download(@ApiParam(name = "教案ID", required = true) @PathVariable String lessonId,
-                         @ApiParam(name = "附件类型", value = "ppt:1 exercises:2", required = true) @PathVariable Integer fileType) {
-        lessonPlanService.download(lessonId, fileType);
+    @PostMapping("download")
+    public ResponseEntity<Object> download(@RequestBody @Valid AttachmentDownloadReq request) {
+        return lessonPlanService.download(request.getId(), request.getFileType());
     }
 }
