@@ -217,6 +217,17 @@
         from lesson_plan
         where user_id = #{userId}
     </select>
+    <select id="statistics" resultType="com.school.manager.pojo.dto.resp.LessonStatisticsInfoResp">
+        select count(lp.id) as count, u.name as user_name, u.job_number
+        from lesson_plan lp
+        left join user u on lp.user_id = u.id
+        where user_id in
+        <foreach collection="userIds" open="(" separator="," close=")" index="index" item="userId">
+            #{userId}
+        </foreach>
+        group by lp.user_id
+
+    </select>
 
 
 </mapper>

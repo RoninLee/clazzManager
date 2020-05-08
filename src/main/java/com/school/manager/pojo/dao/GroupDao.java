@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author lizelong
@@ -77,4 +78,19 @@ public interface GroupDao {
      */
     List<GroupInfoBO> getByIdOrFuzzyName(@Param("name") String name, @Param("id") String id);
 
+    /**
+     * 根据组长id查询所有组员id
+     *
+     * @param userId 组长ID
+     * @return 组员列表
+     */
+    Set<String> getByLeaderId(@Param("userId") String userId);
+
+    /**
+     * 根据用户ID查询组信息
+     *
+     * @param userId 用户ID
+     * @return 组信息
+     */
+    Group getByUserId(@Param("userId") String userId);
 }

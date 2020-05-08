@@ -53,6 +53,8 @@ public enum StatusCode {
     BINDING_GROUP(300002, "已绑定组"),
 
     BINDING_LESSON(300003, "已绑定教案"),
+
+    NO_BINDING_GROUP(300004, "未绑定组信息"),
     ;
     private Integer code;
     private String desc;

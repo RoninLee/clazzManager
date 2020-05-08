@@ -61,4 +61,16 @@
         </where>
 
     </select>
+    <select id="getByLeaderId" resultType="java.lang.String">
+        select gs.user_id
+        from lesson_group lg
+                 left join group_user gs on gs.group_id = lg.id
+                 inner join group_user g on gs.group_id = g.group_id and g.user_id = #{userId}
+    </select>
+    <select id="getByUserId" resultType="com.school.manager.pojo.entity.Group">
+        select lg.id, lg.name, lg.version, lg.grade_id, lg.subject_id
+        from lesson_group lg
+                 left join group_user gu on lg.id = gu.group_id
+        where user_id = #{userId}
+    </select>
 </mapper>

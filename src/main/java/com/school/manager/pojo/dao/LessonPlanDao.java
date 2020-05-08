@@ -2,12 +2,14 @@ package com.school.manager.pojo.dao;
 
 import com.school.manager.pojo.dto.common.BaseDTO;
 import com.school.manager.pojo.dto.resp.LessonPlanListResp;
+import com.school.manager.pojo.dto.resp.LessonStatisticsInfoResp;
 import com.school.manager.pojo.entity.LessonPlan;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author RoninLee
@@ -87,4 +89,12 @@ public interface LessonPlanDao {
      * @return
      */
     Integer getByUserId(@Param("userId") String userId);
+
+    /**
+     * 统计各组员备课情况
+     *
+     * @param userIds 组员ID
+     * @return 备课情况
+     */
+    List<LessonStatisticsInfoResp> statistics(@Param("userIds") Set<String> userIds);
 }
