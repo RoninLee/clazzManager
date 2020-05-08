@@ -3,10 +3,12 @@ package com.school.manager.service.impl;
 import com.school.manager.common.constant.LongConstant;
 import com.school.manager.enums.StatusCode;
 import com.school.manager.exception.SysServiceException;
+import com.school.manager.pojo.dao.LessonPlanDao;
 import com.school.manager.pojo.dao.UserGradeSubjectDao;
 import com.school.manager.pojo.dto.req.UserGradeSubjectSaveReq;
 import com.school.manager.pojo.dto.req.UserGradeSubjectUpdateSaveReq;
 import com.school.manager.pojo.dto.resp.UserGradeSubjectResp;
+import com.school.manager.pojo.entity.LessonPlan;
 import com.school.manager.pojo.entity.UserGradeSubject;
 import com.school.manager.service.UserGradeSubjectService;
 import com.school.manager.utils.BeanMapper;
@@ -38,6 +40,9 @@ public class UserGradeSubjectServiceImpl implements UserGradeSubjectService {
     @Autowired
     private IdWorker idWorker;
 
+    @Resource
+    private LessonPlanDao lessonPlanDao;
+
     /**
      * 保存关联关系
      *
@@ -56,10 +61,19 @@ public class UserGradeSubjectServiceImpl implements UserGradeSubjectService {
     /**
      * 删除关联关系
      *
-     * @param id id
+     * @param id      id
+     * @param version
      */
     @Override
-    public void delete(String id) {
+    public void delete(String id, Long version) {
+        LessonPlan lessonPlan = Optional.ofNullable(lessonPlanDao.info(id)).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc()));
+        if (!Objects.equals(version, lessonPlan.getVersion())) {
+            throw new SysServiceException(StatusCode.DATA_CHANGED.getDesc());
+        }
+        Integer count = lessonPlanDao.getByRelationId(id);
+        if (count > 0) {
+            throw new SysServiceException(StatusCode.BINDING_LESSON.getDesc());
+        }
         userGradeSubjectDao.delete(id);
     }
 

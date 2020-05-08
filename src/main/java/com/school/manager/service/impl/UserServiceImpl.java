@@ -7,8 +7,10 @@ import com.school.manager.enums.StatusCode;
 import com.school.manager.exception.SysServiceException;
 import com.school.manager.jwt.LoginUserInfo;
 import com.school.manager.jwt.LoginUserUtil;
+import com.school.manager.pojo.dao.GroupUserDao;
+import com.school.manager.pojo.dao.LessonPlanDao;
 import com.school.manager.pojo.dao.UserDao;
-import com.school.manager.pojo.dto.common.BaseDTO;
+import com.school.manager.pojo.dao.UserGradeSubjectDao;
 import com.school.manager.pojo.dto.common.FuzzyQueryReq;
 import com.school.manager.pojo.dto.common.PageResult;
 import com.school.manager.pojo.dto.req.LoginReq;
@@ -64,6 +66,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Resource
+    private UserGradeSubjectDao userGradeSubjectDao;
+
+    @Resource
+    private LessonPlanDao lessonPlanDao;
+
+    @Resource
+    private GroupUserDao groupUserDao;
 
     /**
      * 登录
@@ -188,18 +198,32 @@ public class UserServiceImpl implements UserService {
     /**
      * 删除用户
      *
-     * @param id 用户id
+     * @param id      用户id
+     * @param version
      */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
-    public void delete(String id) {
+    public void delete(String id, Long version) {
+        User user = Optional.ofNullable(userDao.info(id)).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc()));
+        if (!Objects.equals(user.getVersion(), version)) {
+            throw new SysServiceException(StatusCode.DATA_CHANGED.getDesc());
+        }
+        Integer count = userGradeSubjectDao.getByUserId(id);
+        if (count > 0) {
+            throw new SysServiceException(StatusCode.BINDING_USER.getDesc());
+        }
+        Integer lessonCount = lessonPlanDao.getByUserId(id);
+        if (lessonCount > 0) {
+            throw new SysServiceException(StatusCode.BINDING_LESSON.getDesc());
+        }
+        Integer groupCount = groupUserDao.getByUserId(id);
+        if (groupCount > 0) {
+            throw new SysServiceException(StatusCode.BINDING_GROUP.getDesc());
+        }
         userDao.delete(id);
         userPasswordService.delete(id);
         //删除用户角色关联关系
         userRoleService.deleteUserRoleBuUserId(id);
-        // 删除用户和年级学科关系
-        userGradeSubjectService.deleteAllByUserId(id);
-        // TODO: 2019/12/22 要不要删除教案相关记录
     }
 
     /**

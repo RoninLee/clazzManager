@@ -5,6 +5,8 @@ import com.school.manager.common.constant.LongConstant;
 import com.school.manager.enums.StatusCode;
 import com.school.manager.exception.SysServiceException;
 import com.school.manager.pojo.dao.GradeDao;
+import com.school.manager.pojo.dao.GroupDao;
+import com.school.manager.pojo.dao.UserGradeSubjectDao;
 import com.school.manager.pojo.dto.common.BaseDTO;
 import com.school.manager.pojo.dto.req.GradeSaveReq;
 import com.school.manager.pojo.dto.req.GradeUpdateReq;
@@ -35,6 +37,12 @@ public class GradeServiceImpl implements GradeService {
     private GradeDao gradeDao;
     @Autowired
     private IdWorker idWorker;
+
+    @Resource
+    private UserGradeSubjectDao userGradeSubjectDao;
+
+    @Resource
+    private GroupDao groupDao;
 
     /**
      * 通过id获取年级信息
@@ -75,12 +83,27 @@ public class GradeServiceImpl implements GradeService {
     /**
      * 删除年级
      *
-     * @param id 年级id
+     * @param id      年级id
+     * @param version
      */
     @Override
-    public void delete(String id) {
+    public void delete(String id, Long version) {
+        Grade grade = Optional.ofNullable(gradeDao.info(id)).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc()));
+        // 乐观锁
+        if (!Objects.equals(version, grade.getVersion())) {
+            throw new SysServiceException(StatusCode.DATA_CHANGED.getDesc());
+        }
+        // 校验绑定人员
+        Integer bindingUserCount = userGradeSubjectDao.getByGradeId(id);
+        if (bindingUserCount > 0) {
+            throw new SysServiceException(StatusCode.BINDING_USER.getDesc());
+        }
+        // 校验绑定组
+        Integer bindingGroupCount = groupDao.getByGradeId(id);
+        if (bindingGroupCount > 0) {
+            throw new SysServiceException(StatusCode.BINDING_GROUP.getDesc());
+        }
         gradeDao.delete(id);
-        // TODO: 2019/12/15 删除年级相关关联关系
     }
 
     /**

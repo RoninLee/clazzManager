@@ -3,10 +3,7 @@ package com.school.manager.controller;
 import com.deepoove.poi.XWPFTemplate;
 import com.school.manager.enums.StatusCode;
 import com.school.manager.exception.SysServiceException;
-import com.school.manager.pojo.dto.common.BaseDTO;
-import com.school.manager.pojo.dto.common.CommonSelOrDelReq;
-import com.school.manager.pojo.dto.common.FileInfo;
-import com.school.manager.pojo.dto.common.Result;
+import com.school.manager.pojo.dto.common.*;
 import com.school.manager.pojo.dto.req.AttachmentDownloadReq;
 import com.school.manager.pojo.dto.req.LessonPlanListReq;
 import com.school.manager.pojo.dto.req.LessonPlanSaveReq;
@@ -68,7 +65,7 @@ public class LessonPlanController {
 
     @ApiOperation("教案详情")
     @PostMapping("info")
-    public Result<LessonPlanInfoResp> info(@RequestBody @Valid CommonSelOrDelReq<String> request) {
+    public Result<LessonPlanInfoResp> info(@RequestBody @Valid CommonIdReq<String> request) {
         return Result.success(lessonPlanService.info(request.getId()));
     }
 
@@ -80,14 +77,14 @@ public class LessonPlanController {
 
     @ApiOperation("删除教案")
     @PostMapping("delete")
-    public Result<Void> delete(@RequestBody @Valid CommonSelOrDelReq<String> request) {
-        lessonPlanService.delete(request.getId());
+    public Result<Void> delete(@RequestBody @Valid CommonDelReq<String> request) {
+        lessonPlanService.delete(request.getId(), request.getVersion());
         return Result.success();
     }
 
     @ApiOperation("导出教案")
     @PostMapping("export")
-    public ResponseEntity<byte[]> export(@RequestBody @Valid CommonSelOrDelReq<String> request) {
+    public ResponseEntity<byte[]> export(@RequestBody @Valid CommonIdReq<String> request) {
         XWPFTemplate template = lessonPlanService.export(request.getId());
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try {

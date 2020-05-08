@@ -1,10 +1,6 @@
 package com.school.manager.controller;
 
-import com.school.manager.pojo.dto.common.BaseDTO;
-import com.school.manager.pojo.dto.common.FuzzyQueryReq;
-import com.school.manager.pojo.dto.common.Result;
-import com.school.manager.pojo.dto.common.CommonFuzzySelReq;
-import com.school.manager.pojo.dto.common.CommonSelOrDelReq;
+import com.school.manager.pojo.dto.common.*;
 import com.school.manager.pojo.dto.req.UserGradeSubjectSaveReq;
 import com.school.manager.pojo.dto.req.UserGradeSubjectUpdateSaveReq;
 import com.school.manager.pojo.dto.resp.UserDropdownListResp;
@@ -55,7 +51,7 @@ public class UserGradeSubjectController {
 
     @ApiOperation("年级学科绑定关系详情")
     @PostMapping("/info")
-    public Result<UserGradeSubjectResp> info(@RequestBody @Valid CommonSelOrDelReq<String> request) {
+    public Result<UserGradeSubjectResp> info(@RequestBody @Valid CommonIdReq<String> request) {
         return Result.success(userGradeSubjectService.findById(request.getId()));
     }
 
@@ -73,8 +69,8 @@ public class UserGradeSubjectController {
 
     @ApiOperation("删除关联关系")
     @PostMapping("delete")
-    public Result<Void> delete(@RequestBody @Valid CommonSelOrDelReq<String> request) {
-        userGradeSubjectService.delete(request.getId());
+    public Result<Void> delete(@RequestBody @Valid CommonDelReq<String> request) {
+        userGradeSubjectService.delete(request.getId(), request.getVersion());
         return Result.success();
     }
 

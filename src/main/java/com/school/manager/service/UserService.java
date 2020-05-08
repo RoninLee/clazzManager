@@ -1,7 +1,6 @@
 package com.school.manager.service;
 
 import com.school.manager.jwt.LoginUserInfo;
-import com.school.manager.pojo.dto.common.BaseDTO;
 import com.school.manager.pojo.dto.common.FuzzyQueryReq;
 import com.school.manager.pojo.dto.common.PageResult;
 import com.school.manager.pojo.dto.req.LoginReq;
@@ -63,8 +62,9 @@ public interface UserService {
      * 删除用户
      *
      * @param id 用户id
+     * @param version
      */
-    void delete(String id);
+    void delete(String id, Long version);
 
     /**
      * 查询用户详情

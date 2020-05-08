@@ -1,6 +1,6 @@
 package com.school.manager.controller;
 
-import com.school.manager.pojo.dto.common.CommonSelOrDelReq;
+import com.school.manager.pojo.dto.common.CommonIdReq;
 import com.school.manager.pojo.dto.common.Result;
 import com.school.manager.pojo.dto.req.ChapterSaveReq;
 import com.school.manager.pojo.dto.req.ChapterUpdateReq;
@@ -37,7 +37,7 @@ public class ChapterController {
 
     @ApiOperation("删除")
     @PostMapping("/delete")
-    public Result<Void> delete(@RequestBody @Valid CommonSelOrDelReq<String> request) {
+    public Result<Void> delete(@RequestBody @Valid CommonIdReq<String> request) {
         chapterService.delete(request.getId());
         return Result.success();
     }
@@ -50,7 +50,7 @@ public class ChapterController {
 
     @ApiOperation("[查询] 根据主键 id 查询")
     @PostMapping("/info")
-    public Result<ChapterInfoResp> info(@RequestBody @Valid CommonSelOrDelReq<String> request) {
+    public Result<ChapterInfoResp> info(@RequestBody @Valid CommonIdReq<String> request) {
         return Result.success(chapterService.info(request.getId()));
     }
 

@@ -122,5 +122,16 @@
             </if>
         </where>
     </select>
+    <select id="leaderList" resultType="com.school.manager.pojo.dto.common.BaseDTO">
+        select id,name
+        from user
+        where group_leader_flag = 1
+    </select>
+    <select id="memberList" resultType="com.school.manager.pojo.dto.common.BaseDTO">
+        select u.id,u.name
+        from user u
+        left join user_grade_subject ugs on u.id = ugs.user_id
+        where u.group_leader_flag = 0 and ugs.grade_id=#{gradeId} and ugs.subject_id=#{subjectId}
+    </select>
 
 </mapper>

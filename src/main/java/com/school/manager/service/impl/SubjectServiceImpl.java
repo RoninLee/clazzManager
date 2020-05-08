@@ -4,7 +4,9 @@ import com.google.common.collect.Lists;
 import com.school.manager.common.constant.LongConstant;
 import com.school.manager.enums.StatusCode;
 import com.school.manager.exception.SysServiceException;
+import com.school.manager.pojo.dao.GroupDao;
 import com.school.manager.pojo.dao.SubjectDao;
+import com.school.manager.pojo.dao.UserGradeSubjectDao;
 import com.school.manager.pojo.dto.common.BaseDTO;
 import com.school.manager.pojo.dto.req.SubjectSaveReq;
 import com.school.manager.pojo.dto.req.SubjectUpdateReq;
@@ -36,6 +38,12 @@ public class SubjectServiceImpl implements SubjectService {
     private SubjectDao subjectDao;
     @Autowired
     private IdWorker idWorker;
+
+    @Resource
+    private UserGradeSubjectDao userGradeSubjectDao;
+
+    @Resource
+    private GroupDao groupDao;
 
     /**
      * 通过学科id查询学科信息
@@ -76,12 +84,24 @@ public class SubjectServiceImpl implements SubjectService {
     /**
      * 删除学科
      *
-     * @param id 学科id
+     * @param id      学科id
+     * @param version
      */
     @Override
-    public void delete(String id) {
+    public void delete(String id, Long version) {
+        Subject subject = Optional.ofNullable(subjectDao.info(id)).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc()));
+        if (!Objects.equals(version, subject.getVersion())) {
+            throw new SysServiceException(StatusCode.DATA_CHANGED.getDesc());
+        }
+        Integer count = userGradeSubjectDao.getBySubjectId(id);
+        if (count > 0) {
+            throw new SysServiceException(StatusCode.BINDING_USER.getDesc());
+        }
+        Integer subjectCount = groupDao.getBySubjectId(id);
+        if (subjectCount > 0) {
+            throw new SysServiceException(StatusCode.BINDING_GROUP.getDesc());
+        }
         subjectDao.delete(id);
-        // TODO: 2019/12/22 删除人员年级学科关联关系
     }
 
     /**

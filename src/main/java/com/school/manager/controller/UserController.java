@@ -6,10 +6,7 @@ import com.school.manager.enums.StatusCode;
 import com.school.manager.exception.SysServiceException;
 import com.school.manager.jwt.LoginUserInfo;
 import com.school.manager.jwt.LoginUserUtil;
-import com.school.manager.pojo.dto.common.CommonSelOrDelReq;
-import com.school.manager.pojo.dto.common.FuzzyQueryReq;
-import com.school.manager.pojo.dto.common.PageResult;
-import com.school.manager.pojo.dto.common.Result;
+import com.school.manager.pojo.dto.common.*;
 import com.school.manager.pojo.dto.req.LoginReq;
 import com.school.manager.pojo.dto.req.UserPasswordUpdateReq;
 import com.school.manager.pojo.dto.req.UserSaveReq;
@@ -91,7 +88,7 @@ public class UserController {
 
     @ApiOperation("用户信息")
     @PostMapping("info")
-    public Result<UserResp> userInfo(@RequestBody @Valid CommonSelOrDelReq<String> request) {
+    public Result<UserResp> userInfo(@RequestBody @Valid CommonIdReq<String> request) {
         return Result.success(userService.info(request.getId()));
     }
 
@@ -113,9 +110,9 @@ public class UserController {
 
     @ApiOperation("删除人员信息")
     @PostMapping("/delete")
-    public Result<Object> delete(@RequestBody CommonSelOrDelReq<String> request) {
+    public Result<Object> delete(@RequestBody CommonDelReq<String> request) {
         try {
-            userService.delete(request.getId());
+            userService.delete(request.getId(), request.getVersion());
             return Result.success();
         } catch (Exception e) {
             return Result.error(e.getMessage());

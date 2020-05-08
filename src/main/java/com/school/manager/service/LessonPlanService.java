@@ -73,8 +73,9 @@ public interface LessonPlanService {
      * 删除教案
      *
      * @param id 教案id
+     * @param version
      */
-    void delete(String id);
+    void delete(String id, Long version);
 
     /**
      * 导出教案

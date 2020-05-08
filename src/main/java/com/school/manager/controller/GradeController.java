@@ -1,7 +1,8 @@
 package com.school.manager.controller;
 
+import com.school.manager.pojo.dto.common.CommonDelReq;
 import com.school.manager.pojo.dto.common.Result;
-import com.school.manager.pojo.dto.common.CommonSelOrDelReq;
+import com.school.manager.pojo.dto.common.CommonIdReq;
 import com.school.manager.pojo.dto.req.GradeSaveReq;
 import com.school.manager.pojo.dto.req.GradeUpdateReq;
 import com.school.manager.pojo.dto.resp.GradeResp;
@@ -42,7 +43,7 @@ public class GradeController {
 
     @ApiOperation("年级信息")
     @PostMapping("/info")
-    public Result<GradeResp> info(@RequestBody @Valid CommonSelOrDelReq<String> request) {
+    public Result<GradeResp> info(@RequestBody @Valid CommonIdReq<String> request) {
         try {
             return Result.success(gradeService.info(request.getId()));
         } catch (Exception e) {
@@ -72,9 +73,9 @@ public class GradeController {
 
     @ApiOperation("删除年级")
     @PostMapping("/delete")
-    public Result<Object> delete(@RequestBody @Valid CommonSelOrDelReq<String> request) {
+    public Result<Object> delete(@RequestBody @Valid CommonDelReq<String> request) {
         try {
-            gradeService.delete(request.getId());
+            gradeService.delete(request.getId(), request.getVersion());
             return Result.success();
         } catch (Exception e) {
             return Result.error(e.getMessage());

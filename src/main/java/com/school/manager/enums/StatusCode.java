@@ -48,6 +48,11 @@ public enum StatusCode {
 
     JOB_NUMBER_EXIST(300000, "工号已存在"),
 
+    BINDING_USER(300001, "已绑定课程"),
+
+    BINDING_GROUP(300002, "已绑定组"),
+
+    BINDING_LESSON(300003, "已绑定教案"),
     ;
     private Integer code;
     private String desc;

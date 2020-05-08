@@ -1,5 +1,6 @@
 package com.school.manager.pojo.dao;
 
+import com.school.manager.pojo.dto.resp.GroupLessonListResp;
 import com.school.manager.pojo.dto.resp.UserGradeSubjectResp;
 import com.school.manager.pojo.entity.UserGradeSubject;
 import org.apache.ibatis.annotations.Mapper;
@@ -87,4 +88,37 @@ public interface UserGradeSubjectDao {
      * @return 列表
      */
     List<UserGradeSubjectResp> list(@Param("fuzzyName") String fuzzyName, @Param("index") Integer index, @Param("pageSize") Integer pageSize);
+
+
+    /**
+     * 查询课程列表
+     *
+     * @param leaderId 组长ID
+     * @return 课程列表
+     */
+    List<GroupLessonListResp> lessonList(@Param("leaderId") String leaderId);
+
+    /**
+     * 根据年级查询关联关系
+     *
+     * @param gradeId 年级ID
+     * @return
+     */
+    Integer getByGradeId(@Param("gradeId") String gradeId);
+
+    /**
+     * 根据用户ID查询关联关系
+     *
+     * @param userId
+     * @return
+     */
+    Integer getByUserId(@Param("userId") String userId);
+
+    /**
+     * 根据学科ID查询
+     *
+     * @param subjectId
+     * @return
+     */
+    Integer getBySubjectId(@Param("subjectId") String subjectId);
 }

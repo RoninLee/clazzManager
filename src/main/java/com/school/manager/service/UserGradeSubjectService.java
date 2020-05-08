@@ -23,8 +23,9 @@ public interface UserGradeSubjectService {
      * 删除关联关系
      *
      * @param id id
+     * @param version
      */
-    void delete(String id);
+    void delete(String id, Long version);
 
     /**
      * 删除关联关系

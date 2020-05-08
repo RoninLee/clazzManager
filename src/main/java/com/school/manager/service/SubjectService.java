@@ -40,8 +40,9 @@ public interface SubjectService {
      * 删除学科
      *
      * @param id 学科id
+     * @param version
      */
-    void delete(String id);
+    void delete(String id, Long version);
 
     /**
      * 学科下拉列表

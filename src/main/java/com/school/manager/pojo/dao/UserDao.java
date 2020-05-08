@@ -79,4 +79,20 @@ public interface UserDao {
      */
     List<UserDropdownListResp> dropdownList(@Param("name") String name);
 
+    /**
+     * 查询组长列表
+     *
+     * @return 组长列表
+     */
+    List<BaseDTO<String>> leaderList();
+
+
+    /**
+     * 查询组员列表
+     *
+     * @param gradeId   年级ID
+     * @param subjectId 学科ID
+     * @return 组员列表
+     */
+    List<BaseDTO<String>> memberList(@Param("gradeId") String gradeId, @Param("subjectId") String subjectId);
 }

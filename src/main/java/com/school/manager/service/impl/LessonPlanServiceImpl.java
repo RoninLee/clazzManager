@@ -45,6 +45,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -195,10 +196,15 @@ public class LessonPlanServiceImpl implements LessonPlanService {
     /**
      * 删除教案
      *
-     * @param id 教案id
+     * @param id      教案id
+     * @param version
      */
     @Override
-    public void delete(String id) {
+    public void delete(String id, Long version) {
+        LessonPlan lessonPlan = Optional.ofNullable(lessonPlanDao.info(id)).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc()));
+        if (!Objects.equals(lessonPlan.getVersion(), version)) {
+            throw new SysServiceException(StatusCode.DATA_CHANGED.getDesc());
+        }
         lessonPlanDao.delete(id);
     }
 
@@ -259,13 +265,11 @@ public class LessonPlanServiceImpl implements LessonPlanService {
                 headers.add("Cache-Control", "no-cache,no-store,must-revalidate");
                 headers.add("Pragma", "no-cache");
                 headers.add("Expires", "0");
-                ResponseEntity<Object> responseEntity = ResponseEntity.ok()
+                return ResponseEntity.ok()
                         .headers(headers)
                         .contentLength(file.length())
                         .contentType(MediaType.parseMediaType("application/octet-stream"))
                         .body(resource);
-
-                return responseEntity;
             }
 
         }

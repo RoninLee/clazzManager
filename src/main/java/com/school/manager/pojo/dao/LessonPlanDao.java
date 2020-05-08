@@ -71,4 +71,20 @@ public interface LessonPlanDao {
      * @return <关联关系id,年级+学科>
      */
     List<BaseDTO<String>> gradeSubList(String userId);
+
+    /**
+     * 根据绑定关系查询教案
+     *
+     * @param relationId
+     * @return
+     */
+    Integer getByRelationId(@Param("relationId") String relationId);
+
+    /**
+     * 根据用户ID查询教案
+     *
+     * @param userId
+     * @return
+     */
+    Integer getByUserId(@Param("userId") String userId);
 }

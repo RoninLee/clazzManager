@@ -36,6 +36,7 @@ public class InterceptorConfig extends WebMvcConfigurationSupport {
         registry.addInterceptor(adminInterceptor)
                 .addPathPatterns("/user/**")
                 .addPathPatterns("/grade/**")
+                .addPathPatterns("/group/**")
                 .addPathPatterns("/subject/**")
                 .addPathPatterns("/userRelation/**")
                 .excludePathPatterns("/user/login", "/user/loginUserInfo")

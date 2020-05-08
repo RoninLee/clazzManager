@@ -20,7 +20,6 @@ public class BaseExceptionHandler {
         if (e instanceof DataIntegrityViolationException) {
             return Result.error(StatusCode.DATA_EXIST.getCode(), StatusCode.DATA_EXIST.getDesc(), null);
         } else if (e instanceof SysServiceException) {
-
             return Result.error(((SysServiceException) e).getCode(), e.getMessage(), ((SysServiceException) e).getData());
         }
         return Result.error(StatusCode.ERROR.getCode(), e.getMessage(), null);

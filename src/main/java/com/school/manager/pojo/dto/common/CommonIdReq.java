@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @Data
 @ApiModel("共用请求对象")
-public class CommonSelOrDelReq<T> implements Serializable {
+public class CommonIdReq<T> implements Serializable {
 
     private static final long serialVersionUID = -9173777641004970046L;
 

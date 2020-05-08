@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.manager.pojo.dao.GroupDao">
+
+    <insert id="add">
+        insert into lesson_group (id, name, grade_id, subject_id)
+            VALUE (#{lessonGroup.id}, #{lessonGroup.name}, #{lessonGroup.gradeId}, #{lessonGroup.subjectId})
+    </insert>
+    <update id="update">
+        update lesson_group
+        set name=#{name},
+            grade_id = #{gradeId},
+            subject_id = #{subjectId},
+            version = #{version}
+        where id = #{id}
+    </update>
+    <delete id="delete">
+        delete
+        from lesson_group
+        where id = #{id}
+    </delete>
+    <select id="info" resultType="com.school.manager.pojo.entity.Group">
+        select id, name, grade_id, subject_id
+        from lesson_group
+        where id = #{id}
+    </select>
+    <select id="infoWithLeader" resultType="com.school.manager.pojo.bo.GroupLeaderInfoBO">
+        select g.id, g.name, g.subject_id, g.grade_id, g.version, u.id
+        from lesson_group g
+                 left join group_user gu on g.id = gu.group_id
+                 left join user u on gu.user_id = u.id
+        where group_leader_flag = 1
+          and g.id = #{id}
+    </select>
+    <select id="getBySubjectId" resultType="java.lang.Integer">
+        select count(id)
+        from lesson_group
+        where subject_id = #{subjectId}
+    </select>
+    <select id="getByGradeId" resultType="java.lang.Integer">
+        select count(id)
+        from lesson_group
+        where grade_id = #{gradeId}
+    </select>
+    <select id="getByIdOrFuzzyName" resultType="com.school.manager.pojo.bo.GroupInfoBO">
+        select g.id,g.name,g.version,u.id as user_id,u.name as user_name,g.grade_id,g.subject_id,concat(g2.name,s.name)
+        as lesson_name,u.group_leader_flag
+        from lesson_group g
+        left join group_user gu on g.id = gu.group_id
+        left join user u on gu.user_id = u.id
+        left join grade g2 on g.grade_id = g2.id
+        left join subject s on g.subject_id = s.id
+        <where>
+            <if test="id != null and id != ''">
+                and g.id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                <bind name="_name" value="'%'+name+'%'"/>
+                (u.name like #{_name} or u.job_number like #{_name})
+            </if>
+        </where>
+
+    </select>
+</mapper>

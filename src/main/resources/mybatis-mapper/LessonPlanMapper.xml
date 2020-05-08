@@ -207,6 +207,16 @@
                  join subject s on ugs.subject_id = s.id
         where ugs.user_id = #{userId}
     </select>
+    <select id="getByRelationId" resultType="java.lang.Integer">
+        select count(id)
+        from lesson_plan
+        where relation_id = #{relationId}
+    </select>
+    <select id="getByUserId" resultType="java.lang.Integer">
+        select count(id)
+        from lesson_plan
+        where user_id = #{userId}
+    </select>
 
 
 </mapper>
