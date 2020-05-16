@@ -42,24 +42,23 @@
         from lesson_group
         where grade_id = #{gradeId}
     </select>
-    <select id="getByIdOrFuzzyName" resultType="com.school.manager.pojo.bo.GroupInfoBO">
-        select g.id,g.name,g.version,u.id as user_id,u.name as user_name,g.grade_id,g.subject_id,concat(g2.name,s.name)
-        as lesson_name,u.group_leader_flag
+    <select id="getById" resultType="com.school.manager.pojo.bo.GroupInfoBO">
+        select g.id,
+               g.name,
+               g.version,
+               u.id   as user_id,
+               u.name as user_name,
+               g.grade_id,
+               g.subject_id,
+               concat(g2.name, s.name)
+                      as lesson_name,
+               u.group_leader_flag
         from lesson_group g
-        left join group_user gu on g.id = gu.group_id
-        left join user u on gu.user_id = u.id
-        left join grade g2 on g.grade_id = g2.id
-        left join subject s on g.subject_id = s.id
-        <where>
-            <if test="id != null and id != ''">
-                and g.id = #{id}
-            </if>
-            <if test="name != null and name != ''">
-                <bind name="_name" value="'%'+name+'%'"/>
-                (u.name like #{_name} or u.job_number like #{_name})
-            </if>
-        </where>
-
+                 left join group_user gu on g.id = gu.group_id
+                 left join user u on gu.user_id = u.id
+                 left join grade g2 on g.grade_id = g2.id
+                 left join subject s on g.subject_id = s.id
+        where g.id = #{id}
     </select>
     <select id="getByLeaderId" resultType="java.lang.String">
         select gs.user_id
@@ -72,5 +71,35 @@
         from lesson_group lg
                  left join group_user gu on lg.id = gu.group_id
         where user_id = #{userId}
+    </select>
+    <select id="getByFuzzyName" resultType="com.school.manager.pojo.bo.GroupInfoBO">
+        select g.id,
+        g.name,
+        g.version,
+        u.id as user_id,
+        u.name as user_name,
+        g.grade_id,
+        g.subject_id,
+        concat(g2.name, s.name) as lesson_name,
+        u.group_leader_flag
+        FROM lesson_group g
+        LEFT JOIN group_user gu
+        ON g.id = gu.group_id
+        LEFT JOIN user u
+        ON gu.user_id = u.id
+        LEFT JOIN grade g2
+        ON g.grade_id = g2.id
+        LEFT JOIN subject s
+        ON g.subject_id = s.id
+        WHERE g.id in (select group_id
+        from group_user gu
+        left join user u on gu.user_id = u.id
+        <where>
+            <if test="name !=null and name !=''">
+                <bind name="_name" value="'%'+name+'%'"/>
+                u.name like #{_name} or u.job_number like #{_name}
+            </if>
+        </where>
+        )
     </select>
 </mapper>

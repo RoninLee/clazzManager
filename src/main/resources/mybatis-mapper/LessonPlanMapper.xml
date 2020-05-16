@@ -41,9 +41,14 @@
         user_id,
         chapter,
         section,
+        lesson_plan_text,
         ppt_name,
+        ppt_url,
         exercises_name,
-        create_time
+        exercises_url,
+        version,
+        create_time,
+        def_time
     </sql>
 
     <insert id="save" parameterType="com.school.manager.pojo.entity.LessonPlan">

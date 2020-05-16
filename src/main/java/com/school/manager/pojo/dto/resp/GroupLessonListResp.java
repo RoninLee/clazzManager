@@ -15,6 +15,9 @@ import java.io.Serializable;
 public class GroupLessonListResp implements Serializable {
     private static final long serialVersionUID = -4338482090849276682L;
 
+    @ApiModelProperty("前端要求唯一ID：年级ID+学科ID")
+    private String lessonId;
+
     @ApiModelProperty(value = "年级ID")
     private String gradeId;
 

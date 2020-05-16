@@ -35,8 +35,15 @@ public class GroupListInfoResp implements Serializable {
     @ApiModelProperty("课程ID")
     private String subjectId;
 
+
+    @ApiModelProperty("课程ID,仅为给前端用")
+    private String lessonId;
+
     @ApiModelProperty("课程名称")
     private String lessonName;
+
+    @ApiModelProperty("版本号")
+    private Long version;
 
     @ApiModelProperty("组员列表")
     private List<BaseDTO<String>> members;

@@ -72,11 +72,10 @@ public interface GroupDao {
     /**
      * 姓名和工号模糊查询组
      *
-     * @param name
      * @param id
      * @return
      */
-    List<GroupInfoBO> getByIdOrFuzzyName(@Param("name") String name, @Param("id") String id);
+    List<GroupInfoBO> getById(@Param("id") String id);
 
     /**
      * 根据组长id查询所有组员id
@@ -93,4 +92,12 @@ public interface GroupDao {
      * @return 组信息
      */
     Group getByUserId(@Param("userId") String userId);
+
+    /**
+     * 根据组员模糊查询
+     *
+     * @param name
+     * @return
+     */
+    List<GroupInfoBO> getByFuzzyName(@Param("name") String name);
 }

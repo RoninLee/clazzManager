@@ -2,7 +2,6 @@ package com.school.manager.pojo.dto.resp;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -39,4 +38,7 @@ public class UserGradeSubjectResp implements Serializable {
 
     @ApiModelProperty("学科名称")
     private String subjectName;
+
+    @ApiModelProperty("版本")
+    private Long version;
 }

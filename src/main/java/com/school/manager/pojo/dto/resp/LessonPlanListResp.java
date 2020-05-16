@@ -37,4 +37,7 @@ public class LessonPlanListResp implements Serializable {
     @ApiModelProperty("创建时间")
     private Date createTime;
 
+    @ApiModelProperty("版本")
+    private Long version;
+
 }

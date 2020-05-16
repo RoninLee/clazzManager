@@ -19,6 +19,7 @@ import com.school.manager.pojo.entity.Group;
 import com.school.manager.pojo.entity.GroupUser;
 import com.school.manager.service.GroupService;
 import com.school.manager.utils.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -95,13 +96,15 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public List<GroupListInfoResp> list(String name, Integer pageIndex, Integer pageSize) {
         int offset = (pageIndex - 1) * pageSize;
-        List<GroupInfoBO> groupInfoBOList = groupDao.getByIdOrFuzzyName(name, null);
+        List<GroupInfoBO> groupInfoBOList = groupDao.getByFuzzyName(name);
         Map<String, List<GroupInfoBO>> collect = groupInfoBOList.stream().collect(Collectors.groupingBy(GroupInfoBO::getId, Collectors.toList()));
         List<List<GroupInfoBO>> pageList = new ArrayList<>(collect.values()).stream().skip(offset).limit(pageSize).collect(Collectors.toList());
         List<GroupListInfoResp> result = new LinkedList<>();
         pageList.forEach(gs -> {
             GroupListInfoResp resp = listToGroup(gs);
-            result.add(resp);
+            if (Objects.nonNull(resp)) {
+                result.add(resp);
+            }
         });
         return result;
     }
@@ -114,8 +117,8 @@ public class GroupServiceImpl implements GroupService {
      */
     @Override
     public GroupListInfoResp info(String id) {
-        List<GroupInfoBO> groupInfoBOList = groupDao.getByIdOrFuzzyName(null, id);
-        return listToGroup(groupInfoBOList);
+        List<GroupInfoBO> groupInfoBOList = groupDao.getById(id);
+        return Optional.ofNullable(listToGroup(groupInfoBOList)).orElseThrow(() -> new SysServiceException(StatusCode.DATA_NOT_EXIST.getDesc()));
     }
 
     /**
@@ -229,26 +232,31 @@ public class GroupServiceImpl implements GroupService {
      * @return 组响应对象
      */
     private GroupListInfoResp listToGroup(List<GroupInfoBO> groupInfoBOList) {
-        GroupListInfoResp resp = new GroupListInfoResp();
-        List<BaseDTO<String>> members = new LinkedList<>();
-        groupInfoBOList.forEach(g -> {
-            if (g.getGroupLeaderFlag()) {
-                resp.setId(g.getId());
-                resp.setName(g.getName());
-                resp.setGradeId(g.getGradeId());
-                resp.setLeaderId(g.getUserId());
-                resp.setLeaderName(g.getUserName());
-                resp.setGradeId(g.getGradeId());
-                resp.setSubjectId(g.getSubjectId());
-                resp.setLessonName(g.getLessonName());
-            } else {
-                BaseDTO<String> baseDTO = new BaseDTO<>();
-                baseDTO.setId(g.getUserId());
-                baseDTO.setName(g.getUserName());
-                members.add(baseDTO);
-            }
-        });
-        resp.setMembers(members);
-        return resp;
+        if (CollectionUtils.isNotEmpty(groupInfoBOList)) {
+            GroupListInfoResp resp = new GroupListInfoResp();
+            List<BaseDTO<String>> members = new LinkedList<>();
+            groupInfoBOList.forEach(g -> {
+                if (g.getGroupLeaderFlag()) {
+                    resp.setId(g.getId());
+                    resp.setName(g.getName());
+                    resp.setGradeId(g.getGradeId());
+                    resp.setLeaderId(g.getUserId());
+                    resp.setLessonId(g.getGradeId() + g.getSubjectId());
+                    resp.setLeaderName(g.getUserName());
+                    resp.setGradeId(g.getGradeId());
+                    resp.setSubjectId(g.getSubjectId());
+                    resp.setVersion(g.getVersion());
+                    resp.setLessonName(g.getLessonName());
+                } else {
+                    BaseDTO<String> baseDTO = new BaseDTO<>();
+                    baseDTO.setId(g.getUserId());
+                    baseDTO.setName(g.getUserName());
+                    members.add(baseDTO);
+                }
+            });
+            resp.setMembers(members);
+            return resp;
+        }
+        return null;
     }
 }

@@ -82,7 +82,8 @@
                g.id   as grade_id,
                g.name as grade_name,
                s.id   as subject_id,
-               s.name as subject_name
+               s.name as subject_name,
+               ugs.version
         FROM user_grade_subject ugs
                  join user u on ugs.user_id = u.id
                  join grade g on ugs.grade_id = g.id
@@ -126,7 +127,8 @@
         g.id as grade_id,
         g.name as grade_name,
         s.id as subject_id,
-        s.name as subject_name
+        s.name as subject_name,
+        ugs.version
         from user_grade_subject ugs
         join user u on ugs.user_id = u.id
         join grade g on ugs.grade_id = g.id
@@ -140,7 +142,10 @@
         limit #{index},#{pageSize}
     </select>
     <select id="lessonList" resultType="com.school.manager.pojo.dto.resp.GroupLessonListResp">
-        select ugs.grade_id, ugs.subject_id, concat(g.name, s.name) as lesson_name
+        select concat(ugs.grade_id, ugs.subject_id) as lesson_id,
+               ugs.grade_id,
+               ugs.subject_id,
+               concat(g.name, s.name)               as lesson_name
         from user_grade_subject ugs
                  left join grade g on ugs.grade_id = g.id
                  left join subject s on ugs.subject_id = s.id
