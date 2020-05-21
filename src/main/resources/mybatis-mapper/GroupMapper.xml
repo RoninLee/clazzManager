@@ -25,7 +25,7 @@
         where id = #{id}
     </select>
     <select id="infoWithLeader" resultType="com.school.manager.pojo.bo.GroupLeaderInfoBO">
-        select g.id, g.name, g.subject_id, g.grade_id, g.version, u.id
+        select g.id, g.name, g.subject_id, g.grade_id, g.version, u.id as leader_id
         from lesson_group g
                  left join group_user gu on g.id = gu.group_id
                  left join user u on gu.user_id = u.id

@@ -6,7 +6,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author lizelong
@@ -34,6 +34,6 @@ public class GroupAddReq implements Serializable {
     private String subjectId;
 
     @ApiModelProperty("组员ID列表")
-    private List<String> members;
+    private Set<String> members;
 
 }

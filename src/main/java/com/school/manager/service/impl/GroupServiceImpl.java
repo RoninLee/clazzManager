@@ -145,7 +145,7 @@ public class GroupServiceImpl implements GroupService {
         leader.setUserId(request.getLeaderId());
         leader.setGroupId(groupId);
         groupUsers.add(leader);
-        Set<String> memberIds = Optional.ofNullable(request.getMembers()).map(HashSet::new).orElse(new HashSet<>());
+        Set<String> memberIds = Optional.ofNullable(request.getMembers()).orElse(new HashSet<>());
         memberIds.forEach(memberId -> {
             GroupUser member = new GroupUser();
             member.setGroupId(groupId);
@@ -186,9 +186,9 @@ public class GroupServiceImpl implements GroupService {
         }
         List<GroupUser> groupUserList = groupUserDao.getGroupByGid(request.getId());
         Set<String> nowUser = groupUserList.stream().map(GroupUser::getUserId).collect(Collectors.toSet());
-        Set<String> members = new HashSet<>(request.getMembers());
+        Set<String> members = Optional.ofNullable(request.getMembers()).orElse(new HashSet<>());
         // 需删除的绑定关系
-        Set<Long> delUsers = groupUserList.stream().filter(groupUser -> !members.contains(groupUser.getUserId())).map(GroupUser::getId).collect(Collectors.toSet());
+        Set<Long> delUsers = groupUserList.stream().filter(groupUser -> !members.contains(groupUser.getUserId()) && !Objects.equals(request.getLeaderId(), groupUser.getUserId())).map(GroupUser::getId).collect(Collectors.toSet());
         // 删除现有 剩余增加
         members.removeAll(nowUser);
         members.forEach(memberId -> {
@@ -197,8 +197,12 @@ public class GroupServiceImpl implements GroupService {
             member.setUserId(memberId);
             groupUserAddList.add(member);
         });
-        groupUserDao.batchAdd(groupUserAddList);
-        groupUserDao.batchDel(request.getId(), delUsers);
+        if (CollectionUtils.isNotEmpty(groupUserAddList)) {
+            groupUserDao.batchAdd(groupUserAddList);
+        }
+        if (CollectionUtils.isNotEmpty(delUsers)) {
+            groupUserDao.batchDel(request.getId(), delUsers);
+        }
     }
 
     /**
