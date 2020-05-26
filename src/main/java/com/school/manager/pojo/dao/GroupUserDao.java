@@ -44,7 +44,7 @@ public interface GroupUserDao {
      * @param id
      * @param delUsers
      */
-    void batchDel(@Param("id") String id, @Param("delUsers") Set<Long> delUsers);
+    void batchDel(@Param("id") String id, @Param("delUsers") Set<String> delUsers);
 
     /**
      * 根据组删除

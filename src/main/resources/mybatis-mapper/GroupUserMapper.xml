@@ -8,7 +8,7 @@
         </foreach>
     </insert>
     <delete id="batchDel">
-        delete from group_user where id = #{id} and user_id in
+        delete from group_user where group_id = #{id} and user_id in
         <foreach collection="delUsers" item="userId" index="index" separator="," open="(" close=")">
             #{userId}
         </foreach>

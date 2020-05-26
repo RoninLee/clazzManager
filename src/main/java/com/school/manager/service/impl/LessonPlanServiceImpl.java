@@ -184,8 +184,17 @@ public class LessonPlanServiceImpl implements LessonPlanService {
             startDate = createTime.get(0);
             endDate = createTime.get(1);
         }
-        List<LessonPlanListResp> lessonPlanList = lessonPlanDao.pageList(request.getRelationId(), startDate, endDate, pageIndex, pageSize);
-        Long pageListCount = lessonPlanDao.pageListCount(request.getRelationId(), startDate, endDate);
+        LoginUserInfo loginUserInfo = Optional.ofNullable(LoginUserUtil.getLoginUserInfo()).orElseThrow(() -> new SysServiceException(StatusCode.NO_LOGIN_INFO.getDesc()));
+        String userId = loginUserInfo.getId();
+        List<LessonPlanListResp> lessonPlanList;
+        Long pageListCount;
+        if (loginUserInfo.getAdminFlag()) {
+            lessonPlanList = lessonPlanDao.pageList(null, request.getRelationId(), startDate, endDate, pageIndex, pageSize);
+            pageListCount = lessonPlanDao.pageListCount(null, request.getRelationId(), startDate, endDate);
+        } else {
+            lessonPlanList = lessonPlanDao.pageList(userId, request.getRelationId(), startDate, endDate, pageIndex, pageSize);
+            pageListCount = lessonPlanDao.pageListCount(userId, request.getRelationId(), startDate, endDate);
+        }
         PageResult<List<LessonPlanListResp>> pageResult = new PageResult<>();
         pageResult.setData(lessonPlanList);
         pageResult.setTotal(pageListCount);

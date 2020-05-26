@@ -179,16 +179,13 @@ public class GroupServiceImpl implements GroupService {
         List<GroupUser> groupUserAddList = new LinkedList<>();
         if (!Objects.equals(request.getLeaderId(), groupLeader.getLeaderId())) {
             checkLeader(request.getLeaderId());
-            GroupUser leader = new GroupUser();
-            leader.setUserId(request.getLeaderId());
-            leader.setGroupId(request.getId());
-            groupUserAddList.add(leader);
         }
         List<GroupUser> groupUserList = groupUserDao.getGroupByGid(request.getId());
         Set<String> nowUser = groupUserList.stream().map(GroupUser::getUserId).collect(Collectors.toSet());
         Set<String> members = Optional.ofNullable(request.getMembers()).orElse(new HashSet<>());
+        members.add(request.getLeaderId());
         // 需删除的绑定关系
-        Set<Long> delUsers = groupUserList.stream().filter(groupUser -> !members.contains(groupUser.getUserId()) && !Objects.equals(request.getLeaderId(), groupUser.getUserId())).map(GroupUser::getId).collect(Collectors.toSet());
+        Set<String> delUsers = groupUserList.stream().filter(groupUser -> !members.contains(groupUser.getUserId())).map(GroupUser::getUserId).collect(Collectors.toSet());
         // 删除现有 剩余增加
         members.removeAll(nowUser);
         members.forEach(memberId -> {

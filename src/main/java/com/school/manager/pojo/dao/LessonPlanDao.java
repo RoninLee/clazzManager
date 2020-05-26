@@ -56,7 +56,7 @@ public interface LessonPlanDao {
      * @author RoninLee
      * @date 2020/01/04
      **/
-    List<LessonPlanListResp> pageList(@Param("relationId") String relationId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("pageIndex") int pageIndex, @Param("pageSize") int pageSize);
+    List<LessonPlanListResp> pageList(@Param("userId") String userId, @Param("relationId") String relationId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("pageIndex") int pageIndex, @Param("pageSize") int pageSize);
 
     /**
      * [查询] 分页查询 count
@@ -64,7 +64,7 @@ public interface LessonPlanDao {
      * @author RoninLee
      * @date 2020/01/04
      **/
-    Long pageListCount(@Param("relationId") String relationId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    Long pageListCount(@Param("userId") String userId, @Param("relationId") String relationId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     /**
      * 根据用户id查询年级学科
