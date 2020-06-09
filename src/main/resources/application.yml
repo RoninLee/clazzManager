@@ -26,6 +26,10 @@ spring:
     connectionPropertie:  druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
   session:
     timeout: 14400
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 mybatis:
   mapper-locations: classpath:/mybatis-mapper/*.xml
   type-aliases-package: com.school.manager
